@@ -60,7 +60,7 @@ if st.button("✨ Generate Science CBS"):
     if not client:
         st.error("Please enter a valid API Key first.")
     else:
-        with st.spinner("Generating using Gemini 2.5 Pro…"):
+        with st.spinner("Generating questions"):
 
             # Fill in placeholders
             final_prompt = (
