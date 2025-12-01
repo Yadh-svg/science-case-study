@@ -76,6 +76,12 @@ case_study_science: |
     8. Scenario Application:
         - Scenario must directly relate to the topic and demonstrate the concept
           in a real-life context.
+    0. Realistic Scenario Alignment (STRICT):
+      - Do NOT construct artificial or forced situations simply to match the sub-questions.
+      - The scenario itself must be believable, naturally occurring, and context-appropriate.
+      - All sub-questions must arise logically from the scenario, not the scenario being shaped to suit the questions.
+      - Avoid unrealistic field setups, impossible experiments, or exaggerated events.
+
 
   -------------------------------------------------------------------------
   CBS FORMAT (SCIENCE) — 4 Marks Total
@@ -131,6 +137,14 @@ case_study_science: |
     - Do NOT mix unrelated concepts.
     - New concepts in the Topic take priority.
     - Old concepts can support reasoning but cannot form full questions.
+  -------------------------------------------------------------------------
+  TOPIC INTEGRATION RULE (STRICT ADDITION)
+  -------------------------------------------------------------------------
+    - All generated CBS questions must strictly follow ONLY the topics provided in the input.
+    - If multiple topics are listed, each CBS question must integrate ALL these topics across its sub-questions.
+    - The distribution may vary, but the complete set of topics must appear collectively across parts (a), (b), and (c).
+    - Do NOT introduce any topic that is not listed.
+    - Ensure topic integration is meaningful and arises naturally from the scenario.
 
   -------------------------------------------------------------------------
   OUTPUT FORMAT
