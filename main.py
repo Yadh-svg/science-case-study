@@ -20,7 +20,7 @@ st.title("🔬 Science Case-Based Study Generator")
 # Load prompt
 template_prompt = load_prompt_template()
 
-# Gemini Client
+
 # Gemini Client
 # api_key will be defined later in the layout
 client = None
