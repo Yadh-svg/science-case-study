@@ -31,51 +31,53 @@ QUESTION_TYPE_MAPPING = {
 # Core Skill Extraction Instructions (appended to prompts when enabled)
 CORE_SKILL_EXTRACTION = """
 
-## BATCH SUMMARY (MANDATORY)
+## BATCH SUMMARY (MANDATORY) — SCIENCE VERSION
 
-After generating all questions in the current batch, produce a single
-batch_summary that lists each question's core mathematical idea individually.
+After generating all questions in the current batch, produce ONE
+batch_summary that lists each question’s core SCIENTIFIC IDEA individually.
 
 Additionally, for EVERY question, you MUST explicitly identify and record
-the scenario used to frame the question.
+the SCENARIO used to frame the question.
 
 ────────────────────────
-DUPLICATE PREVENTION RULE (MATHEMATICAL IDEA):
+DUPLICATE PREVENTION RULE (SCIENTIFIC IDEA):
 1. Before generating each question, you MUST check the "Existing Knowledge Base" (if provided).
-2. If a mathematical idea or solution pattern already exists, you MUST change the logic,
-   reasoning direction, or mathematical structure.
-3. Changing names, numbers, or surface story wording is NOT sufficient.
+2. If a scientific idea, principle, or explanation pattern already exists,
+   you MUST change the concept focus, causal reasoning, or application.
+3. Changing only objects, examples, or wording is NOT sufficient.
 
 ────────────────────────
 NORMALIZATION RULE:
-4. Before checking for duplicates, normalize each question to its abstract mathematical form
-   (operation + structure). Ignore story context and objects.
+4. Before checking for duplicates, normalize each question to its
+   abstract scientific form (concept + reasoning type).
+   Ignore story context and surface details.
 
-5. Questions using the same operation with the same fixed structure
-   (e.g., division by 100) are considered duplicates unless they require
-   fundamentally different reasoning.
+5. Questions based on the same concept with the same reasoning demand
+   (e.g., “direction of friction opposing motion”) are duplicates
+   unless they require a fundamentally different explanation or inference.
 
-6. A question is considered distinct ONLY if it introduces at least one of:
-   - a different mathematical operation
-   - a different direction of reasoning
-   - a different representational domain
-   - a different constraint or logical structure
+6. A question is considered DISTINCT ONLY if it introduces at least one of:
+   - a different scientific concept or law
+   - a different cause–effect reasoning chain
+   - a different representational form (diagram-based, verbal, experimental)
+   - a different constraint, condition, or misconception check
 
 ────────────────────────
 SCENARIO UNIQUENESS RULE (CRITICAL):
-7. Every question MUST use a clearly identifiable scenario
-   (e.g., money, distance, time, classroom, transport, sports, cooking, measurements).
+7. Every question MUST use a clearly identifiable real-world scenario
+   (e.g., playground, kitchen, road traffic, laboratory, sports field, weather).
 
 8. NO TWO QUESTIONS may use the SAME scenario.
-   Scenario repetition of any kind is STRICTLY PROHIBITED.
+   Any scenario repetition is STRICTLY PROHIBITED.
 
 9. Before generating a question, you MUST verify that:
-   - its mathematical idea is not duplicated, AND
-   - its scenario has not appeared earlier in the batch or in prior batches (if provided).
+   - its scientific idea is not duplicated, AND
+   - its scenario has not appeared earlier in the batch or prior batches (if provided).
 
-10. If a new mathematical idea exists but no unused scenario is available,
+10. If a new scientific idea exists but no unused scenario is available,
     DO NOT generate the question and explicitly state:
     "No valid new question possible due to scenario exhaustion."
+
 
 ────────────────────────
 CRITICAL RULE: ONE ENTRY PER QUESTION
