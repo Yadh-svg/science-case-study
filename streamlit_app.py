@@ -141,6 +141,58 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Authentication
+if 'authenticated' not in st.session_state:
+    st.session_state.authenticated = False
+
+def check_authentication():
+    """Check if user is authenticated"""
+    return st.session_state.authenticated
+
+def login(username, password):
+    """Validate login credentials"""
+    try:
+        correct_username = st.secrets["USERNAME"]
+        correct_password = st.secrets["PASSWORD"]
+        if username == correct_username and password == correct_password:
+            st.session_state.authenticated = True
+            return True
+    except Exception as e:
+        st.error(f"❌ Error reading credentials: {e}")
+    return False
+
+# Show login page if not authenticated
+if not check_authentication():
+    st.markdown("""
+    <div class="main-header">
+        <h1>🔐 AI Science Question Creator</h1>
+        <p>Secure Login Required</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("### 🔑 Login")
+    
+    # Create a centered login form
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        with st.form("login_form"):
+            username = st.text_input("Username", placeholder="Enter your username")
+            password = st.text_input("Password", type="password", placeholder="Enter your password")
+            submit = st.form_submit_button("🔓 Login", use_container_width=True)
+            
+            if submit:
+                if username and password:
+                    if login(username, password):
+                        st.success("✅ Login successful! Redirecting...")
+                        st.rerun()
+                    else:
+                        st.error("❌ Invalid username or password")
+                else:
+                    st.warning("⚠️ Please enter both username and password")
+    
+    st.stop()  # Stop execution here if not authenticated
+
 # Initialize session state
 if 'question_types_config' not in st.session_state:
     st.session_state.question_types_config = {}
