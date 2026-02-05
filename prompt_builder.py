@@ -34,10 +34,11 @@ CORE_SKILL_EXTRACTION = """
 ## BATCH SUMMARY (MANDATORY) — SCIENCE VERSION
 
 After generating all questions in the current batch, produce ONE
-batch_summary that lists each question’s core SCIENTIFIC IDEA individually.
+batch_summary that lists each question’s core SCIENTIFIC IDEA individually
+for the CURRENT BATCH ONLY.
 
-Additionally, for EVERY question, you MUST explicitly identify and record
-the SCENARIO used to frame the question.
+Additionally, for EVERY question in the current batch, you MUST explicitly 
+identify and record the SCENARIO used to frame the question.
 
 ────────────────────────
 DUPLICATE PREVENTION RULE (SCIENTIFIC IDEA):
@@ -93,26 +94,15 @@ OUTPUT FORMAT (STRICT):
 
 ```json
 {
-  "batch_summary": "Append new mathematical concepts to Existing Knowledge Base here (comma-separated)",
-  "scenario_used": "Unique scenario per question, no repetition (comma-separated)"
+  "batch_summary": "List new scientific ideas for the CURRENT BATCH ONLY (comma-separated)",
+  "scenario_used": "List unique scenarios for the CURRENT BATCH ONLY (comma-separated)"
 }
 ```
 
-Example (for 3 questions):
-Q1. Which gas is released during photosynthesis?
-Q2. A plant kept in sunlight produces bubbles in water. What do these bubbles indicate?
-Q3. Why are green plants called producers?
-
-{
-  "batch_summary": "1. gas released during photosynthesis, 2. oxygen release observed during photosynthesis in sunlight, 3. food production by green plants through photosynthesis",
-  "scenario_used": "theoretical biology concept, laboratory observation in water setup, ecological role of plants in food chain"
-}
-
-
-
 Rules:
-1. **Concatenate**: Take the "Existing Knowledge Base" values and append your new values (comma-separated).
-2. Ensure the list grows with each batch by exactly the number of questions generated.
+1. ONLY list new items for the current batch.
+2. DO NOT repeat items from the "Existing Knowledge Base".
+3. Python will handle the final concatenation.
 
 
 """

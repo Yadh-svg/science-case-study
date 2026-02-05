@@ -297,7 +297,7 @@ async def generate_raw_batch(
             prompt=prompt_text,
             api_key=api_key,
             files=files,
-            thinking_budget=5000,
+            thinking_budget=3000,
             file_metadata=file_metadata,
             log_name=f"{batch_key}_Gen",
             save_prompt=True
@@ -346,7 +346,7 @@ async def validate_batch(
             prompt=validation_prompt_text,
             api_key=api_key,
             files=files,
-            thinking_budget=5000,
+            thinking_budget=3000,
             file_metadata=file_metadata,
             log_name=f"{batch_key}_Val",
             save_prompt=False
@@ -770,11 +770,24 @@ async def process_batches_pipeline(
                     previous_batch_metadata=accumulated_metadata if accumulated_metadata else None
                 )
                 
-                # Extract metadata from result
-                # Since LLM provides cumulative metadata now, we just update our tracker
+                # LOGIC UPDATE: We now accumulate metadata in Python, 
+                # instead of expecting the LLM to pass back the full list.
                 batch_metadata = result.pop('_metadata', {})
                 if batch_metadata:
-                    accumulated_metadata = batch_metadata
+                    # Initialize if empty
+                    if not accumulated_metadata:
+                        accumulated_metadata = batch_metadata.copy()
+                    else:
+                        # Append new values to existing strings
+                        for key, new_val in batch_metadata.items():
+                            if key in accumulated_metadata:
+                                # Append with comma
+                                current_val = accumulated_metadata[key]
+                                if new_val.strip():
+                                    accumulated_metadata[key] = f"{current_val}, {new_val}"
+                            else:
+                                # New key, just add it
+                                accumulated_metadata[key] = new_val
                     logger.info(f"[Core Skill] Updated cumulative metadata after {batch_key}")
                 
                 # Add batch results to pipeline results

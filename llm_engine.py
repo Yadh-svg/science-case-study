@@ -106,7 +106,7 @@ def run_gemini(
     prompt: str,
     api_key: str,
     files: Optional[List] = None,
-    thinking_budget: int = 10000,
+    thinking_budget: int = 4000,
     file_metadata: Optional[Dict[str, Any]] = None,
     log_name: str = "prompt",
     save_prompt: bool = True
@@ -171,7 +171,7 @@ def run_gemini(
         
         # Using stream=True to be consistent with previous implementation
         stream = client.models.generate_content_stream(
-            model="gemini-2.5-pro",
+            model="gemini-3-flash-preview",
             contents=contents,
             config=config
         )
@@ -265,14 +265,14 @@ async def duplicate_questions_async(
     # Prepare files list if PDF is provided
     files_to_upload = [pdf_file] if pdf_file else None
     
-    # Call Gemini 2.5 Pro with higher thinking budget for better quality
+    # Call Gemini 3 Flash Preview with higher thinking budget for better quality
     logger.info(f"Generating {num_duplicates} duplicate(s) for question {question_code}")
     
     result = await run_gemini_async(
         prompt=formatted_prompt,
         api_key=api_key,
         files=files_to_upload,
-        thinking_budget=8000,  # Higher budget for quality duplicates
+        thinking_budget=3000,  # Higher budget for quality duplicates
         file_metadata={'source_type': 'duplicate_context', 'filenames': [getattr(pdf_file, 'name', 'file')]} if pdf_file else None
     )
     
@@ -325,7 +325,7 @@ async def run_gemini_async(
     prompt: str,
     api_key: str,
     files: Optional[List] = None,
-    thinking_budget: int = 5000,
+    thinking_budget: int = 3000,
     file_metadata: Optional[Dict[str, Any]] = None,
     log_name: str = "prompt",
     save_prompt: bool = True

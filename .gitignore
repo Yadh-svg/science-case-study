@@ -43,3 +43,6 @@ saved_prompts/
 # OS
 .DS_Store
 Thumbs.db
+
+
+.streamlit/secrets.toml

@@ -171,12 +171,12 @@ st.markdown("---")
 # Sidebar for API configuration
 with st.sidebar:
     st.markdown("### ⚙️ Configuration")
-    api_key = st.text_input(
-        "Gemini API Key",
-        type="password",
-        value=os.getenv("GEMINI_API_KEY", ""),
-        help="Enter your Gemini API key"
-    )
+    # API key is now fetched from st.secrets for security
+    try:
+        gemini_api_key = st.secrets["GEMINI_API_KEY"]
+    except Exception:
+        st.error("❌ GEMINI_API_KEY not found in secrets.toml")
+        gemini_api_key = None
     
     st.markdown("---")
     st.markdown("### 📊 Statistics")
@@ -1421,8 +1421,8 @@ with tab1:
     # Generate button at the bottom of configuration
     st.markdown('<div class="section-header">Generate Questions</div>', unsafe_allow_html=True)
     
-    if not api_key:
-        st.warning("⚠️ Please enter your Gemini API key in the sidebar to continue.")
+    if not gemini_api_key:
+        st.warning("⚠️ Gemini API key is missing. Please add GEMINI_API_KEY to your .streamlit/secrets.toml.")
     else:
         
         if st.button("🚀 Generate All Questions", type="primary", use_container_width=True):
@@ -1452,7 +1452,7 @@ with tab1:
                         'old_concept': old_concept,
                         'new_concept': new_concept,
                         'additional_notes': additional_notes,
-                        'api_key': api_key,
+                        'api_key': gemini_api_key,
                         'universal_pdf': st.session_state.get('universal_pdf'),  # Pass universal PDF
                         'core_skill_enabled': st.session_state.get('core_skill_enabled', False)  # Core skill extraction
                     }
@@ -1645,15 +1645,15 @@ with tab2:
         #         
         #         if missing_reasons:
         #             st.error(f"❌ Please provide a reason for: {', '.join(missing_reasons)}")
-        #         elif not api_key:
-        #             st.error("❌ Please enter your Gemini API key in the sidebar")
+        #         elif not gemini_api_key:
+        #             st.error("❌ Gemini API key is missing in secrets.toml")
         #         else:
         #             with st.spinner("Regenerating specific questions..."):
         #                 from batch_processor import regenerate_specific_questions_pipeline
         #                 
         #                 # Prepare configurations
         #                 general_config = {
-        #                     'api_key': api_key,
+        #                     'api_key': gemini_api_key,
         #                     'additional_notes': additional_notes,
         #                     'universal_pdf': st.session_state.get('universal_pdf')
         #                 }
@@ -1836,8 +1836,8 @@ with tab2:
         #     
         #     # Generate Duplicates Button
         #     if st.button("🚀 Generate Duplicates", type="primary", use_container_width=True):
-        #         if not api_key:
-        #             st.error("❌ Please enter your Gemini API key in the sidebar")
+        #         if not gemini_api_key:
+        #             st.error("❌ Gemini API key is missing in secrets.toml")
         #         else:
         #             with st.spinner("Generating duplicates... This may take a moment."):
         #                 import asyncio
@@ -1864,7 +1864,7 @@ with tab2:
         #                             original_question_markdown=data['markdown_content'],
         #                             question_code=data['question_code'],
         #                             num_duplicates=data['num_duplicates'],
-        #                             api_key=api_key,
+        #                             api_key=gemini_api_key,
         #                             additional_notes=data.get('additional_notes', ""),
         #                             pdf_file=data.get('pdf_file', None)
         #                         )
