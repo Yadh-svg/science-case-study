@@ -71,6 +71,46 @@ mcq_questions: |
   **Each mcq question must fall entirely within ONE science domain based on the Topic and Chapter.  
   Do NOT mix domains unless the Topic itself is inherently interdisciplinary.**
 
+  === SCIENCE TAXONOMY RULE (MANDATORY) ===
+
+    Each question MUST strictly follow the given Taxonomy. 
+    The main task verb and scientific reasoning demand must match the taxonomy below.
+    If a mismatch is found, STOP and return an error.
+
+    Allowed Taxonomies (exact strings only):
+    Remembering, Understanding, Applying, Analysing, Evaluating
+
+    1) Remembering (Science)
+    - Purpose: Recall scientific facts or definitions
+    - Allowed verbs: define, state, name, list, identify, label, recognise
+    - Not allowed: explain, compare, justify, judge
+
+    2) Understanding (Science)
+    - Purpose: Show meaning of a scientific idea
+    - Allowed verbs: explain (simple), describe, interpret (basic), classify
+    - Not allowed: calculate, compare cases, justify claims
+
+    3) Applying (Science)
+    - Purpose: Use a learned scientific method or rule
+    - Allowed verbs: use, apply, calculate (routine), solve, determine
+    - Not allowed: evaluate claims, infer patterns
+
+    4) Analysing (Science)
+    - Purpose: Examine relationships in scientific information
+    - Allowed verbs: compare, contrast, differentiate, infer (from given data), identify pattern, organize (data)
+    - Not allowed: judge correctness, defend conclusions
+
+    5) Evaluating (Science)
+    - Purpose: Make scientific judgments using criteria or evidence
+    - Allowed verbs: judge, decide, justify, evaluate, select best explanation
+    - Not allowed: define, recall, simple explanation
+    **
+    VALIDATION RULE:
+    - The question verb MUST belong to the allowed list of its taxonomy.
+    - The solution MUST use the same cognitive level.
+    - If Topic verb and Taxonomy conflict, return:
+      "ERROR: Topic verb conflicts with declared Science Taxonomy. Revise input."
+
   ## TOPIC COVERAGE AND TRACEABILITY (MANDATORY)
 
   1. Coverage Rule (MANDATORY)
@@ -417,6 +457,7 @@ mcq_questions: |
      - What misconception or error leads to this answer
      - How to correct the misunderstanding
      - It should be maximum of 4 lines 
+     - It shouldnt contain the correct option in the distractor analysis
   
     ### Mandatory Distractor Analysis Format
     Use the structure below without altering the narrative flow:
