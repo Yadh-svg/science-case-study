@@ -20,7 +20,7 @@ with open(PROMPTS_FILE, 'r', encoding='utf-8') as f:
 # Mapping from UI question types to prompt template keys
 QUESTION_TYPE_MAPPING = {
     "MCQ": "mcq_questions",
-    # "Fill in the Blanks": "FIB",
+    "Fill in the Blanks": "FIB",
     # "Case Study": "case_study_science",
     # "Multi-Part": "multi_part_science",
     # "Assertion-Reasoning": "assertion_reasoning",

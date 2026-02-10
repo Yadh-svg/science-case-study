@@ -168,6 +168,7 @@ validation_prompt: |
    
       Metadata Block must include:
         Topic/Chapter • Question Type • Taxonomy • DOK • Marks
+        
         (for question/subquestion)
       Rules:
       • Do NOT place metadata before sub-questions.
@@ -175,6 +176,7 @@ validation_prompt: |
       • Metadata line must be separate from question/answer/solution.
       • Use inline separators (e.g., "•"), no key:value labels.
       • No commentary inside metadata.
+      - Metadata should be present at the beginning of the question.Not in middle or end
 
     ## GLOBAL MULTI-LINE FORMATTING RULE:
 
@@ -187,7 +189,7 @@ validation_prompt: |
       - Answer key
       - Solution explanation
       - Key Idea
-      - Distractor analysis 
+      - Distractor analysis (ONLY FOR MCQ)
       - Marking info
       - Metadata
       
@@ -291,7 +293,7 @@ validation_prompt: |
       Remove any of the reference to the textbook if found
 
 
-    ## Distractor analysis table structure :
+    ## Distractor analysis table structure[ONLY FOR MCQ] :
       Generate the distractor analysis table using Word-compatible Markdown. Use full column separators, padded cells, and extended dash lines so Word recognizes it as a table. Do not use compact ‘|---|---|’ separators. Each column must have descriptive headers and consistent spacing
       Given below is the distractor analysis table with proper spacing and Word recognizable format, Make sure the table format will be like this
       ### DISTRACTOR ANALYSIS
@@ -346,3 +348,34 @@ structure_MCQ: |
   "question2": "..."
   }
 
+
+structure_FIB: |
+  Fill in the Blanks Output Structure (SCIENCE):
+
+  Return a JSON object where each key ("question1", "question2", …) maps to a single markdown string.
+
+  Each value must contain the COMPLETE fill-in-the-blanks question written in PURE CLEAN MARKDOWN.
+  Do NOT use structured labels like **Topic:**, **Question:**, **Answer:**, **Solution:** as JSON fields.
+
+  Include ALL applicable components inside the markdown (after validation):
+  - Metadata Block must include:
+    Topic/Chapter • Question Type • Taxonomy • DOK • Marks
+    (for question/subquestion)
+  - Diagram prompt (if applicable)
+  - Question text with blanks
+  - Sub-parts (if multi-part)
+  - Correct answers for each blank
+  - Detailed solution (step-by-step scientific reasoning)
+  - Key idea / concept
+
+  Formatting rules:
+  - Use markdown headers for sections.
+  - Represent blanks as "____" or "[BLANK]".
+  - Chemical equations and scientific expressions must follow plain-text science rules.
+  - Everything inside each question value must be markdown text inside quotes, not JSON formatting.
+
+  EXAMPLE OUTPUT FORMAT:
+  {
+    "question1": "# Laws of Motion\n\n*Concept-based FIB*\n\nWhen a net external force acts on a body of mass 2 kg producing an acceleration of 3 m/s², the magnitude of the force is ____ N.\n\n### Answer\n6\n\n### Solution\nAccording to Newton’s second law:\nForce = mass × acceleration\n\nSubstituting values:\nForce = 2 kg × 3 m/s² = 6 N\n\nTherefore, the force acting on the body is 6 N.\n\n### Key Idea\nNewton’s second law states that force is directly proportional to acceleration for a given mass.",
+    "question2": "..."
+  }

@@ -405,7 +405,7 @@ with tab1:
     # Question type selection
     question_types = [
         "MCQ",
-        # "Fill in the Blanks",
+        "Fill in the Blanks",
         # "Case Study",
         # "Multi-Part",
         # "Assertion-Reasoning",
@@ -827,8 +827,25 @@ with tab1:
                     )
                     st.session_state.question_types_config[qtype]['questions'][i]['num_subparts'] = num_subparts
                     
-                    # FIB Type (Internal only, not in UI as per user request)
-                    st.session_state.question_types_config[qtype]['questions'][i]['fib_type'] = st.session_state.question_types_config[qtype]['questions'][i].get('fib_type', 'Auto')
+                    # FIB Type Selection
+                    fib_type_options = [
+                        "Auto",
+                        "Concept (definition)",
+                        "REAL LIFE IMAGES BASED",
+                        "IMAGE BASED",
+                        "Image-Based Science Observation",
+                        "Data Based",
+                        "Numerical and Image Based",
+                        "Equation Based"
+                    ]
+                    current_fib_type = st.session_state.question_types_config[qtype]['questions'][i].get('fib_type', 'Auto')
+                    fib_type = st.selectbox(
+                        "FIB Type",
+                        fib_type_options,
+                        key=f"fib_type_{i}",
+                        index=fib_type_options.index(current_fib_type) if current_fib_type in fib_type_options else 0
+                    )
+                    st.session_state.question_types_config[qtype]['questions'][i]['fib_type'] = fib_type
                     
                     # If single-part (num_subparts = 1), show DOK, Marks, Taxonomy directly
                     if num_subparts == 1:

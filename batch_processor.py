@@ -349,7 +349,7 @@ async def validate_batch(
             thinking_budget=3000,
             file_metadata=file_metadata,
             log_name=f"{batch_key}_Val",
-            save_prompt=False
+            save_prompt=True
         )
         
         result['batch_key'] = batch_key
@@ -504,6 +504,7 @@ async def process_single_batch_flow(
     general_config: Dict[str, Any],
     type_config: Dict[str, Any] = None,
     validation_prompt_template: str = "",
+    validation_config: Dict[str, Any] = None,
     progress_callback=None,
     previous_batch_metadata: Dict[str, Any] = None
 ) -> Dict[str, Any]:
@@ -541,15 +542,10 @@ async def process_single_batch_flow(
         if progress_callback: progress_callback(batch_key, result_payload)
         return {batch_key: result_payload, '_metadata': core_skill_metadata}
 
-    # --- STAGE 2: SPLIT ---
-    split_questions = split_generated_content(raw_result['text'])
+    # --- STAGE 2: BATCH VALIDATION (No Split) ---
+    logger.info(f"[{batch_key}] Validating entire batch (all questions together)")
     
-
-    
-    # --- STAGE 3: PARALLEL VALIDATION ---
-    logger.info(f"[{batch_key}] Validating {len(split_questions)} items in PARALLEL. Keys: {list(split_questions.keys())}")
-    
-    # Prepare common validation resources
+    # Prepare validation resources
     val_files = [] 
     val_file_metadata = {'source_type': 'None (Validation)', 'filenames': []}
     
@@ -565,143 +561,49 @@ async def process_single_batch_flow(
         "Descriptive w/ Subquestions": "structure_Descriptive_w_subq"
     }
     structure_key = structure_map.get(base_type_key)
-    # Load validation.yaml config locally inside function or pass it? 
-    # We passed the template string. We need structure format rule.
-    # Assuming standard structure rule for now or extracting from template if possible.
-    # Actually, let's use a generic instruction if we can't load the file here easily.
-    # BETTER: Pass the validation_config or load it once in the pipeline.
-    # For now, let's assume the strict JSON structure rule is embedded or we use a default.
-    structure_format = "Return a valid JSON object." 
-    # Try to extract from globals/pipeline if passed, but simpler to default or refine later.
     
+    # Load the actual structure format from validation_config
+    structure_format = "Return a valid JSON object."  # Default fallback
+    if validation_config and structure_key:
+        structure_format = validation_config.get(structure_key, structure_format)
+        logger.info(f"[{batch_key}] Using structure format: {structure_key}")
+    else:
+        logger.warning(f"[{batch_key}] No validation config or structure key found, using default")
     
-    async def validate_single_item(q_key, q_text):
-        """Helper to validate one specific question chunk"""
-        try:
-            # Build Context for THIS question only
-            # We need to map q_key (question1) back to the config? 
-            # The split gave us numbers based on the generated text headers.
-            # Ideally "Question [1]" corresponds to index 0 in questions list.
-            try:
-                idx = int(q_key.replace("question", "")) - 1
-            except:
-                idx = 0
-            
-            # Formatting context safely
-            q_config = questions[idx] if 0 <= idx < len(questions) else {}
-            topic_str = q_config.get('topic', 'Unknown')
-            q_notes = q_config.get('additional_notes_text', '')
-            
-            # Specifier
-            spec = q_config.get('mcq_type') or q_config.get('fib_type') or q_config.get('descriptive_type') or "Standard"
-            
-            context_line = f"Question Context: Topic='{topic_str}', Type='{spec}'"
-            if q_notes: context_line += f", Notes='{q_notes}'"
-                
-            # Construct Prompt
-            val_prompt = validation_prompt_template.replace("{{GENERATED_CONTENT}}", q_text)
-            val_prompt = val_prompt.replace("{{INPUT_CONTEXT}}", context_line)
-            # Use structure map if available (passed or hardcoded knowns)
-            val_prompt = val_prompt.replace("{{OUTPUT_FORMAT_RULES}}", structure_format)
-            
-            # Call API
-            v_res = await validate_batch(f"{batch_key}_{q_key}", val_prompt, general_config, val_files, val_file_metadata)
-            
-            logger.info(f"[{batch_key}_{q_key}] Validation finished. Result keys: {list(v_res.keys()) if v_res else 'None'}")
-            
-            # Return tuple of (key, result)
-            return q_key, v_res
-            
-        except Exception as e:
-            logger.error(f"Item validation failed for {q_key}: {e}")
-            return q_key, {'error': str(e), 'text': ''}
-
-    # Launch all validation tasks
-    validation_tasks = [
-        validate_single_item(k, v) for k, v in split_questions.items()
-    ]
-    
-    validation_results = await asyncio.gather(*validation_tasks)
-    
-    # --- STAGE 4: AGGREGATE ---
-    # We need to combine the results into a single "validated" dictionary 
-    # that looks like the result of a batch validation (text field containing JSON).
-    # OR we construct the final object that the Renderer expects.
-    # The renderer typically parses `validated['text']` as JSON.
-    # So we should reconstruct a JSON string from our individual results.
-    
-    import json
-    aggregated_json = {}
-    total_val_time = 0
-    
-    # Define helper locally or at module level (doing locally to minimize diff scope but module level is cleaner. 
-    # I'll add the helper at module level in a separate edit or just inline a simple one here if short.
-    # Actually, let's look for braces.
-    
-    def extract_first_json_match(text: str) -> Dict[str, Any]:
-        """
-        Helper to find first valid JSON object using raw_decode.
-        This handles trailing text automatically and is more robust than manual brace counting.
-        """
-        try:
-            # Find closest opening brace
-            start_idx = text.find('{')
-            if start_idx == -1:
-                return None 
-            
-            # Use raw_decode which returns (obj, end_index) and ignores trailing text
-            decoder = json.JSONDecoder()
-            obj, _ = decoder.raw_decode(text, idx=start_idx)
-            return obj
-        except Exception:
-            return None
-
-    for q_key, v_res in validation_results:
-        # v_res['text'] should be the JSON for that question (e.g. {"question1": "markdown"})
-        total_val_time += v_res.get('elapsed', 0)
+    # Build context for the batch (all questions)
+    context_lines = []
+    for idx, q_config in enumerate(questions):
+        topic_str = q_config.get('topic', 'Unknown')
+        q_notes = q_config.get('additional_notes_text', '')
+        spec = q_config.get('mcq_type') or q_config.get('fib_type') or q_config.get('descriptive_type') or "Standard"
         
-        # Robust extraction
-        raw_text = v_res.get('text', '')
-        
-        # First try to strip code blocks as they are most common source of noise
-        cleaner_text = raw_text.replace('```json', '').replace('```', '').strip()
-        
-        # Try extraction on cleaned text first (best chance)
-        data = extract_first_json_match(cleaner_text)
-        
-        # If valid data found
-        if data:
-            try:
-                # Take the first value found (assuming one question per validation call)
-                if data:
-                    content = next(iter(data.values()))
-                    aggregated_json[q_key] = content
-                else:
-                    aggregated_json[q_key] = raw_text
-            except Exception as e:
-                logger.warning(f"Extracted JSON but failed to get value for {q_key}: {e}")
-                aggregated_json[q_key] = raw_text
-        else:
-            # If failed, try on original raw text (in case code block stripping removed something vital? Unlikely but safe)
-            data_retry = extract_first_json_match(raw_text)
-            if data_retry:
-                try:
-                    content = next(iter(data_retry.values()))
-                    aggregated_json[q_key] = content
-                except:
-                    aggregated_json[q_key] = raw_text
-            else:
-                logger.warning(f"Failed to parse validation output for {q_key}. Using raw text.")
-                aggregated_json[q_key] = raw_text
-            
-    # Create the virtual "batch validation result"
+        context_line = f"Question {idx+1}: Topic='{topic_str}', Type='{spec}'"
+        if q_notes:
+            context_line += f", Notes='{q_notes}'"
+        context_lines.append(context_line)
+    
+    batch_context = "\n".join(context_lines)
+    
+    # Construct validation prompt for entire batch
+    val_prompt = validation_prompt_template.replace("{{GENERATED_CONTENT}}", raw_result['text'])
+    val_prompt = val_prompt.replace("{{INPUT_CONTEXT}}", batch_context)
+    val_prompt = val_prompt.replace("{{OUTPUT_FORMAT_RULES}}", structure_format)
+    
+    # Call validation API once for the entire batch
+    validation_result = await validate_batch(batch_key, val_prompt, general_config, val_files, val_file_metadata)
+    
+    logger.info(f"[{batch_key}] Batch validation complete")
+    
+    # The validation result should already contain properly formatted JSON
     final_validation_payload = {
-        'text': json.dumps(aggregated_json),
-        'elapsed': total_val_time / max(len(validation_results), 1), # Approx avg time or max? 
-        'batch_key': batch_key
+        'text': validation_result.get('text', '{}'),
+        'elapsed': validation_result.get('elapsed', 0),
+        'batch_key': batch_key,
+        'input_tokens': validation_result.get('input_tokens', 0),
+        'output_tokens': validation_result.get('output_tokens', 0)
     }
     
-    logger.info(f"[{batch_key}] Flow Complete. Aggregated {len(aggregated_json)} items.")
+    logger.info(f"[{batch_key}] Flow Complete")
     
     result_payload = {
         'raw': raw_result,
@@ -766,6 +668,7 @@ async def process_batches_pipeline(
                     general_config=general_config,
                     type_config=None,
                     validation_prompt_template=validation_prompt_template,
+                    validation_config=validation_config,
                     progress_callback=progress_callback,
                     previous_batch_metadata=accumulated_metadata if accumulated_metadata else None
                 )
@@ -810,6 +713,7 @@ async def process_batches_pipeline(
                     general_config=general_config,
                     type_config=None,
                     validation_prompt_template=validation_prompt_template,
+                    validation_config=validation_config,
                     progress_callback=progress_callback,
                     previous_batch_metadata=None
                 )
