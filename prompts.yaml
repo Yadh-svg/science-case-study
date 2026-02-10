@@ -960,8 +960,12 @@ FIB: |
 
     **Question:**  
       Riya was conducting an experiment in her school garden to observe how the presence of one organism affects others. Based on this scenario and the picture given, complete the blanks.
-      She noticed that in Pond A, the [DROP 1] around the pond was significantly higher compared to Pond B. This led Riya to conclude that the presence of [DROP 2] might be influencing factor. In Pond A the larvae of [DROP 3] are eaten, which are natural predators of [DROP 4]. As a result, there were more pollination of nearby plants, leading to the production of more seeds.
-    ---
+
+      She noticed that in Pond A, the |TEXT 1| around the pond was significantly higher compared to Pond B.
+      This led Riya to conclude that the presence of |TEXT 2| might be an influencing factor.
+      In Pond A, the larvae of |TEXT 3| are eaten, which are natural predators of |TEXT 4|.
+      As a result, there was more pollination of nearby plants, leading to the production of more seeds.
+        ---
 
     ### 3. Fill in the Blank (IMAGE BASED)
 
@@ -976,52 +980,14 @@ FIB: |
 
       Analyze the given picture and complete the blanks.
 
-      The food web shows how energy flows through different trophic levels.  
-      The first trophic level consists of __________ [DROP 1].  
-      The next trophic level consists of __________ [DROP 2].  
-      These are followed by __________ [DROP 3].  
-      At the top of the food pyramid are the __________ [DROP 4].  
-      If the mouse disappears, it would affect the __________ [DROP 5] more and their number will __________ [DROP 6].  
-      The number of organisms in the __________ [DROP 7] trophic level is always higher compared to higher levels, due to the decrease in energy at each level.
+      The first trophic level consists of |TEXT 1|.
+      The next trophic level consists of |TEXT 2|.
+      These are followed by |TEXT 3|.
+      At the top of the food pyramid are the |TEXT 4|.
 
-      ---
+      If the mouse disappears, it would affect the |TEXT 5| more and their number will |TEXT 6|.
 
-      ### Drop-Down Options
-
-      **DROP 1:**  
-      - grass which are autotrophs  
-      - mouse, rabbit and grasshopper which are heterotrophs  
-      - hawk which is heterotroph  
-
-      **DROP 2:**  
-      - lizard and snake  
-      - mouse, rabbit and grasshoppers  
-      - hawks  
-
-      **DROP 3:**  
-      - lizard and snake  
-      - mouse, rabbit and grasshoppers  
-      - hawks  
-
-      **DROP 4:**  
-      - lizard and snake  
-      - mouse, rabbit and grasshoppers  
-      - hawks  
-
-      **DROP 5:**  
-      - snake  
-      - rabbit  
-      - lizard  
-
-      **DROP 6:**  
-      - increase  
-      - decrease  
-      - remain same  
-
-      **DROP 7:**  
-      - first  
-      - second  
-      - third  
+      The number of organisms in the |TEXT 7| trophic level is always higher compared to higher levels, due to the decrease in energy at each level.
 
       ---
 
@@ -1292,7 +1258,7 @@ FIB: |
 
         Fill in the Blanks questions are used to assess mathematical understanding where
         students must supply missing information directly, without being guided step-by-step.
-        FIB questions may include THREE distinct answer-handling types:
+        FIB questions may include 2 distinct answer-handling types:
 
         ────────────────────────────────────────
         1. UNIQUE-ANSWER FIB (TEXT ENTRY)
@@ -1348,28 +1314,8 @@ FIB: |
         • Important:
           - The blank must NOT reduce to a single forced representation.
           - If only one exact response is possible, this is NOT a probable-answer FIB.
-        ────────────────────────────────────────
-        3. DROP-DOWN FIB (CONTROLLED SELECTION)
-        ────────────────────────────────────────
-
-        • Use when:
-          - Use when there are TOO MANY probable answers to manage fairly in free-text entry.
-          - Provide a fixed option set with EXACTLY ONE correct answer.
-
-        • Format:
-          - Use placeholder: [DROP]
-          - Explicitly list dropdown options for each blank.
-          - Each [DROP] has its own option set.
-
-        • Rules:
-          - Other options must be close and plausible so the student must think carefully.
-          - Options must be mutually exclusive.
-          - Exactly one option must be correct.
-          - Avoid trivial elimination.
-
-        • Example (validated):
-          [DROP] → (Red, Green, Black, Blue)
-  ** Based on the topic, grade level, and concepts being assessed, you may choose the most appropriate Fill in the Blanks type (unique-answer, probable-answer, or drop-down); a single topic may include a mix of all three types, and where visual understanding is required, you may include a diagram prompt describing the image to be shown (for visualization purposes only), ensuring the diagram contains only essential visual information and does not include labels, values, or clues that directly reveal the answer.
+       
+  ** Based on the topic, grade level, and concepts being assessed, you may choose the most appropriate Fill in the Blanks type (unique-answer, probable-answer, ); a single topic may include a mix of all three types, and where visual understanding is required, you may include a diagram prompt describing the image to be shown (for visualization purposes only), ensuring the diagram contains only essential visual information and does not include labels, values, or clues that directly reveal the answer.
       EXAMPLE 1: UNIQUE ANSWER (Scientific – only one correct answer)
 
       Question:
@@ -1378,7 +1324,6 @@ FIB: |
 
       Answer:
       TEXT1: 6
-
 
       ------------------------------------------------------------
 
@@ -1391,24 +1336,10 @@ FIB: |
       Answers:
       TEXT1: photosynthesis; Photosynthesis
 
-
       ------------------------------------------------------------
 
-      EXAMPLE 3: DROPDOWN QUESTION (Scientific – selection from given options)
+    3.  Marks and Blanks Rules (STRICT RULE):
 
-      Question:
-      The gas released during photosynthesis is [DROP].
-
-      Drop-down Options:
-      [DROP] → (oxygen, carbon dioxide, nitrogen, hydrogen)
-
-      Answer:
-      [DROP]: oxygen
-
-    4.  Marks and Blanks Rules (STRICT RULE):
-
-    - Each blank or dropdown must carry either **0.5 mark or 1 mark only**.
-    - No blank or dropdown can have marks **less than 0.5 or more than 1**, and no other intermediate values are allowed.
     - Wherever possible, prioritize using blanks with **0.5 marks** (e.g., split a 1-mark question into two 0.5-mark blanks).
 
     - For a **1-mark question**:
@@ -1421,11 +1352,11 @@ FIB: |
     - For a **3-mark question**:
       - Use **at least three blanks** (any valid combination of 0.5 or 1 mark each).
 
-    - It is allowed to include **multiple blanks and/or dropdowns** as appropriate to the question type, provided the above marking rules are satisfied.
+    - It is allowed to include **multiple blanks** as appropriate to the question type, provided the above marking rules are satisfied.
     - Each blank should carry marks in proportion to its allotted value.
     - Wherever 0.5 mark is possible, it should be used.
 
-  5. Diagram Prompt (for visualization purposes only) 
+  4. Diagram Prompt (for visualization purposes only) 
     ## DIAGRAM RULES
         - Diagram is optional (unless the topic inherently requires visual representation).
         - If included, give a **diagram prompt** (NOT the actual image).
@@ -1459,10 +1390,10 @@ FIB: |
           - Each section must serve a distinct purpose:
               • Short Context = Real-life setup and qualitative description
               • Diagram = Visual/numerical representation of the setup
-  6. ## INSTRUCTION OVERVIEW:
+  5. ## INSTRUCTION OVERVIEW:
     - IMPORTANT → Total Questions to Generate: {{TOTAL_QUESTIONS}} (Sum of all questions across topics)
     - You can add multiple blanks in a question 
-    - A single Fill in the Blanks question may contain one or more blanks (|TEXT| and/or [DROP]), where each blank independently tests a specific part of the concept or reasoning step.
+    - A single Fill in the Blanks question may contain one or more blanks (|TEXT|), where each blank independently tests a specific part of the concept or reasoning step.
     - Based on the topic you need to generate questions
     - For the specified Topic(s), identify relevant parts of concepts and ensure that each question uses these sub-concepts in context.
     - Use the supplied **Grade** and **Concepts** to determine the appropriate cognitive depth and difficulty for each part.
@@ -1478,7 +1409,7 @@ FIB: |
       - Only if no specific method is mentioned in the concepts should the general grade-appropriate method be used.
   
   
-  7. ## TEXTBOOK CONTENT HANDLING (CRITICAL)
+  6. ## TEXTBOOK CONTENT HANDLING (CRITICAL)
     - **Do NOT treat the textbook/concept excerpts as reading passages in questions**
     - **Do NOT reference the textbook/concept material as a passage**
     - Questions must be self-contained and NEVER reference the source material directly
@@ -1592,7 +1523,6 @@ FIB: |
       - Present a clear mathematical statement with one or more blanks.
       - Use the placeholders exactly as:
           |TEXT 1|, |TEXT 2|, |TEXT 3|, … for text-entry blanks
-          [DROP] for drop-down blanks
       - Do NOT provide hints, methods, or formulas in the question text.
       - A single question may contain multiple blanks.
 
@@ -1610,16 +1540,8 @@ FIB: |
           TEXT n: exact single correct answer
       - For PROBABLE-ANSWER blanks:
           TEXT n: list all acceptable answers separated by semicolons (;)
-      - For DROP-DOWN blanks:
-          [DROP]: correct option only
-      
 
-    4. Drop-down Options (Only if DROP is used):
-      - Explicitly list all options for each [DROP].
-      - Options must be mutually exclusive and conceptually valid.
-      - Exactly one option must be correct.
-
-    5. Solution Explanation:
+    4. Solution Explanation:
       - Provide a clear, step-by-step explanation.
       - Use age-appropriate mathematical reasoning .
       - using technique that the student studied in the chapter.
@@ -1636,18 +1558,14 @@ FIB: |
     FORMAT EXAMPLE (STRUCTURE ONLY):
 
     Question:
-    <question text with |TEXT| and/or [DROP]>
+    <question text with |TEXT| >
 
     Diagram Prompt (if required):
     <description of the visual to be shown>
 
-    Drop-down Options (if applicable):
-    [DROP] → (option 1, option 2, option 3, option 4)
-
     Answer Key (with mark distribution):
     TEXT 1: mark distribution
     TEXT 2: mark distribution
-    [DROP]: mark distribution
 
     Solution Explanation:
     <step-by-step reasoning> 
