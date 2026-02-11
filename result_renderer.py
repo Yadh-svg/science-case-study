@@ -254,88 +254,82 @@ def render_markdown_question(question_key: str, markdown_content: str, question_
     
     # Only show duplication controls in "results" context, not in progressive rendering
     if render_context == "results":
-        # Question header with checkbox (using Streamlit's built-in state management)
-        col1, col2, col3, col4 = st.columns([0.6, 2.5, 1.5, 0.6])
+        # Question header
+        st.markdown(f"### {emoji} Question {q_num}")
         
-        # with col1:
-        #     # Checkbox state is automatically managed by Streamlit via the key parameter
-        #     duplicate_selected = st.checkbox(
-        #         "Duplicate",
-        #         key=checkbox_key,
-        #         help="Select this question to generate duplicates"
-        #     )
-        # 
-        # with col2:
-        #     st.markdown(f"### {emoji} Question {q_num}")
-        #     
-        #     # Check for "newly generated" flag
-        #     # We need to peek at the question data. Since we only have markdown_content here which might be a string,
-        #     # we rely on the caller to handle this or we inspect the session state if available.
-        #     # However, for simplicity, if the markdown_content is a dict (which we support), check there.
-        #     # If it's a string, we can't easily check without extra args.
-        #     # Let's handle the badge in the loop that calls this function, OR pass a flag.
-        #     
-        #     # Add "Select for Regeneration" checkbox
-        #     regen_key = f"regen_select_{batch_key}_{q_num}"
-        #     regen_selected = st.checkbox("Select for Regeneration", key=regen_key, help="Select to regenerate ONLY this question")
-        #     
-        #     if regen_selected:
-        #         # Add to a global set of selected questions for regeneration
-        #         if 'regen_selection' not in st.session_state:
-        #             st.session_state.regen_selection = set()
-        #         st.session_state.regen_selection.add(f"{batch_key}:{q_num}")
-        #         
-        #         # Show reason input field when checkbox is selected
-        #         regen_reason_key = f"regen_reason_{batch_key}_{q_num}"
-        #         st.text_input(
-        #             "Reason for Regeneration (Mandatory)",
-        #             placeholder="e.g., Options are incorrect, off-topic, needs clarity...",
-        #             key=regen_reason_key,
-        #             help="Explain what needs to be fixed or changed in this question"
-        #         )
-        #     else:
-        #         if 'regen_selection' in st.session_state:
-        #             st.session_state.regen_selection.discard(f"{batch_key}:{q_num}")
-        # 
-        # with col3:
-        #     if duplicate_selected:
-        #         # Number input state is also automatically managed via key parameter
-        #         st.number_input(
-        #             "# Duplicates",
-        #             min_value=1,
-        #             max_value=5,
-        #             value=1,
-        #             key=count_key,
-        #             help="Number of duplicates to generate"
-        #         )
-        #         
-        #         # Additional Notes for Duplicates
-        #         notes_key = f"duplicate_notes_{batch_key}_{question_key}"
-        #         file_key = f"duplicate_file_{batch_key}_{question_key}"
-        #         
-        #         with st.expander("📝 Duplicate Customization (Text Notes & PDF)", expanded=False):
-        #             st.info("💡 You can use both notes and a file together. The AI will synthesize them.")
-        #             
-        #             st.text_area(
-        #                 "Additional Instructions",
-        #                 placeholder="e.g., Use the graph in the uploaded PDF but change values...",
-        #                 key=notes_key,
-        #                 height=70,
-        #                 help="Specific instructions for these duplicates"
-        #             )
-        #             
-        #             st.file_uploader(
-        #                 "Context File (PDF/Image)",
-        #                 type=['pdf', 'png', 'jpg', 'jpeg', 'webp'],
-        #                 key=file_key,
-        #                 help="Upload a file to provide context. Can be used along with text notes."
-        #             )
+        # Duplication Controls
+        col1, col2 = st.columns([0.3, 0.7])
+        with col1:
+            duplicate_selected = st.checkbox("🔄 Duplicate", key=checkbox_key, help="Select to generate alternate versions of this question")
         
-        # Since above columns are commented out, we should still show the question number
-        with col2:
-            st.markdown(f"### {emoji} Question {q_num}")
+        if duplicate_selected:
+            with col2:
+                # Count and Notes in columns
+                c1, c2 = st.columns([0.3, 0.7])
+                with c1:
+                    st.number_input(
+                        "Count",
+                        min_value=1,
+                        max_value=5,
+                        value=1,
+                        key=count_key,
+                        help="Number of variations (1-5)"
+                    )
+                with c2:
+                    notes_key = f"duplicate_notes_{batch_key}_{question_key}"
+                    st.text_input(
+                        "Customization Notes (Optional)",
+                        placeholder="e.g., change numbers, different scenario...",
+                        key=notes_key
+                    )
+                
+                # File uploader (full width of col2)
+                file_key = f"duplicate_file_{batch_key}_{question_key}"
+                st.file_uploader(
+                    "Context File (PDF/Image)",
+                    type=['pdf', 'png', 'jpg', 'jpeg', 'webp'],
+                    key=file_key,
+                    help="Upload for contextual transformation"
+                )
+
+        # Selective Regeneration Controls
+        st.markdown("")
+        col_reg1, col_reg2 = st.columns([0.3, 0.7])
         
-        with col4:
+        # Initialize regen_selection if not exists
+        if 'regen_selection' not in st.session_state:
+            st.session_state.regen_selection = set()
+            
+        regen_checkbox_key = f"regen_select_{batch_key}_{q_num}"
+        with col_reg1:
+            is_selected = st.checkbox("♻️ Regenerate", key=regen_checkbox_key, help="Select to rewrite this question with AI")
+            
+            # Format: "{question_type} - Batch {batch_index}:{question_number}"
+            # batch_key ALREADY contains "Type - Batch X" if correctly passed
+            regen_id = f"{batch_key}:{q_num}"
+            
+            if is_selected:
+                st.session_state.regen_selection.add(regen_id)
+            else:
+                st.session_state.regen_selection.discard(regen_id)
+                
+        if is_selected:
+            with col_reg2:
+                reason_key = f"regen_reason_{batch_key}_{q_num}"
+                st.text_input(
+                    "Reason for Regeneration (Optional)",
+                    placeholder="e.g., make it more difficult, fix wording...",
+                    key=reason_key
+                )
+        
+        st.markdown("---")
+        
+        # Copy button (kept in a column to the right)
+        col_header, col_copy = st.columns([0.9, 0.1])
+        with col_header:
+            pass # Header already rendered above to avoid indentation
+        
+        with col_copy:
             # Add copy-to-clipboard button with markdown stripping
             import streamlit.components.v1 as components
             import json
@@ -570,9 +564,7 @@ def render_batch_results(batch_key: str, result_data: Dict[str, Any], render_con
         # Add prominent separator between questions
         if i > 1:
             st.markdown("")
-            st.markdown("")
             st.markdown("---")
-            st.markdown("---")  # Double divider for prominence
             st.markdown("")
         
         # After normalization, content is GUARANTEED to be a string

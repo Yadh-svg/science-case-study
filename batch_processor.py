@@ -219,20 +219,21 @@ def group_questions_by_type_and_topic(questions_config: List[Dict[str, Any]]) ->
         
         # 3. Priority Packing (Original Logic)
         topic_map = defaultdict(list)
+        topic_order = [] # Preserve original order of topics
         for q in type_questions:
             # Normalize topic: lowercase, strip, collapse spaces. Handle None.
             raw_topic = q.get('topic', '') or 'Unknown'
             topic_key = " ".join(str(raw_topic).strip().lower().split())
+            if topic_key not in topic_map:
+                topic_order.append(topic_key)
             topic_map[topic_key].append(q)
             
         final_list_for_type = []
         remainder_pool = []
         
         # 3. Extract Full Batches
-        # Sort topics to ensure deterministic order? Yes.
-        sorted_topics = sorted(topic_map.keys())
-        
-        for topic in sorted_topics:
+        # Preserve original topic appearance order
+        for topic in topic_order:
             questions = topic_map[topic]
             
             # While we have enough for a full batch
@@ -248,9 +249,9 @@ def group_questions_by_type_and_topic(questions_config: List[Dict[str, Any]]) ->
             remainder_pool.extend(questions)
             
         # 4. Pack Remainder Pool
-        # We process the pool in chunks of BATCH_SIZE
-        # The pool contains questions from different topics (or same if fragmented)
-        # We just slice it up.
+        # We sort the pool by original index to ensure that while topics are grouped when possible,
+        # we don't unnecessarily reorder small topics or "leftovers" from one batch to much earlier ones.
+        remainder_pool.sort(key=lambda x: x.get('original_index', 0))
         
         chunks = [remainder_pool[i:i + BATCH_SIZE] for i in range(0, len(remainder_pool), BATCH_SIZE)]
         for chunk in chunks:
@@ -258,9 +259,9 @@ def group_questions_by_type_and_topic(questions_config: List[Dict[str, Any]]) ->
             
         final_grouped[q_type] = final_list_for_type
         
-        logger.info(f"  - {q_type}: {len(final_list_for_type)} questions (Packed by Topic)")
+        logger.info(f"  - {q_type}: {len(final_list_for_type)} questions (Grouped by Topic & Preserving Order)")
 
-    logger.info(f"Grouped {len(questions_config)} questions into {len(final_grouped)} types with Priority Packing.")
+    logger.info(f"Grouped {len(questions_config)} questions into {len(final_grouped)} types with Topic-Based Grouping.")
     
     return final_grouped
 
@@ -299,8 +300,9 @@ async def generate_raw_batch(
             files=files,
             thinking_budget=3000,
             file_metadata=file_metadata,
-            log_name=f"{batch_key}_Gen",
-            save_prompt=True
+            # Use a more explicit log name for regeneration if override is on
+            log_name=f"Regeneration_{batch_key}" if general_config.get('save_prompts_override') else f"{batch_key}_Gen",
+            save_prompt=general_config.get('save_prompts_override', False)
         )
 
 
@@ -349,7 +351,9 @@ async def validate_batch(
             thinking_budget=3000,
             file_metadata=file_metadata,
             log_name=f"{batch_key}_Val",
-            save_prompt=True
+            # ONLY save validation prompts if explicitly requested AND it's NOT a regeneration run 
+            # (unless they really want validation of regeneration too, but let's assume they don't for now)
+            save_prompt=general_config.get('save_prompts_override', False) and not general_config.get('is_regeneration')
         )
         
         result['batch_key'] = batch_key
@@ -749,115 +753,91 @@ async def regenerate_specific_questions_pipeline(
     """
     logger.info(f"Regenerating specific questions: {regeneration_map}")
     
-    # 1. Filter the configuration to ONLY the selected questions
-    filtered_config = []
+    # 1. Sync indices using Priority Packing
+    # This must match the original generation logic exactly
+    grouped_batch_map = group_questions_by_type_and_topic(original_config)
     
-    grouped_map = defaultdict(list)
-    for q in original_config:
-        grouped_map[q.get('type', 'MCQ')].append(q)
+    selected_configs_only = []
+    
+    # 2. Extract selected questions by batch_key and relative index
+    for batch_key, indices in regeneration_map.items():
+        # Handle new Batch Key format (e.g., "MCQ - Batch 1")
+        base_type = batch_key.split(' - Batch ')[0]
         
-    for q_type, indices in regeneration_map.items():
-        # Handle new Batch Key format in regeneration map (e.g., "MCQ - Batch 1")
-        # EXTRACT BASE TYPE from keys if they contain " - Batch "
-        base_type = q_type.split(' - Batch ')[0]
+        # Parse batch number from key if present
+        import re
+        batch_match = re.search(r'Batch (\d+)', batch_key)
+        batch_num = int(batch_match.group(1)) if batch_match else 1
         
-        if base_type not in grouped_map:
-            logger.warning(f"Type {base_type} (from {q_type}) not found in original config")
+        if base_type not in grouped_batch_map:
+            logger.warning(f"Type {base_type} not found in grouped map during regeneration")
             continue
             
-        questions_of_type = grouped_map[base_type]
+        all_grouped_of_type = grouped_batch_map[base_type]
+        
+        # Calculate offset based on batch number
+        # Default batch size is 4 
+        BATCH_SIZE = DEFAULT_BATCH_SIZE
+        offset = (batch_num - 1) * BATCH_SIZE
         
         for idx in indices:
-            # indices are 1-based from the layout, but they refer to the GLOBAL index within that type 
-            # across all batches? Or batch-local?
-            # In result_renderer, we construct keys like "question1", "question2". 
-            # If we split into batches, the renderer outputs indices 1..5 for Batch 1, 1..5 for Batch 2?
-            # NO. The prompt builder usually receives 5 questions. The generated output will say question1..question5.
-            # So the UI indices for Batch 2 will likely be 1..5 as well?
-            # IF SO, the regeneration map coming from UI will be { "MCQ - Batch 2": [1, 3] }.
-            # This [1, 3] means 1st and 3rd question WITHIN Batch 2.
-            # We need to map this back to the global list if we want to grab settings,
-            # OR just grab the settings for the corresponding items in that batch.
+            # idx is 1-based index WITHIN the batch (1..4)
+            target_grouped_idx = offset + (idx - 1)
             
-            # Since we don't have the batch definitions persisted explicitly, we must reconstruct them.
-            # questions_of_type has ALL generic MCQs.
-            # "MCQ - Batch 1" -> indices 0-4
-            # "MCQ - Batch 2" -> indices 5-9
-            
-            # Parse batch number
-            batch_num = 1
-            if ' - Batch ' in q_type:
-                try:
-                    batch_num = int(q_type.split(' - Batch ')[1])
-                except:
-                    batch_num = 1
-            
-            # Calculate offset
-            BATCH_SIZE = DEFAULT_BATCH_SIZE
-            offset = (batch_num - 1) * BATCH_SIZE
-            
-            # Target index in the global list for this type
-            # idx is 1-based index within the batch prompt result
-            target_global_idx = offset + (idx - 1)
-            
-            if 0 <= target_global_idx < len(questions_of_type):
-                q_config = questions_of_type[target_global_idx]
+            if 0 <= target_grouped_idx < len(all_grouped_of_type):
+                q_config = all_grouped_of_type[target_grouped_idx].copy()
+                
+                # Attach Context
                 q_config['_is_being_regenerated'] = True
                 
-                # Attach original text if available
+                # Original Text
                 existing_content_map = general_config.get('existing_content_map', {})
-                if q_type in existing_content_map:
-                    # q_type is the batch key e.g. "MCQ - Batch 1"
-                    # idx is the 1-based index in that batch
+                if batch_key in existing_content_map:
                     q_key = f"question{idx}"
-                    original_text = existing_content_map[q_type].get(q_key, "")
+                    original_text = existing_content_map[batch_key].get(q_key, "")
                     if original_text:
                         q_config['original_text'] = original_text
-                        logger.info(f"Attached original text for regeneration of {q_type} {q_key}")
                 
-                # Attach per-question regeneration reason if available
+                # Regeneration Reason
                 regeneration_reasons_map = general_config.get('regeneration_reasons_map', {})
-                question_identifier = f"{q_type}:{idx}"  # Format: "MCQ - Batch 1:3"
-                reason = regeneration_reasons_map.get(question_identifier, "")
+                # Look up by "batch_key:idx"
+                reason_id = f"{batch_key}:{idx}"
+                reason = regeneration_reasons_map.get(reason_id, "")
                 if reason:
                     q_config['regeneration_reason'] = reason
-                    logger.info(f"Attached regeneration reason for {question_identifier}: {reason[:50]}...")
                 
-                q_config_copy = q_config.copy()
-                q_config_copy['type'] = q_type # "MCQ - Batch 2"
-                filtered_config.append(q_config_copy)
+                # Override type to the specific batch key to preserve alignment in process_batches_pipeline
+                # This ensures the parallel pipeline treats "MCQ - Batch 2" as a distinct task
+                q_config['type'] = batch_key
                 
+                selected_configs_only.append(q_config)
             else:
-                logger.warning(f"Index {idx} out of bounds for type {base_type} (Global idx {target_global_idx})")
+                logger.warning(f"Index {idx} out of bounds for {batch_key} (Global mapping failed)")
 
-    if not filtered_config:
-        return {'error': "No valid questions selected for regeneration"}
+    if not selected_configs_only:
+        return {'error': "No valid questions were identified for regeneration. Check index mapping."}
 
-    logger.info(f"Starting regeneration pipeline for {len(filtered_config)} questions...")
-    results = await process_batches_pipeline(filtered_config, general_config, progress_callback)
+    logger.info(f"Executing standard pipeline for {len(selected_configs_only)} selected questions...")
     
-    # POST-PROCESS RESULTS TO FIX KEYS
-    # Results will have keys like "MCQ - Batch 2 - Batch 1".
-    # We want "MCQ - Batch 2".
+    # 3. Enable prompt saving for regeneration regardless of general config
+    regeneration_config = general_config.copy()
+    regeneration_config['save_prompts_override'] = True
+    regeneration_config['is_regeneration'] = True
+    
+    # 4. Execute Standard Pipeline
+    # Since we modified the 'type' to includes the batch number, the pipeline will 
+    # process them in parallel batches corresponding to their original UI groups.
+    results = await process_batches_pipeline(selected_configs_only, regeneration_config, progress_callback)
+    
+    # 5. Cleanup Keys
+    # process_batches_pipeline adds " - Batch 1" because it thinks it's a new generation.
+    # We strip the LAST " - Batch 1" to return keys exactly matching st.session_state.generated_output.
     fixed_results = {}
     for k, v in results.items():
-        # Remove ONLY the LAST " - Batch 1" suffix added by the regeneration pipeline
-        # Use rsplit to split from the right and only remove the last occurrence
         if ' - Batch 1' in k:
-            # Split from right, max 1 split, then rejoin
-            # "MCQ - Batch 1 - Batch 1" -> splits to ["MCQ - Batch 1", ""] -> "MCQ - Batch 1"
-            # "MCQ - Batch 1" -> splits to ["MCQ", ""] -> "MCQ" (wrong!)
-            # Better: Use rsplit with maxsplit and count occurrences
-            parts = k.rsplit(' - Batch 1', 1)
-            if len(parts) == 2:
-                # Successfully split, use the left part
-                original_key = parts[0]
-            else:
-                # Couldn't split (shouldn't happen), keep original
-                original_key = k
+            original_key = k.rsplit(' - Batch 1', 1)[0]
             fixed_results[original_key] = v
         else:
             fixed_results[k] = v
             
-    logger.info(f"Post-processed regeneration results keys: {list(results.keys())} -> {list(fixed_results.keys())}")
     return fixed_results

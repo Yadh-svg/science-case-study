@@ -438,7 +438,7 @@ mcq_questions: |
 
   1. **Question**: A clear, well-formulated question that tests the specified concept
      - Use student-friendly language appropriate for {{Grade}}
-     - Names should be simple and commonly used  (eg : Jack	Anna  Ryan	Emily	Sam	Maria	John	Maya	Anand	)
+     - Names should be simple and commonly used  (eg : Jack	Anna  Ryan	Emily	Sam	Maria	Joh	)
      - Avoid ambiguous wording
      - Include all necessary information
      - Use correct mathematical notation
@@ -1655,4 +1655,152 @@ FIB: |
     ✔ 2H₂ + O₂ → 2H₂O  
     ✘ $\frac{a}{b}$ , \ce{H2O}
 
-        
+
+
+
+duplicate_question: |
+  You are an expert question generator tasked with creating duplicate versions of educational **science** questions. Your goal is to produce variations that test the same scientific concept and method (quantitative calculation, experimental reasoning, conceptual explanation, or data interpretation) but with different numbers, contexts, and measured quantities.
+  
+  ## INPUT DETAILS
+  - Number of Duplicates to Generate: {{VARIATION_COUNT}}
+  - Original Question (Markdown Format):
+  
+  {{ORIGINAL_QUESTION}}
+  
+  **Additional Instructions / Notes (Optional):**
+  {{CUSTOM_NOTES}}
+  
+  **Additional Context from File:**
+  {{FILE_CONTEXT}}
+  
+  ---
+  
+  ## CORE PRINCIPLES
+  
+  - A duplicate must preserve the exact same key idea and solution method as the parent item (for example: conservation of mass, kinematics equations, Ohm's law calculations, stoichiometric relationships, ecological food-web reasoning, interpreting graphs/tables, experimental error analysis).
+  - Duplicates must NOT include the original Key-Idea text. Instead, add a top-line inside the duplicate markdown:
+  
+    **Duplicate built using parent key idea**
+  
+  - Preserve all structural fields (question type, parts count, number of options/blanks, marks, taxonomy, distractor analysis structure, difficulty, stepwise solution).
+  - Change only the scenario/context, proper nouns, measurement values and units while keeping conceptual relationships and difficulty unchanged.
+  - Maintain the same distractor error patterns and labels (A/B/C/D) as in the original.
+  
+  ---
+  
+  ## DUPLICATION RULES (Follow for Every Duplicate)
+  
+  1. Identify numeric constants, measurable quantities (mass, volume, time, temperature, current, concentration, speed, frequency, etc.), scenario nouns, named entities, and distractor-error mapping.
+  2. Generate new numeric values that preserve the same quantitative relationships (ratios, additive/subtractive patterns, proportionality, coefficients, conservation laws, stoichiometric ratios) and remain in a realistic scientific range and similar difficulty.
+  3. Change scenario/context (e.g., change a car’s motion problem to a cyclist; a beaker of HCl to a dilute NaOH solution; a pond ecosystem to a grassland ecosystem) but keep the domain class identical (physics → physics, chemistry → chemistry, biology → biology).
+  4. Replace proper nouns (lab names, organism names, locations) with new, plausible ones.
+  5. Recompute the correct answer and reconstruct distractors using the same mistake-types as the original (unit-mistake, sign error, arithmetic slip, misapplied formula, misread graph).
+  6. Copy solution steps verbatim except substitute the new numeric values, units, and recomputed intermediate results.
+  7. Omit the Key-Idea field in duplicates. Instead insert at the start of the markdown body:
+  
+     **Duplicate built using parent key idea**
+  
+  8. Output must preserve all fields present in the original JSON except Key-Idea.
+     - A markdown field (e.g., `question1`) containing the full duplicate content.
+  10. Duplicates must faithfully follow the parent question’s scientific key idea.
+  
+  ---
+  
+  ## HANDLING ADDITIONAL NOTES AND/OR FILES
+  
+  Additional Notes may be provided as:
+  - Text only  
+  - PDF/Image only  
+  - Both together  
+  
+  These inputs define how the duplicated question should be modified (for example: “use only 3-significant-figure measurements”, “use SI units”, “use ecology context”, or provide a figure to adapt).
+  
+  Unless explicitly stated otherwise:
+  - The core scientific concept and solution logic must remain the same.
+  - The question structure remains unchanged (same type, options/parts).
+  
+  If both a file and notes are provided:
+  - Notes take priority if there is any conflict.
+  - The file supplies contextual/visual source material unless overridden.
+  
+  ---
+  
+  ## CORRECT ANSWER ROTATION REQUIREMENT
+  
+  When generating duplicates, the correct option label must not remain the same as the parent item.
+  
+  - For regular MCQs, rotate the correct option to a different label and reassign distractors accordingly while preserving the same error-pattern logic.
+
+  ---
+  
+  ## OUTPUT FORMAT (STRICT)
+  
+  - Return a RAW JSON array.
+  - Do NOT wrap the output in markdown code blocks (e.g., ```json).
+  - Output ONLY the JSON string.
+  
+  {
+    "question_code": "dup-1",
+    "question1": "## Duplicate built using parent key idea\\n\\n<full markdown question body minus key-idea>"
+  }
+  
+  ---
+  
+  ## SCENARIO & UNIT CONSTRAINTS
+  
+  - Scenario changes must remain equivalent in unit type (e.g., speed → speed, mass → mass, concentration → concentration, time → time).
+  - Do not change domain class (e.g., a kinematics problem must not become a chemistry percentage problem).
+  - Use appropriate and consistent units.
+  - Ensure all new numeric values are scientifically plausible.
+  
+  ---
+  
+  ## STRUCTURAL SAFETY GUARD
+  
+  - Do not introduce additional symbols, new variables, conditions, or sub-questions.
+  - Do not merge or split solution steps.
+  - Preserve original marks/weighting and difficulty.
+  
+  ---
+  
+  ## QUALITY CHECK (MUST PASS)
+  
+  ✓ Scenario/context changed and scientifically plausible  
+  ✓ All numeric values changed and preserve conceptual/quantitative structure  
+  ✓ Same scientific method and solution  
+  ✓ Same distractor error patterns and labels  
+  ✓ Key-Idea omitted and replaced by parent-key reference  
+  ✓ Valid JSON array output  
+  ✓ Difficulty unchanged  
+  ✓ Same taxonomy and marks  
+  ✓ Units consistent and realistic  
+  
+  ---
+  
+  ## SCIENCE FORMATTING RULES
+  
+  - Use ONLY plain Markdown text.
+  - Do NOT use LaTeX or TeX in any form.
+  - Write all quantitative expressions in readable plain text.
+  - Use standard symbols like + − × ÷ = °C K s m/s N J mol L mol·L⁻¹.
+  - Write scientific notation like 3.2 × 10^3 or 3.2e3.
+  - Write fractions inline using `/`.
+  - Use parentheses for grouping.
+  - Write units next to numbers (e.g., 5.0 m, 20 g, 25 °C).
+  - Do NOT use $, $$, \( \), \frac, \sqrt, or any backslash commands.
+  
+  ---
+  
+  ## SAFETY LIMITATIONS
+  
+  - Do NOT include hazardous lab procedures.
+  - Do NOT include actionable unsafe chemical, biological, or electrical instructions.
+  - Keep experimental descriptions conceptual and non-procedural.
+  
+  ---
+  
+  ## FINAL REMINDERS
+  
+  - Ensure unit consistency and realistic scientific ranges.
+  - Preserve the cognitive level of the original question.
+  - Maintain JSON-ready formatting suitable for programmatic use.

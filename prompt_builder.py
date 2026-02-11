@@ -221,11 +221,17 @@ def build_topics_section(questions: List[Dict[str, Any]], batch_key: str = "") -
                 line = f'    - Topic: "{topic}" → Questions: 1{mcq_type_str}{fib_type_str}{descriptive_type_str}, DOK: {dok}, Marks: {marks}, Taxonomy: {taxonomy} | New Concept Source: {new_concept_label} | Additional Notes Source: {additional_notes_label}'
         
         
-        # Add regeneration reason if present (shown before original content)
+        # Add regeneration instruction and reason if present (shown before original content)
+        is_being_regenerated = q.get('_is_being_regenerated', False)
         regeneration_reason = q.get('regeneration_reason', '')
-        if regeneration_reason:
-            lines.append(f'      [USER FEEDBACK / REGENERATION REASON]:')
-            lines.append(f'      "{regeneration_reason}"')
+        
+        if is_being_regenerated:
+            lines.append(f'      [REGENERATION INSTRUCTION]:')
+            lines.append(f'      "You are regenerating an existing question. Improve it based on the feedback below but preserve its original format and structure."')
+            
+            if regeneration_reason:
+                lines.append(f'      [USER FEEDBACK / REGENERATION REASON]:')
+                lines.append(f'      "{regeneration_reason}"')
             lines.append('')
         
         # Add original text if present (Regeneration Context)

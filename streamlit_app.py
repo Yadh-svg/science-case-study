@@ -16,6 +16,7 @@ from st_img_pastebutton import paste
 import io
 import base64
 import re
+from duplication_handler import process_parallel_duplication
 
 class PastedFile(io.BytesIO):
     """Wrapper to make pasted images look like UploadedFile objects"""
@@ -1674,332 +1675,266 @@ with tab2:
         )
         
         # Add Regenerate Selected Section
-        # st.markdown("---")
-        # st.markdown('<div class="section-header">🔄 Regenerate Selected Questions</div>', unsafe_allow_html=True)
-        # 
-        # # Check for regeneration selection
-        # regen_selection = st.session_state.get('regen_selection', set())
-        # 
-        # if regen_selection:
-        #     st.info(f"✅ {len(regen_selection)} question(s) selected for regeneration")
-        #     
-        #     # Show selected questions breakdown
-        #     regen_map = {}
-        #     for item in regen_selection:
-        #         # Format: "batch_key:q_num"
-        #         if ':' in item:
-        #             b_key, q_num = item.rsplit(':', 1)
-        #             if b_key not in regen_map:
-        #                 regen_map[b_key] = []
-        #             regen_map[b_key].append(int(q_num))
-        #     
-        #     for b_key, indices in regen_map.items():
-        #         st.write(f"• **{b_key}**: Questions {sorted(indices)}")
-        #         
-        #     if st.button("♻️ Regenerate Selected", type="primary", use_container_width=True):
-        #         # Collect reasons for each selected question
-        #         regeneration_reasons_map = {}
-        #         missing_reasons = []
-        #         
-        #         for item in regen_selection:
-        #             if ':' in item:
-        #                 b_key, q_num = item.rsplit(':', 1)
-        #                 regen_reason_key = f"regen_reason_{b_key}_{q_num}"
-        #                 reason = st.session_state.get(regen_reason_key, "").strip()
-        #                 
-        #                 if not reason:
-        #                     missing_reasons.append(f"Question {q_num} in {b_key}")
-        #                 else:
-        #                     regeneration_reasons_map[item] = reason
-        #         
-        #         if missing_reasons:
-        #             st.error(f"❌ Please provide a reason for: {', '.join(missing_reasons)}")
-        #         elif not gemini_api_key:
-        #             st.error("❌ Gemini API key is missing in secrets.toml")
-        #         else:
-        #             with st.spinner("Regenerating specific questions..."):
-        #                 from batch_processor import regenerate_specific_questions_pipeline
-        #                 
-        #                 # Prepare configurations
-        #                 general_config = {
-        #                     'api_key': gemini_api_key,
-        #                     'additional_notes': additional_notes,
-        #                     'universal_pdf': st.session_state.get('universal_pdf')
-        #                 }
-        #                 
-        #                 # Need to reconstruct the full original config list
-        #                 # AND attach the original text for context
-        #                 
-        #                 # Helper to get original text
-        #                 from result_renderer import extract_json_objects, normalize_llm_output_to_questions
-        #                 
-        #                 full_config_list = []
-        #                 
-        #                 # Pre-parse all existing outputs into a lookup map: map[batch_key][question_idx] = text
-        #                 # question_idx is 1-based index in the batch
-        #                 existing_content_map = {}
-        #                 
-        #                 if st.session_state.generated_output:
-        #                     for b_key, b_res in st.session_state.generated_output.items():
-        #                         val_res = b_res.get('validated', {})
-        #                         text = val_res.get('text', '')
-        #                         if text:
-        #                             # Normalize to get clear {question1: "content"} map
-        #                             q_map = normalize_llm_output_to_questions(text)
-        #                             existing_content_map[b_key] = q_map
-        #                 
-        #                 for q_type, config in st.session_state.question_types_config.items():
-        #                     for i, q in enumerate(config.get('questions', []), 1):
-        #                         q_copy = q.copy()
-        #                         q_copy['type'] = q_type
-        #                         
-        #                         # Check if this question is in the regeneration map
-        #                         # regeneration_map keys are batch_keys (e.g. "MCQ - Batch 1")
-        #                         # We need to match q_type (e.g. "MCQ") to the batch key? 
-        #                         # NO, the regeneration map has specific batch keys.
-        #                         # The `regenerate_specific_questions_pipeline` logic filters by matching base type.
-        #                         # But we need to know WHICH specific question this is to attach the text.
-        #                         
-        #                         # The validation loop in `regenerate_specific_questions_pipeline` calculates global index.
-        #                         # We can do the reverse here or just attach if we can identify it.
-        #                         # But simpler: `regenerate_specific_questions_pipeline` has the logic to find the specific config.
-        #                         # We should pass the LOOKUP MAP to the pipeline or general_config?
-        #                         # No, we are building `full_config_list`.
-        #                         # We don't validly know which batch this `q` belongs to easily without re-simulating the batching logic.
-        #                         
-        #                         # ALTERNATIVE: Use `general_config` to pass the `existing_content_map`.
-        #                         # The pipeline can then look it up when it identifies the question.
-        #                         
-        #                         full_config_list.append(q_copy)
-        #                         
-        #                 general_config['existing_content_map'] = existing_content_map
-        #                 general_config['regeneration_reasons_map'] = regeneration_reasons_map
-        # 
-        #                 # Run regeneration
-        #                 import asyncio
-        #                 try:
-        #                     regen_results = asyncio.run(regenerate_specific_questions_pipeline(
-        #                         original_config=full_config_list,
-        #                         regeneration_map=regen_map,
-        #                         general_config=general_config
-        #                     ))
-        #                     
-        #                     if regen_results.get('error'):
-        #                         st.error(f"Regeneration failed: {regen_results['error']}")
-        #                     else:
-        #                         # Merge results back into st.session_state.generated_output
-        #                         merged_count = 0
-        #                         
-        #                         for batch_key, batch_res in regen_results.items():
-        #                             val_res = batch_res.get('validated', {})
-        #                             new_text_content = val_res.get('text', '')
-        #                             
-        #                             if new_text_content and batch_key in st.session_state.generated_output:
-        #                                 from result_renderer import normalize_llm_output_to_questions
-        #                                 
-        #                                 # Parse new and existing content using normalize function
-        #                                 new_questions_map = normalize_llm_output_to_questions(new_text_content)
-        #                                 existing_text = st.session_state.generated_output[batch_key]['validated']['text']
-        #                                 existing_questions_map = normalize_llm_output_to_questions(existing_text)
-        #                                 
-        #                                 # Get requested indices for this batch
-        #                                 requested_indices = sorted(regen_map.get(batch_key, []))
-        #                                 
-        #                                 # Sort new keys to align with requested indices
-        #                                 import re
-        #                                 sorted_new_keys = sorted(new_questions_map.keys(), 
-        #                                     key=lambda x: int(re.search(r'\d+', x).group()) if re.search(r'\d+', x) else 0)
-        #                                     
-        #                                 if len(sorted_new_keys) != len(requested_indices):
-        #                                     st.warning(f"⚠️ Expected {len(requested_indices)} questions but got {len(sorted_new_keys)}. Attempting best fit.")
-        #                                 
-        #                                 # Replace questions at requested indices
-        #                                 for i, new_k in enumerate(sorted_new_keys):
-        #                                     if i < len(requested_indices):
-        #                                         original_idx = requested_indices[i]
-        #                                         original_k = f"question{original_idx}"
-        #                                         existing_questions_map[original_k] = new_questions_map[new_k]
-        #                                         merged_count += 1
-        #                                 
-        #                                 # Serialize and update session state
-        #                                 import json
-        #                                 updated_json_str = json.dumps(existing_questions_map, indent=2)
-        #                                 st.session_state.generated_output[batch_key]['validated']['text'] = updated_json_str
-        #                                 
-        #                             elif not new_text_content:
-        #                                 st.error(f"❌ No new content generated for {batch_key}")
-        #                             elif batch_key not in st.session_state.generated_output:
-        #                                 st.error(f"❌ Batch key '{batch_key}' not found in session state!")
-        #                         
-        #                         if merged_count > 0:
-        #                             st.success(f"✅ Regenerated {merged_count} question(s) successfully!")
-        #                             st.session_state.regen_selection = set()
-        #                             st.rerun()  # Instant reload with updated questions
-        #                         else:
-        #                             st.error("❌ Regeneration failed. Please try again.")
-        #                         
-        #                 except Exception as e:
-        #                     st.error(f"Error running regeneration: {e}")
-        # else:
-        #     st.info("ℹ️ Select questions above using the checkboxes to regenerate specific items.")
+        st.markdown("---")
+        st.markdown('<div class="section-header">♻️ Regenerate Selected Questions</div>', unsafe_allow_html=True)
+        
+        # Check for regeneration selection
+        regen_selection = st.session_state.get('regen_selection', set())
+        
+        if regen_selection:
+            st.info(f"✅ {len(regen_selection)} question(s) selected for regeneration")
+            
+            # Show selected questions breakdown
+            regen_map = {}
+            for item in regen_selection:
+                # Format: "batch_key:q_num"
+                if ':' in item:
+                    b_key, q_num = item.rsplit(':', 1)
+                    if b_key not in regen_map:
+                        regen_map[b_key] = []
+                    regen_map[b_key].append(int(q_num))
+            
+            for b_key, indices in regen_map.items():
+                st.write(f"• **{b_key}**: Questions {sorted(indices)}")
+                
+            if st.button("♻️ Regenerate Selected", type="primary", use_container_width=True):
+                # Collect reasons for each selected question
+                regeneration_reasons_map = {}
+                
+                for item in regen_selection:
+                    if ':' in item:
+                        b_key, q_num = item.rsplit(':', 1)
+                        regen_reason_key = f"regen_reason_{b_key}_{q_num}"
+                        reason = st.session_state.get(regen_reason_key, "").strip()
+                        regeneration_reasons_map[item] = reason
+                
+                if not gemini_api_key:
+                    st.error("❌ Gemini API key is missing in secrets.toml")
+                else:
+                    with st.spinner("Regenerating specific questions..."):
+                        from batch_processor import regenerate_specific_questions_pipeline
+                        from result_renderer import normalize_llm_output_to_questions
+                        
+                        # Prepare configurations
+                        general_config = {
+                            'api_key': gemini_api_key,
+                            'additional_notes': additional_notes,
+                            'universal_pdf': st.session_state.get('universal_pdf'),
+                            'grade': st.session_state.get('grade', 'Grade 10'),
+                            'curriculum': st.session_state.get('curriculum', 'NCERT'),
+                            'subject': st.session_state.get('subject', 'Science'),
+                            'chapter': st.session_state.get('chapter', 'Chapter'),
+                            'science_domain': st.session_state.get('science_domain', 'Not Specified'),
+                            'old_concept': st.session_state.get('old_concept', 'N/A'),
+                            'new_concept': st.session_state.get('new_concept', 'N/A'),
+                            'core_skill_enabled': st.session_state.get('core_skill_enabled', False)
+                        }
+                        
+                        # Reconstruct the full original config list
+                        full_config_list = []
+                        for q_type, config in st.session_state.question_types_config.items():
+                            for q in config.get('questions', []):
+                                q_copy = q.copy()
+                                q_copy['type'] = q_type
+                                full_config_list.append(q_copy)
+                        
+                        # Build existing content map
+                        existing_content_map = {}
+                        if st.session_state.generated_output:
+                            for b_key, b_res in st.session_state.generated_output.items():
+                                val_res = b_res.get('validated', {})
+                                text = val_res.get('text', '')
+                                if text:
+                                    q_map = normalize_llm_output_to_questions(text)
+                                    existing_content_map[b_key] = q_map
+                        
+                        general_config['existing_content_map'] = existing_content_map
+                        general_config['regeneration_reasons_map'] = regeneration_reasons_map
+
+                        # Run regeneration
+                        import asyncio
+                        try:
+                            # Use internal helper to run async in streamlit
+                            import nest_asyncio
+                            nest_asyncio.apply()
+                            
+                            regen_results = asyncio.run(regenerate_specific_questions_pipeline(
+                                original_config=full_config_list,
+                                regeneration_map=regen_map,
+                                general_config=general_config
+                            ))
+                            
+                            if isinstance(regen_results, dict) and regen_results.get('error'):
+                                st.error(f"❌ Regeneration failed: {regen_results['error']}")
+                            else:
+                                # Merge results back into st.session_state.generated_output
+                                merged_count = 0
+                                
+                                for batch_key, batch_res in regen_results.items():
+                                    val_res = batch_res.get('validated', {})
+                                    new_text_content = val_res.get('text', '')
+                                    
+                                    if new_text_content and batch_key in st.session_state.generated_output:
+                                        # Parse existing content
+                                        existing_text = st.session_state.generated_output[batch_key]['validated']['text']
+                                        existing_questions_map = normalize_llm_output_to_questions(existing_text)
+                                        
+                                        # Parse new content
+                                        new_questions_map = normalize_llm_output_to_questions(new_text_content)
+                                        
+                                        # Get requested indices for this batch
+                                        requested_indices = sorted(regen_map.get(batch_key, []))
+                                        
+                                        # Sort new keys to align with requested indices
+                                        import re
+                                        sorted_new_keys = sorted(new_questions_map.keys(), 
+                                            key=lambda x: int(re.search(r'\d+', x).group()) if re.search(r'\d+', x) else 0)
+                                            
+                                        # Replace questions at requested indices
+                                        for i, new_k in enumerate(sorted_new_keys):
+                                            if i < len(requested_indices):
+                                                original_idx = requested_indices[i]
+                                                original_k = f"question{original_idx}"
+                                                existing_questions_map[original_k] = new_questions_map[new_k]
+                                                merged_count += 1
+                                        
+                                        # Serialize back to the same format as the original LLM output
+                                        # The format should be a JSON object where each questionX key maps to a markdown string
+                                        import json
+                                        updated_json_str = json.dumps(existing_questions_map, indent=2, ensure_ascii=False)
+                                        
+                                        # Create a new batch result to trigger Streamlit's change detection
+                                        # Direct mutation of nested dicts may not trigger rerender
+                                        updated_batch_result = st.session_state.generated_output[batch_key].copy()
+                                        updated_batch_result['validated'] = updated_batch_result['validated'].copy()
+                                        updated_batch_result['validated']['text'] = updated_json_str
+                                        st.session_state.generated_output[batch_key] = updated_batch_result
+                                        
+                                if merged_count > 0:
+                                    st.success(f"✅ Regenerated {merged_count} question(s) successfully!")
+                                    st.session_state.regen_selection = set()
+                                    st.rerun()
+                                else:
+                                    st.error("❌ No questions were successfully merged. Please try again.")
+                                    
+                        except Exception as e:
+                            st.error(f"❌ Error during regeneration: {str(e)}")
+                            st.exception(e)
+        else:
+            st.info("ℹ️ Select questions above using the checkboxes to regenerate specific items.")
 
         # Add Generate Duplicates section
-        # st.markdown("---")
-        # st.markdown('<div class="section-header">🔄 Generate Question Duplicates</div>', unsafe_allow_html=True)
-        # 
-        # # Collect selected questions from checkbox states
-        # # This happens only when rendering, not when clicking checkboxes
-        # selected_questions = {}
-        # 
-        # # Iterate through all rendered questions and check their checkbox states
-        # for batch_key, batch_result in results.items():
-        #     val_res = batch_result.get('validated', {})
-        #     text_content = val_res.get('text', '')
-        #     
-        #     if text_content:
-        #         # Extract JSON to get question keys
-        #         from result_renderer import extract_json_objects
-        #         json_objects = extract_json_objects(text_content)
-        #         
-        #         for obj in json_objects:
-        #             # Handle validation wrapper
-        #             questions_to_check = {}
-        #             if 'CORRECTED_ITEM' in obj or 'corrected_item' in obj:
-        #                 corrected = obj.get('CORRECTED_ITEM') or obj.get('corrected_item')
-        #                 if isinstance(corrected, dict):
-        #                     questions_to_check = corrected
-        #             else:
-        #                 questions_to_check = obj
-        #             
-        #             # Check each question
-        #             for q_key, q_content in questions_to_check.items():
-        #                 if q_key.lower().startswith('question') or q_key.lower().startswith('q'):
-        #                     # Use 'results' context to match the render context
-        #                     checkbox_key = f"duplicate_results_{batch_key}_{q_key}"
-        #                     count_key = f"duplicate_count_results_{batch_key}_{q_key}"
-        #                     
-        #                     # Check if checkbox is selected
-        #                     if st.session_state.get(checkbox_key, False):
-        #                         # Create unique question code with batch type prefix
-        #                         # Extract question number from q_key (e.g., "question1" -> "1")
-        #                         q_num = q_key.replace("question", "").replace("q", "")
-        #                         question_code = f"{batch_key}_q{q_num}" if q_num else f"{batch_key}_{q_key}"
-        #                         
-        #                         selected_questions[f"{batch_key}_{q_key}"] = {
-        #                             'question_key': q_key,
-        #                             'question_code': question_code,
-        #                             'batch_key': batch_key,
-        #                             'markdown_content': q_content if isinstance(q_content, str) else str(q_content),
-        #                             'num_duplicates': st.session_state.get(count_key, 1),
-        #                             'additional_notes': st.session_state.get(f"duplicate_notes_{batch_key}_{q_key}", ""),
-        #                             'pdf_file': st.session_state.get(f"duplicate_file_{batch_key}_{q_key}", None)
-        #                         }
-        # 
-        # if selected_questions:
-        #     st.info(f"✅ {len(selected_questions)} question(s) selected for duplication")
-        #     
-        #     # Show which questions are selected
-        #     with st.expander("View Selected Questions", expanded=False):
-        #         for key, data in selected_questions.items():
-        #             st.write(f"• {data['batch_key']} - {data['question_key']} (x{data['num_duplicates']})")
-        #     
-        #     # Generate Duplicates Button
-        #     if st.button("🚀 Generate Duplicates", type="primary", use_container_width=True):
-        #         if not gemini_api_key:
-        #             st.error("❌ Gemini API key is missing in secrets.toml")
-        #         else:
-        #             with st.spinner("Generating duplicates... This may take a moment."):
-        #                 import asyncio
-        #                 from collections import defaultdict
-        #                 from llm_engine import duplicate_questions_async
-        #                 
-        #                 # Group selected questions by batch_key (question type)
-        #                 grouped_by_type = defaultdict(list)
-        #                 for key, data in selected_questions.items():
-        #                     grouped_by_type[data['batch_key']].append(data)
-        #                 
-        #                 # Show grouping info
-        #                 status_text = st.empty()
-        #                 total_questions = len(selected_questions)
-        #                 status_text.info(f"Processing {total_questions} question(s) in full parallel...")
-        #                 
-        #                 async def generate_all_duplicates_parallel():
-        #                     """Generate duplicates for ALL questions in parallel"""
-        #                     
-        #                     # Create a task for each individual question (not grouped by type)
-        #                     async def process_single_question(key, data):
-        #                         """Process a single question's duplication"""
-        #                         result = await duplicate_questions_async(
-        #                             original_question_markdown=data['markdown_content'],
-        #                             question_code=data['question_code'],
-        #                             num_duplicates=data['num_duplicates'],
-        #                             api_key=gemini_api_key,
-        #                             additional_notes=data.get('additional_notes', ""),
-        #                             pdf_file=data.get('pdf_file', None)
-        #                         )
-        #                         return key, result
-        #                     
-        #                     # Create tasks for ALL questions at once
-        #                     tasks = [
-        #                         process_single_question(key, data)
-        #                         for key, data in selected_questions.items()
-        #                     ]
-        #                     
-        #                     # Run ALL questions in parallel
-        #                     results_list = await asyncio.gather(*tasks)
-        #                     
-        #                     # Convert list of tuples to dictionary
-        #                     results = {key: result for key, result in results_list}
-        #                     
-        #                     return results
-        #                 
-        #                 # Run async generation
-        #                 try:
-        #                     dup_results = asyncio.run(generate_all_duplicates_parallel())
-        #                     
-        #                     # Prepare persistent report
-        #                     report = {
-        #                         'success': False,
-        #                         'success_count': 0,
-        #                         'errors': []
-        #                     }
-        #                     
-        #                     # Store duplicates in session state
-        #                     for key, result in dup_results.items():
-        #                         if result.get('error'):
-        #                             report['errors'].append({
-        #                                 'key': selected_questions[key]['question_code'],
-        #                                 'error': result['error']
-        #                             })
-        #                         else:
-        #                             duplicates = result.get('duplicates', [])
-        #                             # Handle empty duplicates list as an error or warning
-        #                             if not duplicates:
-        #                                 report['errors'].append({
-        #                                     'key': selected_questions[key]['question_code'],
-        #                                     'error': "AI returned no duplicates (empty list). Try adjusting the prompt or notes."
-        #                                 })
-        #                             else:
-        #                                 data = selected_questions[key]
-        #                                 duplicates_key = f"duplicates_{data['batch_key']}_{data['question_key']}"
-        #                                 st.session_state[duplicates_key] = duplicates
-        #                                 report['success_count'] += 1
-        #                     
-        #                     report['success'] = report['success_count'] > 0
-        #                     
-        #                     # Save report to session state for persistence across rerun
-        #                     st.session_state.duplicate_generation_report = report
-        #                     
-        #                     st.info("Generation complete. Reloading...")
-        #                     st.rerun()
-        #                     
-        #                 except Exception as e:
-        #                     st.error(f"❌ Error during duplication: {str(e)}")
-        #                     st.exception(e)
-        #                     
-        # 
-        # else:
-        #     st.info("ℹ️ Select questions using the checkboxes above to generate duplicates")
+        st.markdown("---")
+        st.markdown('<div class="section-header">🔄 Generate Question Duplicates</div>', unsafe_allow_html=True)
+        
+        # Collect selected questions from checkbox states
+        selected_questions = {}
+        
+        # Iterate through all rendered questions and check their checkbox states
+        for batch_key, batch_result in results.items():
+            val_res = batch_result.get('validated', {})
+            text_content = val_res.get('text', '')
+            
+            if text_content:
+                # Extract JSON to get question keys
+                from result_renderer import extract_json_objects
+                json_objects = extract_json_objects(text_content)
+                
+                for obj in json_objects:
+                    # Handle validation wrapper
+                    questions_to_check = {}
+                    if 'CORRECTED_ITEM' in obj or 'corrected_item' in obj:
+                        corrected = obj.get('CORRECTED_ITEM') or obj.get('corrected_item')
+                        if isinstance(corrected, dict):
+                            questions_to_check = corrected
+                    else:
+                        questions_to_check = obj
+                    
+                    # Check each question
+                    for q_key, q_content in questions_to_check.items():
+                        if q_key.lower().startswith('question') or q_key.lower().startswith('q'):
+                            checkbox_key = f"duplicate_results_{batch_key}_{q_key}"
+                            count_key = f"duplicate_count_results_{batch_key}_{q_key}"
+                            
+                            if st.session_state.get(checkbox_key, False):
+                                q_num = q_key.replace("question", "").replace("q", "")
+                                question_code = f"{batch_key}_q{q_num}" if q_num else f"{batch_key}_{q_key}"
+                                
+                                selected_questions[f"{batch_key}_{q_key}"] = {
+                                    'question_key': q_key,
+                                    'question_code': question_code,
+                                    'batch_key': batch_key,
+                                    'markdown_content': q_content if isinstance(q_content, str) else str(q_content),
+                                    'num_duplicates': st.session_state.get(count_key, 1),
+                                    'additional_notes': st.session_state.get(f"duplicate_notes_{batch_key}_{q_key}", ""),
+                                    'pdf_file': st.session_state.get(f"duplicate_file_{batch_key}_{q_key}", None)
+                                }
+        
+        if selected_questions:
+            st.info(f"✅ {len(selected_questions)} question(s) selected for duplication")
+            
+            with st.expander("View Selected Questions", expanded=False):
+                for key, data in selected_questions.items():
+                    st.write(f"• {data['batch_key']} - {data['question_key']} (x{data['num_duplicates']})")
+            
+            if st.button("🚀 Generate Duplicates", type="primary", use_container_width=True):
+                if not gemini_api_key:
+                    st.error("❌ Gemini API key is missing in secrets.toml")
+                else:
+                    with st.spinner("Generating duplicates... This may take a moment."):
+                        requests = []
+                        for key, data in selected_questions.items():
+                            requests.append({
+                                'original_markdown': data['markdown_content'],
+                                'variation_count': data['num_duplicates'],
+                                'custom_notes': data.get('additional_notes', ''),
+                                'context_file': data.get('pdf_file')
+                            })
+                        
+                        try:
+                            # Run async parallel duplication
+                            dup_results_list = asyncio.run(process_parallel_duplication(requests, gemini_api_key))
+                            
+                            report = {
+                                'success': False,
+                                'success_count': 0,
+                                'errors': []
+                            }
+                            
+                            # Map results back to selected questions
+                            question_keys = list(selected_questions.keys())
+                            for i, result in enumerate(dup_results_list):
+                                key = question_keys[i]
+                                data = selected_questions[key]
+                                
+                                if result.get('error'):
+                                    report['errors'].append({
+                                        'key': data['question_code'],
+                                        'error': result['error']
+                                    })
+                                else:
+                                    duplicates = result.get('duplicates', [])
+                                    if not duplicates:
+                                        report['errors'].append({
+                                            'key': data['question_code'],
+                                            'error': "AI returned no duplicates. Try adjusting notes or file context."
+                                        })
+                                    else:
+                                        duplicates_key = f"duplicates_{data['batch_key']}_{data['question_key']}"
+                                        st.session_state[duplicates_key] = duplicates
+                                        report['success_count'] += 1
+                            
+                            report['success'] = report['success_count'] > 0
+                            st.session_state.duplicate_generation_report = report
+                            
+                            st.info("Generation complete. Reloading...")
+                            st.rerun()
+                            
+                        except Exception as e:
+                            st.error(f"❌ Error during duplication: {str(e)}")
+                            st.exception(e)
+        else:
+            st.info("ℹ️ Select questions using the checkboxes above to generate duplicates")
     else:
         st.info("👈 Configure and generate questions to see results here")
 
