@@ -106,7 +106,6 @@ def run_gemini(
     prompt: str,
     api_key: str,
     files: Optional[List] = None,
-    thinking_budget: int = 4000,
     thinking_level: str = "medium",
     file_metadata: Optional[Dict[str, Any]] = None,
     log_name: str = "prompt",
@@ -119,7 +118,7 @@ def run_gemini(
         prompt: The text prompt to send
         api_key: Gemini API key
         files: List of file-like objects to upload (PDFs or images)
-        thinking_budget: Thinking budget tokens
+        thinking_level: Thinking level ("low", "medium", "high")
         file_metadata: Metadata about files (source_type, filenames)
         
     Returns:
@@ -144,9 +143,9 @@ def run_gemini(
             source_type = file_metadata.get('source_type', 'Unknown')
             filenames = file_metadata.get('filenames', [])
             logger.info(f"Starting Gemini | Files: {len(files)} files ({source_type}) | "
-                       f"Files: {', '.join(filenames)} | Thinking budget: {thinking_budget}")
+                       f"Files: {', '.join(filenames)} | Thinking level: {thinking_level}")
         else:
-            logger.info(f"Starting Gemini | Files: None | Thinking budget: {thinking_budget}")
+            logger.info(f"Starting Gemini | Files: None | Thinking level: {thinking_level}")
         
         # Build contents list
         contents = []
@@ -220,7 +219,6 @@ async def run_gemini_async(
     prompt: str,
     api_key: str,
     files: Optional[List] = None,
-    thinking_budget: int = 4000,
     thinking_level: str = "medium",
     file_metadata: Optional[Dict[str, Any]] = None,
     log_name: str = "prompt",
@@ -229,4 +227,4 @@ async def run_gemini_async(
     """
     Async wrapper for run_gemini.
     """
-    return await asyncio.to_thread(run_gemini, prompt, api_key, files, thinking_budget, thinking_level, file_metadata, log_name, save_prompt)
+    return await asyncio.to_thread(run_gemini, prompt, api_key, files, thinking_level, file_metadata, log_name, save_prompt)

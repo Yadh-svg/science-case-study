@@ -192,7 +192,25 @@ validation_prompt: |
       - Distractor analysis (ONLY FOR MCQ)
       - Marking info
       - Metadata
-      
+       ##CRITICAL FORMATTING RULE (NON-NEGOTIABLE):
+
+      If the output contains answer options anywhere (in Question or Solution):
+
+      1. Each option MUST be on a separate line.
+      2. It is STRICTLY FORBIDDEN to place more than one option on the same line.
+      3. Do NOT separate options using spaces, commas, or inline formatting.
+      4. After writing one option, insert a line break immediately.
+      5. This rule overrides all other formatting instructions.
+      6, each dropdown should contain option number for eg DROP 1 : A,B,C ... and should be on separate line
+      Correct format example:
+
+      OPTIONS:
+
+      A) 57 km
+      B) 7.5 km
+      C) 54 km
+      D) 57 km²
+
       FORMATTING REQUIREMENTS:
       1. Each logical block must be placed on its own new line.
       2. Subparts must appear vertically, one per line.

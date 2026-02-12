@@ -438,7 +438,7 @@ mcq_questions: |
 
   1. **Question**: A clear, well-formulated question that tests the specified concept
      - Use student-friendly language appropriate for {{Grade}}
-     - Names should be simple and commonly used  (eg : Jack	Anna  Ryan	Emily	Sam	Maria	Joh	)
+     - Names should be simple and commonly used  (eg : Jack	Anna  Ryan	Emily	Sam	Maria	John)
      - Avoid ambiguous wording
      - Include all necessary information
      - Use correct mathematical notation
@@ -778,6 +778,8 @@ FIB: |
     - Chapter/Unit: {{Chapter}}
     - Old Concepts: {{Old_Concept}}  # Prerequisite knowledge - what the student has already studied before this chapter
     {{TOPICS_SECTION}}
+    - For 3 marks it should be 5-6 blanks (drop downs) and for 4 marks 7-8 blanks
+ 
     - **Note**: Concepts consist of New Concepts (current chapter content) and Old Concepts (prerequisite knowledge). Prioritize new concepts for questions.
     - **Additional Notes**: {{Additional_Notes}}  # Extra instructions or configuration for how questions or solutions should be generated. Consider these notes when creating questions and formatting solutions.
     - IMPORTANT → Total Questions to Generate: {{TOTAL_QUESTIONS}} (Sum of all questions across topics)
@@ -910,85 +912,206 @@ FIB: |
     - Do NOT use concepts from "Topic B" when generating a question for "Topic A", even if both are in the input list.
     - Treat each topic's request as a completely isolated task.
 
-    brrrrrrrrrr
+    ────────────────────────────────────────
+  ANSWER FORMAT SELECTION POLICY
+  (TEXT vs DROP-DOWN)
+  ────────────────────────────────────────
 
-    ## FIB Question Types (Definitions)
+  DEFAULT RULE:
+  Use DROP-DOWN format in most science questions.And the dropdows should be sentences
+  +
+      ## FIB Question Types (Definitions)
 
-    ### 1. Fill in the Blank (Content / Definition Based)
+      ### 1. Fill in the Blank (Content / Definition Based)
 
-    **Description:**  
-      A fill-in-the-blank question that tests **core scientific concepts, definitions, or principles**.  
-      There is **no image and no real-world narrative**.  
-      Students rely purely on **scientific understanding**, terminology, and relationships.
+      **Description:**  
+        A fill-in-the-blank question that tests **core scientific concepts, definitions, or principles**.  
+        There is **no image and no real-world narrative**.  
+        Students rely purely on **scientific understanding**, terminology, and relationships.
 
-    **Examples:**
+        If the answer could be written in multiple valid ways → use DROP-DOWN format.
+        If only one strictly correct term exists → use |TEXT| format.
 
-      - The process by which green plants prepare their own food using sunlight is called **|TEXT1|**.
-      - In the human respiratory system, oxygen is exchanged for carbon dioxide in the **|TEXT1|** of the lungs.
-      - The force that pulls objects towards the center of the Earth is known as **|TEXT1|**.
+      **Examples:**
+        - The process by which green plants convert carbon dioxide and water into glucose using sunlight and chlorophyll is called |TEXT1|.
+        - The largest planet in our solar system is |TEXT2|.
+        - The fixed numerical value of acceleration due to gravity near the surface of the Earth (in m/s², rounded to one decimal place) is |TEXT3|.
+      ---
+
+      ────────────────────────────────────────
+      2. FILL IN THE BLANK (REAL-LIFE IMAGE BASED – SCIENCE)
+      ────────────────────────────────────────
+
+      DESCRIPTION
+
+      A Real-Life Image-Based FIB requires students to interpret a provided real-world image or diagram before answering.
+
+      The blank must:
+      • Depend on visual analysis.
+      • Not be answerable without observing the image.
+      • Require ecological or scientific reasoning, not direct labeling only.
+
+      If the answer could be written in multiple valid ways → use DROP-DOWN format.
+      If only one strictly correct term exists → use |TEXT| format.
+
+      Do NOT mix diagram-generation instructions with student-facing content.
+
+      ---
+
+      IMAGE REQUIREMENTS
+
+      • Simple, exam-oriented.
+      • Black-and-white line diagram (unless realism is necessary).
+      • Clear labels where required.
+      • Arrows must show direction of interaction (e.g., predator → prey).
+      • No unnecessary artistic detail.
+
+      ---
+
+    REAL EXAM-STYLE EXAMPLE
+
+    ### Scenario
+
+    The diagram shows two ponds, Pond A and Pond B.
+
+    Pond A:
+    • Fish present  
+    • Fish feeding on insect larvae  
+    • Fewer adult insects  
+    • More flowering plants  
+    • More pollinators  
+
+    Pond B:
+    • No fish  
+    • Many insect larvae  
+    • Many adult insects  
+    • Fewer flowering plants  
+    • Fewer pollinators  
+
+    Arrows indicate:
+    Fish → insect larvae  
+    Pollinators → flowers  
 
     ---
 
-    ### 2. Fill in the Blank (REAL LIFE IMAGES BASED - Science Diagram)
+    ### Question
 
-    **Description:**  
-      A Real-Life Images-Based FIB is a type of fill-in-the-blank question where the blank is based on a real-world image that is provided. The student needs to interpret the image to fill in the correct word or phrase.
+    Riya observed differences between the two ponds. Based on the diagram, complete the statements by choosing the most appropriate option for each [DROP].
 
-    **Diagram Prompt:**
+    i) In Pond A, the number of pollinators visiting flowers was higher because [DROP 1]
 
-        A simple black-and-white line diagram showing two ponds labeled **Pond A** and **Pond B**.
+    A. The presence of fish reduced insect larvae, allowing more pollinating insects to survive and visit flowers.  
+    B. The fish directly carried pollen from one flower to another in the pond ecosystem.  
+    C. The larvae consumed all flowering plants, forcing pollinators to migrate elsewhere.  
+    D. The absence of fish increased competition among pollinators.  
 
-        - **Pond A**:
-          - Fish present in water
-          - Fish feeding on insect larvae
-          - Fewer insects around the pond
-          - More flowering plants
-          - Pollinators (bees/butterflies) visiting flowers
+    ---
 
-        - **Pond B**:
-          - No fish in water
-          - Many insect larvae
-          - More insects around the pond
-          - Fewer flowering plants
-          - Less pollinator activity
+    ii) The organism that directly controls the population of insect larvae in Pond A is [DROP 2]
 
-        Use arrows to show:
-        - Fish → insect larvae
-        - Pollinators → flowers
+    A. Fish, which feed on insect larvae and regulate their numbers.  
+    B. Flowering plants, which compete with larvae for nutrients.  
+    C. Pollinators, which consume larvae during nectar collection.  
+    D. Soil microbes, which physically remove larvae from water.  
 
-        The diagram should be simple, exam-oriented, and suitable for school-level ecology questions.
+    ---
 
-    **Question:**  
-      Riya was conducting an experiment in her school garden to observe how the presence of one organism affects others. Based on this scenario and the picture given, complete the blanks.
+    iii) The ecological interaction between fish and insect larvae represents [DROP 3]
 
-      She noticed that in Pond A, the |TEXT 1| around the pond was significantly higher compared to Pond B.
-      This led Riya to conclude that the presence of |TEXT 2| might be an influencing factor.
-      In Pond A, the larvae of |TEXT 3| are eaten, which are natural predators of |TEXT 4|.
-      As a result, there was more pollination of nearby plants, leading to the production of more seeds.
-        ---
+    A. A predator–prey relationship where one organism feeds on another.  
+    B. Mutualism in which both organisms benefit equally.  
+    C. Competition for the same food resource.  
+    D. Parasitism where larvae live inside fish.  
 
+    ---
+
+    ANSWER KEY
+
+    DROP 1 → A  
+    DROP 2 → A  
+    DROP 3 → A  
+
+    ---
+
+    VALIDATION CHECKLIST
+
+    [ ] The answer depends on interpreting the diagram.  
+    [ ] Each DROP has exactly one correct answer.  
+    [ ] Options are sentence-based and reasoning-driven.  
+    [ ] Distractors reflect realistic misconceptions.  
+    [ ] The blank cannot be replaced by a single keyword.  
+
+
+      ### Diagram Prompt
+
+      A simple black-and-white food web diagram showing:
+      - Grass at the base
+      - Mouse, rabbit, and grasshopper feeding on grass
+      - Lizard and snake feeding on herbivores
+      - Hawk at the top as the apex predator
+
+      Use arrows to show the direction of energy flow.  
+      Label each organism clearly.  
+      The diagram should be simple, exam-oriented, and suitable for middle school ecology questions.
+
+
+    ---
     ### 3. Fill in the Blank (IMAGE BASED)
 
     **Description:**  
       An Image-Based FIB is a type of fill-in-the-blank question where the blank is related to an image, diagram, or illustration, and the student must identify or describe something based on the visual provided.      No image is provided.  
-
+      If the answer could be written in multiple valid ways → use DROP-DOWN format.
+      If only one strictly correct term exists → use |TEXT| format.
     **Examples:**
 
     ### IMAGE BASED FIB
 
       An Image-Based FIB is a type of fill-in-the-blank question where the blank is related to an image, diagram, or illustration, and the student must identify or describe something based on the visual provided.
 
-      Analyze the given picture and complete the blanks.
+      Analyze the given food web diagram and choose the most appropriate option for each [DROP].
 
-      The first trophic level consists of |TEXT 1|.
-      The next trophic level consists of |TEXT 2|.
-      These are followed by |TEXT 3|.
-      At the top of the food pyramid are the |TEXT 4|.
+      i) The first trophic level in the diagram consists of [DROP 1]
 
-      If the mouse disappears, it would affect the |TEXT 5| more and their number will |TEXT 6|.
+      A. Organisms that produce their own food through photosynthesis and form the base of the food web.  
+      B. Animals that feed directly on other animals.  
+      C. Predators that occupy the highest trophic level.  
+      D. Organisms that consume both plants and animals.  
 
-      The number of organisms in the |TEXT 7| trophic level is always higher compared to higher levels, due to the decrease in energy at each level.
+      ---
 
+      ii) The group consisting of mouse, rabbit, and grasshopper represents [DROP 2]
+
+      A. Primary consumers that feed directly on producers.  
+      B. Secondary consumers that prey on herbivores.  
+      C. Decomposers that recycle nutrients.  
+      D. Apex predators controlling all populations.  
+
+      ---
+
+      iii) If the mouse population suddenly disappears, the population most directly affected would be [DROP 3]
+
+      A. Snake, because it depends on mouse as one of its food sources.  
+      B. Grass, because it consumes snake.  
+      C. Hawk, because it feeds exclusively on grass.  
+      D. Lizard, because it depends only on grasshopper.  
+
+      ---
+
+      iv) The reason the first trophic level has the highest number of organisms is that [DROP 4]
+
+      A. Energy decreases at each successive trophic level, limiting higher-level populations.  
+      B. Predators reproduce more slowly than plants.  
+      C. Herbivores consume all available energy.  
+      D. Energy increases as it moves upward in the food chain.  
+
+      ---
+
+      ANSWER KEY
+
+      DROP 1 → A  
+      DROP 2 → A  
+      DROP 3 → A  
+      DROP 4 → A  
       ---
 
       ### Diagram Prompt
@@ -1005,11 +1128,12 @@ FIB: |
 
 
     ---
-
     ### 4. Fill in the Blank (Image-Based Science Observation)
 
     **Description:**  
       An Image-Based FIB is a type of fill-in-the-blank question where the blank is related to an image, diagram, or illustration, and the student must identify or describe something based on the visual provided.
+      If the answer could be written in multiple valid ways → use DROP-DOWN format.
+      If only one strictly correct term exists → use |TEXT| format.
     **Example (with Diagram Prompt):**
 
     **Diagram Prompt:**  
@@ -1029,15 +1153,19 @@ FIB: |
 
     **Example:**
 
-    | Substance | Melting Point (°C) |
-    |---------|------------------|
-    | Ice     | 0                |
-    | Iron   | 1538             |
-    | Wax    | 62               |
+    ### 5. Fill in the Blank (Data-Based – Science)
 
-    **Question:**  
-    Among the substances given, **|TEXT1|** has the lowest melting point.  
-    At room temperature, **|TEXT2|** is most likely to remain solid.
+      | Substance | Melting Point (°C) |
+      |-----------|--------------------|
+      | Ice       | 0                  |
+      | Iron      | 1538               |
+      | Wax       | 62                 |
+
+      Question:
+
+      Among the substances given, |TEXT1| has the lowest melting point.
+
+      The substance with the highest melting point is |TEXT2|.
 
     ---
 
@@ -1081,12 +1209,12 @@ FIB: |
 
     **Examples:**
 
-    -Complete the equation for photosynthesis:
+      Complete the balanced chemical equation for photosynthesis.
 
-      __ CO₂ + __ H₂O + light energy → __ C₆H₁₂O₆ + __ O₂
+      |TEXT1| CO₂ + |TEXT2| H₂O + light energy → |TEXT3| C₆H₁₂O₆ + |TEXT4| O₂
 
-      This process occurs in the __________ of plant cells, where sunlight is used to convert carbon dioxide and water into glucose and oxygen.
-
+      This process occurs inside the organelle called the |TEXT5|.
+      (Write the singular scientific term.)
 
 
     ---
@@ -1258,64 +1386,186 @@ FIB: |
 
         Fill in the Blanks questions are used to assess mathematical understanding where
         students must supply missing information directly, without being guided step-by-step.
-        FIB questions may include 2 distinct answer-handling types:
+        FIB questions may include TWO distinct answer-handling types:
 
         ────────────────────────────────────────
-        1. UNIQUE-ANSWER FIB (TEXT ENTRY)
+        1. UNIQUE-ANSWER FIB (STRICT TEXT ENTRY)
         ────────────────────────────────────────
 
-        • Use when:
-          - Only ONE scientific correct answer exists.
-          - Use for ALL scientific questions.
-          - Allow ONLY ONE correct answer.
-          - No alternative wording or representation is acceptable.
+        Use this format ONLY when the answer is completely unique
+        and cannot be represented in any alternative valid form.
 
-        • Format:
-          - Use |TEXT n| placeholders.
-          - No dropdowns, no options shown to students.
+        Do NOT use this format if:
+        - Synonyms are possible.
+        - Chemical formulas and common names both exist (e.g., water / H2O).
+        - Units can vary.
+        - Equivalent mathematical forms exist (e.g., 1/2, 0.5, 50%).
+        - Spelling variations are possible.
+        - Singular/plural variations are possible.
 
-        • Answer Key Rules:
-          - Provide exactly one correct value.
-          - Do NOT add unnecessary variants.
+        If multiple valid representations exist → use DROP-DOWN format instead.
 
-        • Typical use cases:
-          - Exact values,
-          - Final inferred results,
-          - Constrained outcomes after reasoning.
+        ---
 
-        • Example (validated):
-          TEXT1: 196
-          TEXT2: 225
-          TEXT3: 14
+        WHEN TO USE
 
-        ────────────────────────────────────────
-        2. PROBABLE-ANSWER FIB (TEXT ENTRY)
-        ────────────────────────────────────────
+        Use UNIQUE-ANSWER FIB only when:
 
-        • Use when:
-          - The correct answer can be written in multiple valid ways.
-          - Use when the SAME correct answer can be written in MULTIPLE valid ways
-            (word form, number form, equivalent expressions, accepted terminology).
+        • The answer is a single, fixed numerical value after calculation.
+        • The answer is a standardized scientific term with no accepted synonym.
+        • The answer is a constrained final result derived through reasoning.
+        • Only ONE scientifically accepted expression exists.
 
-        • Format:
-          - Use placeholders: |TEXT 1|, |TEXT 2|, etc.
-          - Do NOT provide options inside the question.
-          - Student response is free text.
+        ---
 
-        • Answer Key Rules:
-          - All scientific acceptable answers must be listed.
-          - Separate probable answers using a semicolon (;).
-          - Do NOT include unnecessary variations.
-          - Only scientifically and linguistically valid equivalents are allowed.
+        FORMAT RULES
 
-        • Example (validated):
-          |TEXT 1| → single; one; 1
+        • Use placeholder: |TEXT n|
+        • No dropdowns.
+        • No visible options.
+        • Students must type the answer exactly.
 
-        • Important:
-          - The blank must NOT reduce to a single forced representation.
-          - If only one exact response is possible, this is NOT a probable-answer FIB.
-       
-  ** Based on the topic, grade level, and concepts being assessed, you may choose the most appropriate Fill in the Blanks type (unique-answer, probable-answer, ); a single topic may include a mix of all three types, and where visual understanding is required, you may include a diagram prompt describing the image to be shown (for visualization purposes only), ensuring the diagram contains only essential visual information and does not include labels, values, or clues that directly reveal the answer.
+        ---
+
+        ANSWER KEY RULES
+
+        • Provide exactly ONE correct answer.
+        • Do NOT include alternate spellings.
+        • Do NOT include unit variations.
+        • Do NOT include equivalent mathematical forms.
+        • The answer must match character-by-character.
+
+        ---
+
+        VALID USE CASES
+
+        ✓ Final numeric value after calculation  
+        ✓ Exact year (e.g., 1919)  
+        ✓ Exact constant value (e.g., 3.14 if approximation fixed in question)  
+        ✓ Unique scientific term (e.g., Photosynthesis)  
+        ✓ Atomic number (e.g., 8)  
+
+        ---
+
+        DO NOT USE FOR
+
+        ✗ Water (can be written as H2O)  
+        ✗ Half (can be 1/2 or 0.5)  
+        ✗ 10 metres (could be 1000 cm)  
+        ✗ Decomposer (can be saprophyte)  
+        ✗ Sodium chloride (can be NaCl)
+
+        ---
+
+        EXAMPLE (VALIDATED)
+
+        |TEXT 1|  
+        |TEXT 2|  
+        |TEXT 3|
+
+        Answer Key:
+        TEXT1: 196  
+        TEXT2: 225  
+        TEXT3: 14
+
+       2 DROP-DOWN FIB (CONTROLLED SELECTION – SENTENCE-LEVEL DIFFICULTY)
+          ## PURPOSE
+
+          Use drop-down format when:
+          - There are multiple possible valid ways a student might phrase the answer in free text.
+          - Standardizing responses is required for objective evaluation.
+          - Wherever dropdown is possible bring dropdown
+          ---
+
+          ## FORMAT RULES
+
+          - Use placeholder: **[DROP X]** (e.g., [DROP 1], [DROP 2]).
+          - Each blank must have its own option set.
+          - Each option must be a **complete sentence**.
+          - Exactly **one** option must be correct.
+          - Options must:
+            - Be conceptually close and plausible.
+            - Be mutually exclusive.
+            - Avoid obvious elimination clues.
+            - Be similar in length and structure.
+          - Do NOT make the blank replaceable by a single keyword.
+          - The correct answer must require reasoning, not pattern matching.
+
+          ---
+
+          ## REAL EXAM-STYLE EXAMPLE
+
+          ### Scenario
+
+          A student conducted an experiment to study the conditions required for rusting.  
+          Three identical iron nails were placed under different conditions for five days.
+
+          | Setup | Condition of Nail | Environment | Observation After 5 Days |
+          |--------|------------------|-------------|--------------------------|
+          | A | Iron nail | Exposed to air and water | Reddish-brown layer formed |
+          | B | Iron nail | Exposed to air only (kept dry) | No visible change |
+          | C | Iron nail | Submerged in boiled water with oil layer | No visible change |
+
+          ---
+
+          ### Complete the statements by choosing the most appropriate option for each [DROP].
+
+          ---
+
+          i) The formation of the reddish-brown coating in Setup A indicates that [DROP 1]
+
+          A. Iron reacts with both oxygen and water to form hydrated iron oxide, which appears as rust.  
+          B. Iron undergoes physical expansion due to moisture and changes color as a result.  
+          C. Water alone is sufficient to chemically transform iron into a new compound.  
+          D. Oxygen alone causes iron to disintegrate without the involvement of moisture.  
+
+          ---
+
+          ii) Comparing Setup A and Setup B shows that rusting does not occur when [DROP 2]
+
+          A. Iron is exposed to oxygen but moisture is absent.  
+          B. Iron is kept in contact with water at room temperature.  
+          C. Iron is allowed to remain in open air for several days.  
+          D. Iron is placed in a container with limited air circulation.  
+
+          ---
+
+          iii) The absence of rust in Setup C suggests that [DROP 3]
+
+          A. Removing dissolved oxygen from water prevents the oxidation of iron.  
+          B. Covering water with oil increases the rate of rusting.  
+          C. Boiling water permanently alters the chemical nature of iron.  
+          D. Iron does not react in the presence of any liquid.  
+
+          ---
+
+          iv) From this experiment, it can be concluded that rusting is a process that [DROP 4]
+
+          A. Requires both oxygen and water to proceed effectively.  
+          B. Occurs only when iron is heated at high temperatures.  
+          C. Takes place in completely dry air without moisture.  
+          D. Depends solely on the presence of carbon dioxide in the atmosphere.  
+
+          ---
+
+          ## ANSWER KEY
+
+          - DROP 1 → A  
+          - DROP 2 → A  
+          - DROP 3 → A  
+          - DROP 4 → A  
+
+          ---
+
+          ## VALIDATION CHECKLIST
+
+          - [ ] Each [DROP] has exactly four options.
+          - [ ] All options are complete sentences.
+          - [ ] Only one option per drop is correct.
+          - [ ] Distractors reflect realistic misconceptions.
+          - [ ] The blank cannot be replaced by a single keyword.
+          - [ ] No grammatical clues reveal the answer.
+  ** Based on the topic, grade level, and concepts being assessed, you may choose the most appropriate Fill in the Blanks type (unique-answer or drop-down); a single topic may include a mix of all three types, and where visual understanding is required, you may include a diagram prompt describing the image to be shown (for visualization purposes only), ensuring the diagram contains only essential visual information and does not include labels, values, or clues that directly reveal the answer.
       EXAMPLE 1: UNIQUE ANSWER (Scientific – only one correct answer)
 
       Question:
@@ -1327,36 +1577,37 @@ FIB: |
 
       ------------------------------------------------------------
 
-      EXAMPLE 2: PROBABLE / MULTIPLE ANSWERS (Scientific – more than one valid form)
+      EXAMPLE 2: DROPDOWN QUESTION (Scientific – selection from given options)
 
       Question:
-      Name the process by which green plants make their own food.
-      |TEXT1|
+      The gas released during photosynthesis is [DROP].
 
-      Answers:
-      TEXT1: photosynthesis; Photosynthesis
+      Drop-down Options:
+      [DROP] → (oxygen, carbon dioxide, nitrogen, hydrogen)
 
-      ------------------------------------------------------------
+      Answer:
+      [DROP]: oxygen
 
-    3.  Marks and Blanks Rules (STRICT RULE):
+    4.  Marks and Blanks Rules (STRICT RULE):
 
-    - Wherever possible, prioritize using blanks with **0.5 marks** (e.g., split a 1-mark question into two 0.5-mark blanks).
+    - Each blank or dropdown must carry **0.5 mark**.
+    - No blank or dropdown can have marks **less than 0.5 or more than 0.5**, and no other intermediate values are allowed.
 
     - For a **1-mark question**:
-      - Use **one blank of 1 mark**, OR
       - Use **two blanks of 0.5 mark each**.
 
     - For a **2-mark question**:
-      - Use **at least two blanks** (any valid combination of 0.5 or 1 mark each).
+      - Use 4 blanks of 0.5 mark each.
 
     - For a **3-mark question**:
-      - Use **at least three blanks** (any valid combination of 0.5 or 1 mark each).
-
-    - It is allowed to include **multiple blanks** as appropriate to the question type, provided the above marking rules are satisfied.
+      - Use 6 blanks of 0.5 mark each.
+    - For a **4-mark question**:
+      - Use 8 blanks of 0.5 mark each.
+    - It is allowed to include **multiple blanks and/or dropdowns** as appropriate to the question type, provided the above marking rules are satisfied.
     - Each blank should carry marks in proportion to its allotted value.
     - Wherever 0.5 mark is possible, it should be used.
 
-  4. Diagram Prompt (for visualization purposes only) 
+  5. Diagram Prompt (for visualization purposes only) 
     ## DIAGRAM RULES
         - Diagram is optional (unless the topic inherently requires visual representation).
         - If included, give a **diagram prompt** (NOT the actual image).
@@ -1390,10 +1641,10 @@ FIB: |
           - Each section must serve a distinct purpose:
               • Short Context = Real-life setup and qualitative description
               • Diagram = Visual/numerical representation of the setup
-  5. ## INSTRUCTION OVERVIEW:
+  6. ## INSTRUCTION OVERVIEW:
     - IMPORTANT → Total Questions to Generate: {{TOTAL_QUESTIONS}} (Sum of all questions across topics)
     - You can add multiple blanks in a question 
-    - A single Fill in the Blanks question may contain one or more blanks (|TEXT|), where each blank independently tests a specific part of the concept or reasoning step.
+    - A single Fill in the Blanks question may contain one or more blanks (|TEXT| and/or [DROP]), where each blank independently tests a specific part of the concept or reasoning step.
     - Based on the topic you need to generate questions
     - For the specified Topic(s), identify relevant parts of concepts and ensure that each question uses these sub-concepts in context.
     - Use the supplied **Grade** and **Concepts** to determine the appropriate cognitive depth and difficulty for each part.
@@ -1409,7 +1660,7 @@ FIB: |
       - Only if no specific method is mentioned in the concepts should the general grade-appropriate method be used.
   
   
-  6. ## TEXTBOOK CONTENT HANDLING (CRITICAL)
+  7. ## TEXTBOOK CONTENT HANDLING (CRITICAL)
     - **Do NOT treat the textbook/concept excerpts as reading passages in questions**
     - **Do NOT reference the textbook/concept material as a passage**
     - Questions must be self-contained and NEVER reference the source material directly
@@ -1523,6 +1774,7 @@ FIB: |
       - Present a clear mathematical statement with one or more blanks.
       - Use the placeholders exactly as:
           |TEXT 1|, |TEXT 2|, |TEXT 3|, … for text-entry blanks
+          [DROP] for drop-down blanks
       - Do NOT provide hints, methods, or formulas in the question text.
       - A single question may contain multiple blanks.
 
@@ -1538,10 +1790,16 @@ FIB: |
       - Clearly map each blank to its answer.
       - For UNIQUE-ANSWER blanks:
           TEXT n: exact single correct answer
-      - For PROBABLE-ANSWER blanks:
-          TEXT n: list all acceptable answers separated by semicolons (;)
+      - For DROP-DOWN blanks:
+          [DROP]: correct option only
+      
 
-    4. Solution Explanation:
+    4. Drop-down Options (Only if DROP is used):
+      - Explicitly list all options for each [DROP].
+      - Options must be mutually exclusive and conceptually valid.
+      - Exactly one option must be correct.
+
+    5. Solution Explanation:
       - Provide a clear, step-by-step explanation.
       - Use age-appropriate mathematical reasoning .
       - using technique that the student studied in the chapter.
@@ -1558,14 +1816,18 @@ FIB: |
     FORMAT EXAMPLE (STRUCTURE ONLY):
 
     Question:
-    <question text with |TEXT| >
+    <question text with |TEXT| and/or [DROP]>
 
     Diagram Prompt (if required):
     <description of the visual to be shown>
 
+    Drop-down Options (if applicable):
+    [DROP] → (option 1, option 2, option 3, option 4)
+
     Answer Key (with mark distribution):
     TEXT 1: mark distribution
     TEXT 2: mark distribution
+    [DROP]: mark distribution
 
     Solution Explanation:
     <step-by-step reasoning> 
@@ -1630,7 +1892,6 @@ FIB: |
       - If the explanation sounds suitable for a strong student, rewrite it to be simpler.
 
     - Do not mix answer types within a single blank.
-    - Do not include unnecessary variations in probable answers.
     - Ensure every blank tests understanding, not guessing.
     - Output language must be English.
 
@@ -1655,41 +1916,38 @@ FIB: |
     ✔ 2H₂ + O₂ → 2H₂O  
     ✘ $\frac{a}{b}$ , \ce{H2O}
 
-
-
-
 duplicate_question: |
   You are an expert question generator tasked with creating duplicate versions of educational **science** questions. Your goal is to produce variations that test the same scientific concept and method (quantitative calculation, experimental reasoning, conceptual explanation, or data interpretation) but with different numbers, contexts, and measured quantities.
-  
+ 
   ## INPUT DETAILS
   - Number of Duplicates to Generate: {{VARIATION_COUNT}}
   - Original Question (Markdown Format):
-  
+ 
   {{ORIGINAL_QUESTION}}
-  
+ 
   **Additional Instructions / Notes (Optional):**
   {{CUSTOM_NOTES}}
-  
+ 
   **Additional Context from File:**
   {{FILE_CONTEXT}}
-  
+ 
   ---
-  
+ 
   ## CORE PRINCIPLES
-  
+ 
   - A duplicate must preserve the exact same key idea and solution method as the parent item (for example: conservation of mass, kinematics equations, Ohm's law calculations, stoichiometric relationships, ecological food-web reasoning, interpreting graphs/tables, experimental error analysis).
   - Duplicates must NOT include the original Key-Idea text. Instead, add a top-line inside the duplicate markdown:
-  
+ 
     **Duplicate built using parent key idea**
-  
+ 
   - Preserve all structural fields (question type, parts count, number of options/blanks, marks, taxonomy, distractor analysis structure, difficulty, stepwise solution).
   - Change only the scenario/context, proper nouns, measurement values and units while keeping conceptual relationships and difficulty unchanged.
   - Maintain the same distractor error patterns and labels (A/B/C/D) as in the original.
-  
+ 
   ---
-  
+ 
   ## DUPLICATION RULES (Follow for Every Duplicate)
-  
+ 
   1. Identify numeric constants, measurable quantities (mass, volume, time, temperature, current, concentration, speed, frequency, etc.), scenario nouns, named entities, and distractor-error mapping.
   2. Generate new numeric values that preserve the same quantitative relationships (ratios, additive/subtractive patterns, proportionality, coefficients, conservation laws, stoichiometric ratios) and remain in a realistic scientific range and similar difficulty.
   3. Change scenario/context (e.g., change a car’s motion problem to a cyclist; a beaker of HCl to a dilute NaOH solution; a pond ecosystem to a grassland ecosystem) but keep the domain class identical (physics → physics, chemistry → chemistry, biology → biology).
@@ -1697,74 +1955,74 @@ duplicate_question: |
   5. Recompute the correct answer and reconstruct distractors using the same mistake-types as the original (unit-mistake, sign error, arithmetic slip, misapplied formula, misread graph).
   6. Copy solution steps verbatim except substitute the new numeric values, units, and recomputed intermediate results.
   7. Omit the Key-Idea field in duplicates. Instead insert at the start of the markdown body:
-  
+ 
      **Duplicate built using parent key idea**
-  
+ 
   8. Output must preserve all fields present in the original JSON except Key-Idea.
      - A markdown field (e.g., `question1`) containing the full duplicate content.
   10. Duplicates must faithfully follow the parent question’s scientific key idea.
-  
+ 
   ---
-  
+ 
   ## HANDLING ADDITIONAL NOTES AND/OR FILES
-  
+ 
   Additional Notes may be provided as:
   - Text only  
   - PDF/Image only  
   - Both together  
-  
+ 
   These inputs define how the duplicated question should be modified (for example: “use only 3-significant-figure measurements”, “use SI units”, “use ecology context”, or provide a figure to adapt).
-  
+ 
   Unless explicitly stated otherwise:
   - The core scientific concept and solution logic must remain the same.
   - The question structure remains unchanged (same type, options/parts).
-  
+ 
   If both a file and notes are provided:
   - Notes take priority if there is any conflict.
   - The file supplies contextual/visual source material unless overridden.
-  
+ 
   ---
-  
+ 
   ## CORRECT ANSWER ROTATION REQUIREMENT
-  
+ 
   When generating duplicates, the correct option label must not remain the same as the parent item.
-  
+ 
   - For regular MCQs, rotate the correct option to a different label and reassign distractors accordingly while preserving the same error-pattern logic.
-
+ 
   ---
-  
+ 
   ## OUTPUT FORMAT (STRICT)
-  
+ 
   - Return a RAW JSON array.
   - Do NOT wrap the output in markdown code blocks (e.g., ```json).
   - Output ONLY the JSON string.
-  
+ 
   {
     "question_code": "dup-1",
     "question1": "## Duplicate built using parent key idea\\n\\n<full markdown question body minus key-idea>"
   }
-  
+ 
   ---
-  
+ 
   ## SCENARIO & UNIT CONSTRAINTS
-  
+ 
   - Scenario changes must remain equivalent in unit type (e.g., speed → speed, mass → mass, concentration → concentration, time → time).
   - Do not change domain class (e.g., a kinematics problem must not become a chemistry percentage problem).
   - Use appropriate and consistent units.
   - Ensure all new numeric values are scientifically plausible.
-  
+ 
   ---
-  
+ 
   ## STRUCTURAL SAFETY GUARD
-  
+ 
   - Do not introduce additional symbols, new variables, conditions, or sub-questions.
   - Do not merge or split solution steps.
   - Preserve original marks/weighting and difficulty.
-  
+ 
   ---
-  
+ 
   ## QUALITY CHECK (MUST PASS)
-  
+ 
   ✓ Scenario/context changed and scientifically plausible  
   ✓ All numeric values changed and preserve conceptual/quantitative structure  
   ✓ Same scientific method and solution  
@@ -1774,11 +2032,11 @@ duplicate_question: |
   ✓ Difficulty unchanged  
   ✓ Same taxonomy and marks  
   ✓ Units consistent and realistic  
-  
+ 
   ---
-  
+ 
   ## SCIENCE FORMATTING RULES
-  
+ 
   - Use ONLY plain Markdown text.
   - Do NOT use LaTeX or TeX in any form.
   - Write all quantitative expressions in readable plain text.
@@ -1788,19 +2046,19 @@ duplicate_question: |
   - Use parentheses for grouping.
   - Write units next to numbers (e.g., 5.0 m, 20 g, 25 °C).
   - Do NOT use $, $$, \( \), \frac, \sqrt, or any backslash commands.
-  
+ 
   ---
-  
+ 
   ## SAFETY LIMITATIONS
-  
+ 
   - Do NOT include hazardous lab procedures.
   - Do NOT include actionable unsafe chemical, biological, or electrical instructions.
   - Keep experimental descriptions conceptual and non-procedural.
-  
+ 
   ---
-  
+ 
   ## FINAL REMINDERS
-  
+ 
   - Ensure unit consistency and realistic scientific ranges.
   - Preserve the cognitive level of the original question.
   - Maintain JSON-ready formatting suitable for programmatic use.

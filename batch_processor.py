@@ -298,7 +298,7 @@ async def generate_raw_batch(
             prompt=prompt_text,
             api_key=api_key,
             files=files,
-            thinking_budget=3000,
+            thinking_level="medium",
             file_metadata=file_metadata,
             # Use a more explicit log name for regeneration if override is on
             log_name=f"Regeneration_{batch_key}" if general_config.get('save_prompts_override') else f"{batch_key}_Gen",
@@ -348,7 +348,7 @@ async def validate_batch(
             prompt=validation_prompt_text,
             api_key=api_key,
             files=files,
-            thinking_budget=3000,
+            thinking_level="medium",
             file_metadata=file_metadata,
             log_name=f"{batch_key}_Val",
             # ONLY save validation prompts if explicitly requested AND it's NOT a regeneration run 
