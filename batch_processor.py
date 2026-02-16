@@ -302,7 +302,7 @@ async def generate_raw_batch(
             file_metadata=file_metadata,
             # Use a more explicit log name for regeneration if override is on
             log_name=f"Regeneration_{batch_key}" if general_config.get('save_prompts_override') else f"{batch_key}_Gen",
-            save_prompt=general_config.get('save_prompts_override', False)
+            save_prompt=True  # Always save generation prompts (including Descriptive questions)
         )
 
 
@@ -581,7 +581,11 @@ async def process_single_batch_flow(
         q_notes = q_config.get('additional_notes_text', '')
         spec = q_config.get('mcq_type') or q_config.get('fib_type') or q_config.get('descriptive_type') or "Standard"
         
-        context_line = f"Question {idx+1}: Topic='{topic_str}', Type='{spec}'"
+        dok = q_config.get('dok', 'N/A')
+        marks = q_config.get('marks', 'N/A')
+        taxonomy = q_config.get('taxonomy', 'N/A')
+        
+        context_line = f"Question {idx+1}: Topic='{topic_str}', Type='{spec}', DOK='{dok}', Marks='{marks}', Taxonomy='{taxonomy}'"
         if q_notes:
             context_line += f", Notes='{q_notes}'"
         context_lines.append(context_line)

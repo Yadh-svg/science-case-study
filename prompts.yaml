@@ -269,6 +269,20 @@ mcq_questions: |
           B) Both Assertion (A) and Reason (R) are true, but Reason (R) does not explain Assertion (A).  
           C) Assertion (A) is true, but Reason (R) is false.  
           D) Assertion (A) is false, but Reason (R) is true.  
+        - You should not change the option order
+      For Assertion–Reason :
+        Unlike other option distribution 
+        Ensure the final answer key across all questions follows this distribution:
+        - **20%** of questions → **Correct Option A**
+        - **30%** of questions → **Correct Option B**
+        - **25%** of questions → **Correct Option C**
+        - **25%** of questions → **Correct Option D**
+
+        
+        FOR EG : 10 QUESTION 
+        then  A=2, B=3, C=2, D=3
+        Total must always equal {{TOTAL_QUESTIONS}}.
+
                   
       -----------------------------------------
       7. MCQ (Real-Life Based)
@@ -554,6 +568,30 @@ mcq_questions: |
       - Do NOT use point-by-point bullet lists.
       - Use continuous descriptive narrative that clearly defines the layout, components, and relationships.
       - The prompt must read as a cohesive depiction, not a disjointed list of objects.
+  
+  ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
+
+    To avoid positional bias, the correct answer options must be distributed across A, B, C, and D.
+
+    1. The generator MUST NOT place the correct answer in the same position repeatedly.
+    2. Across the full set of questions, correct answers must be approximately evenly distributed.
+    3. Use forced rotation order unless the user specifies otherwise:
+
+      Question 1 → A  
+      Question 2 → B  
+      Question 3 → C  
+      Question 4 → D  
+      Question 5 → A  
+      Question 6 → B  
+      (Continue repeating cycle)
+
+    4. If TOTAL_QUESTIONS is not divisible by 4, continue the rotation naturally.
+    5. Validation is required before final output:
+      - Count how many correct answers appear in A, B, C, D.
+      - If distribution is uneven or clustered → regenerate affected questions.
+
+    If this rule is violated, STOP and return:
+    "ERROR: Correct option distribution rule violated."
 
       ### Data/Label Placement Rules:
       - **Diagram Prompt:**  
@@ -1218,7 +1256,30 @@ FIB: |
 
 
     ---
+    ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
 
+        To avoid positional bias, the correct answer options must be distributed across A, B, C, and D.
+
+        1. The generator MUST NOT place the correct answer in the same position repeatedly.
+        2. Across the full set of questions, correct answers must be approximately evenly distributed.
+        3. Use forced rotation order unless the user specifies otherwise:
+
+          Question 1 → A  
+          Question 2 → B  
+          Question 3 → C  
+          Question 4 → D  
+          Question 5 → A  
+          Question 6 → B  
+          (Continue repeating cycle)
+
+        4. If TOTAL_QUESTIONS is not divisible by 4, continue the rotation naturally.
+        5. Validation is required before final output:
+          - Count how many correct answers appear in A, B, C, D.
+          - If distribution is uneven or clustered → regenerate affected questions.
+
+        If this rule is violated, STOP and return:
+        "ERROR: Correct option distribution rule violated."
+  
     ### Validation Check (Mandatory)
 
     **“Does the scientific concept become unavoidable because of the situation, data, diagram, or equation?”**  
@@ -1229,6 +1290,26 @@ FIB: |
    - In the TOPICS_SECTION, each question may optionally specify an "FIB Type".
    - If "FIB Type" is specified, you **MUST STRICTLY** generate a question that fits that specific definition and style.
    - If "FIB Type" is "Auto" or NOT specified, you must choose the most appropriate type based on the topic and grade level, ensuring variety across the set.
+  ## Placeholder Numbering Rule (Dropdowns and Blanks)
+
+    All answer placeholders must be numbered sequentially starting from 1.
+
+    Use the formats:
+    - DROP 1, DROP 2, DROP 3, ... for dropdowns
+    - BLANK 1, BLANK 2, BLANK 3, ... for text entry blanks
+
+    Number placeholders in the exact order they appear in the question, regardless of type.
+
+    Rules:
+    - Do NOT skip numbers.
+    - Do NOT continue numbering from previous questions.
+    - Restart numbering from 1 for every new question.
+    - Each placeholder must have a unique number.
+    - Numbering must strictly follow the reading order of the question.
+    - Dropdowns and blanks may be mixed, but they must share the same continuous numbering sequence.
+
+    Example order if mixed:
+    DROP 1 → BLANK 2 → DROP 3 → BLANK 4
 
   For each question, you must specify:
     - **FIB Type**: (Concept (definition)/REAL LIFE IMAGES BASED /IMAGE BASED /Image-Based Science Observation/ Data Based /Numerical and Image Based/ Equation Based)
@@ -1594,15 +1675,16 @@ FIB: |
     - No blank or dropdown can have marks **less than 0.5 or more than 0.5**, and no other intermediate values are allowed.
 
     - For a **1-mark question**:
-      - Use **two blanks of 0.5 mark each**.
+      - Use total **two blanks/dropdowns of 0.5 mark each**.
 
     - For a **2-mark question**:
-      - Use 4 blanks of 0.5 mark each.
+      - Use total **4 blanks/dropdowns of 0.5 mark each**.
 
     - For a **3-mark question**:
-      - Use 6 blanks of 0.5 mark each.
+      - Use total 6 blanks/dropdowns of 0.5 mark each.
     - For a **4-mark question**:
-      - Use 8 blanks of 0.5 mark each.
+      - Use total 8 blanks/dropdowns of 0.5 mark each.
+    - The number of blanks should be strict, It should not increase or decrease 
     - It is allowed to include **multiple blanks and/or dropdowns** as appropriate to the question type, provided the above marking rules are satisfied.
     - Each blank should carry marks in proportion to its allotted value.
     - Wherever 0.5 mark is possible, it should be used.
@@ -1800,6 +1882,7 @@ FIB: |
       - Exactly one option must be correct.
 
     5. Solution Explanation:
+      - Give the correct option for each drop /blanks  
       - Provide a clear, step-by-step explanation.
       - Use age-appropriate mathematical reasoning .
       - using technique that the student studied in the chapter.
@@ -2062,3 +2145,461 @@ duplicate_question: |
   - Ensure unit consistency and realistic scientific ranges.
   - Preserve the cognitive level of the original question.
   - Maintain JSON-ready formatting suitable for programmatic use.
+
+descriptive_questions: |
+
+  You are a Science teacher who develops clear, scenario-based descriptive questions strictly based on the provided concepts and resource material. The questions must be analytical, thought-provoking, and assess higher-order thinking skills through multi-part questions. The questions as well as the solution should be of higher quality (For Final exams).
+  Its an NCERT syllabus based question and solution creation task.
+  Grades are from 3 - 8 
+  
+  ### Inputs (Provided by User)
+    - Subject / Course / Grade: {{Subject}}
+    - Grade Level: {{Grade}}
+    - Chapter Number & Name: {{Chapter}}
+      {{TOPICS_SECTION}}
+    - IMPORTANT → Total Questions to Generate: {{TOTAL_QUESTIONS}}
+    - Old Concepts: {{Old_Concept}}  # Prerequisite knowledge - what the student has already studied before this chapter
+    
+    - (if the topic requires to use the pdf) The attached PDF contains the key concepts of the chapter.
+    - The purpose of analyzing key_concepts is solely to ensure the questions remain:
+      - grade-appropriate,
+      - aligned with what the student has already learned,
+      - and correctly situated within the chapter's conceptual progression.
+    - Treat the uploaded PDF as a **closed syllabus boundary**.
+    - Do **NOT** infer, assume, or import concepts from outside the PDF.
+    - Do **NOT** use results that are traditionally associated with the topic but not covered in the PDF.
+    - Infer to the pdf and understand what the student has already learned and what the student should know from the pdf.
+    - The idea and concept used in the questions should be from the pdf. 
+    
+  ## PDF 
+    If a pdf is uploaded then analyse the full pdf to understand the topics and subtopics(for each topic you can generate questions by using the concept used in that topic). So understand those so that you can genrate variety of questions if needed.
+    
+  ## PDF Topic Boundary Rules [important rule if pdf is there]
+
+    Analyze the entire PDF and identify clear boundaries between topics and subtopics. When the user specifies a subtopic, locate the precise boundary for that subtopic and use only the concepts, definitions, methods,
+    and exercise patterns contained within that boundary. Do not mix or leak concepts from earlier or later topics. Do not introduce ideas from other sections unless the exercises of that subtopic explicitly require them.
+    Study how the exercises for that subtopic/topic are built to understand the style of questioning and the concept being tested. Do not copy or rephrase those exercises. Instead, generate new, concept-aligned questions modeled on the same idea. 
+    The user will always give a topic/subtopic; use only that subtopic's/topic's boundary to make the questions.Never address the pdf as textbook, pdf or any other thing in the questions
+    
+  ## STRICT KNOWLEDGE BOUNDARY RULES
+    Treat the uploaded PDFs/images as the only source of knowledge. Do not use any outside syllabus, curriculum, or textbook knowledge. Do not introduce concepts, terminology, skills, or grade-level content that is not explicitly shown in the uploaded material.
+    Generate questions that match the appropriate difficulty level, and same style. Do not increase the grade level or add any new concepts. Do not assume hidden scientific knowledge. 
+    The uploaded content defines a closed knowledge boundary. If a concept, method, property, term, or instruction is not present in the PDF/image, do not include it in the generated items. Stay fully faithful to the language, style, tasks, operations, and reasoning patterns present in the PDF/image.
+    
+  ## PDF Magnitude rule 
+    Strictly adhere to the number range and magnitude specified in the pdf or concepts provided, ensuring that all numerical values, unit conversions, 
+    and intermediate calculations remain within the scope of numbers introduced in the chapter.
+    
+  ## MULTI-TOPIC HANDLING:
+    - You are generating questions for {{NUMBER_OF_TOPICS}} topic(s).
+    - Process each topic independently.
+    - Ensure clear separation of questions by topic.
+    - Follow the exact number of questions specified for each topic.
+    
+  ## SCIENCE DOMAIN REFERENCE (MANDATORY SECTION)
+    Science Domain for this question: {{Science_Domain}}
+    1. Life Science: Study of living organisms—plants, animals, humans, and microorganisms
+    2. Physical Science: Study of non-living systems—matter, energy, force, motion, heat, light, sound, electricity, magnetism
+    3. Earth Science: Study of the Earth and its processes—rocks, soil, water, atmosphere, weather, climate
+    4. Environmental Science: Study of how people interact with nature and their surroundings
+    
+    ALL descriptive questions must remain strictly within the science domain implied by the Topic and Chapter.
+    DO NOT mix domains unless the Topic itself explicitly integrates them.
+
+  ## SCIENCE TAXONOMY RULE (MANDATORY)
+
+    Each question MUST strictly follow the given Taxonomy. 
+    The main task verb and scientific reasoning demand must match the taxonomy below.
+    
+    Allowed Taxonomies (exact strings only):
+    Remembering, Understanding, Applying, Analysing, Evaluating
+
+    1) Remembering (Science)
+    - Purpose: Recall scientific facts or definitions
+    - Allowed verbs: define, state, name, list, identify, label, recognise
+    - Not allowed: explain, compare, justify, judge
+
+    2) Understanding (Science)
+    - Purpose: Show meaning of a scientific idea
+    - Allowed verbs: explain (simple), describe, interpret (basic), classify
+    - Not allowed: calculate, compare cases, justify claims
+
+    3) Applying (Science)
+    - Purpose: Use a learned scientific method or rule
+    - Allowed verbs: use, apply, calculate (routine), solve, determine
+    - Not allowed: evaluate claims, infer patterns
+
+    4) Analysing (Science)
+    - Purpose: Examine relationships in scientific information
+    - Allowed verbs: compare, contrast, differentiate, infer (from given data), identify pattern, organize (data)
+    - Not allowed: judge validity, critique methods
+
+    5) Evaluating (Science)
+    - Purpose: Make judgments based on criteria
+    - Allowed verbs: judge, critique, justify (with evidence), evaluate, assess
+    - Not required: create new solutions
+
+  Instructions for generating questions:
+    - Names should be simple and commonly used (eg: Jack, Anna, Ryan, Emily, Sam, Maria, John)
+    
+    DO NOT use academic or classroom settings.
+    This means NO:
+    - teacher, student, class, quiz, test, homework, assignment, exam, studying
+    - THE QUESTION SHOULD BE STRICTLY FROM THE TOPIC AND SHOULD USE ALL ITS CORRECT SUB TOPIC FOR EACH QUESTIONS 
+    
+  1. UNIQUE DESCRIPTIVE QUESTION DESIGN — CORE UNIQUENESS RULES
+
+    1. One Concept, Many Reasoning Paths
+      - Stay strictly within the given topic or sub-concept.
+      - Do NOT introduce additional formulas, identities, or side-topics.
+      - Uniqueness must come from how the concept is used, not from adding new concepts.
+
+    2. Reasoning-Path Uniqueness (Most Important Rule)
+      - No two questions may follow the same logical reasoning flow.
+      - Changing only numbers, names, or objects does NOT count as uniqueness.
+      - Each question must require a different cognitive journey.
+
+      Examples of distinct reasoning paths:
+        • Direct observation vs reverse inference
+        • Comparing outcomes vs predicting future state
+        • Identifying causes vs evaluating effects
+        • Inferring missing parameters vs applying known ones
+        • Planning/optimization vs exact analysis
+        • Constraint satisfaction vs free exploration
+
+    3. Same Concept ≠ Same Question
+      - Even if the same concept is tested, the *approach* must differ.
+      - Students should not be able to solve two questions by repeating the same steps in the same order.
+
+    4. Cognitive Twist Requirement
+      - Every question must contain a "twist" that forces thinking beyond routine recall.
+      - Twists may include:
+          • Hidden or indirect data
+          • Conflicting variables or unexpected outcomes
+          • Multi-step dependency (one result feeds another)
+          • Comparative analysis across different conditions
+
+    5. DOK Rules (Science)
+
+      DOK 3 science questions are **NOT restricted to calculations** and must **NOT** be solvable by:
+      - Simple recall of facts or definitions
+      - Applying a single formula or rule
+      - One-step processes or direct answers
+      - Mechanical procedures with a fixed method
+
+      They **must require strategic scientific reasoning**, which may be **quantitative or non-quantitative**, such as:
+      - Planning an investigation or selecting variables
+      - Interpreting data, graphs, or experimental results
+      - Testing, revising, or justifying a scientific explanation
+      - Analyzing cause–effect relationships
+      - Evaluating constraints, trade-offs, or competing explanations
+
+    6. Logical-Operation Sequence Diversity (Science)
+
+      Each DOK 3 question must use a **distinct internal reasoning sequence**.  
+      Do **not** reuse the same logical pathway across questions.
+
+      Examples of valid and diverse science reasoning sequences:
+      - Observe evidence → Infer mechanism → Predict outcome
+      - Compare models → Identify limitation → Conclude
+      - Analyze variables → Test hypothesis → Revise explanation
+      - Evaluate data → Detect anomaly → Justify claim
+      - Relate concepts → Explain interaction → Validate conclusion
+
+    7. No Structural Reuse (Science)
+
+      Avoid repeating the same question skeleton, such as:
+      - "Given X and Y, explain Z"
+      - "Analyze the results of …"
+
+      Instead, vary the **task type**, including:
+      - Prediction under altered scientific conditions
+      - Reconstruction of a process from partial evidence
+      - Comparison of two systems or experiments
+      - Optimization of a scientific method or design
+      - Validation or refutation of a claim using evidence
+
+    8. Backtracking & Indirect Inference Encouraged
+      - Prefer questions where:
+          • The student must work backwards
+          • Key parameters are not directly given
+          • Relationships must be decoded before analysis
+
+    9. Anti-Pattern Checklist (If YES → Reject Question)
+      - Can this be solved in one step?
+      - Does it mirror another question's solution flow?
+      - Is the only difference in the scenario context?
+      - Does it rely on simple recall?
+      - Would an average student solve it mechanically (for DOK 3)?
+      
+  2. Explanation of DOK Levels:
+    ### SKILL IMPLEMENTATION GUIDELINES
+  
+    - Based on the DOK level mentioned for each question you need to refer the below table to make sure the question is of the correct DOK level.
+
+    | TIMSS Science Skill                                   | DOK 1 (1 Mark)                                                   | DOK 2 (1 Mark)                                                             | DOK 3 (2-3 Marks)                                                                                          |
+    |--------------------------------------------------------|------------------------------------------------------------------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+    | **1. Formulating Questions & Hypotheses**             | State a simple question about the scenario/source.               | —                                                                          | Formulate a testable hypothesis OR pose a complex scientific question based on the case.                  |
+    | **2. Designing & Conducting Investigations**          | —                                                                | Identify one key variable, material, or condition for an investigation.    | Propose a full experimental plan (variables, controls, procedure) to test a concept from the scenario.     |
+    | **3. Working with Data**                              | Extract/read one piece of data from the case.                   | Identify a pattern, trend, or relationship from the data.                  | —                                                                                                         |
+    | **4. Interpreting & Drawing Conclusions**             | —                                                                | Make an inference or simple explanation linking evidence to a principle.   | —                                                                                                         |
+    | **5. Evaluating Scientific Explanations**             | —                                                                | —                                                                          | Critique or justify a claim/conclusion using evidence and scientific reasoning.                           |
+    | **6. Communicating Scientific Ideas**                 | Define, name, or state a key term/concept using correct science terminology. | —                                                              | —                                                                                                         |
+
+  3. DESCRIPTIVE QUESTION DESIGN RULES
+
+    Descriptive questions assess deeper understanding through scenario-based, multi-part questions.
+    Each question presents a realistic scientific scenario followed by analytical sub-questions.
+
+    ────────────────────────────────────────
+    SCENARIO-BASED FORMAT
+    ────────────────────────────────────────
+
+    Each descriptive question MUST include:
+    
+    1. **Scenario Introduction**
+       - Present a realistic experimental setup, observation, or scientific situation
+       - Include relevant data (tables, observations, measurements)
+       - Provide enough context for students to analyze without giving away answers
+       - Use age-appropriate language and relatable contexts
+    
+    2. **Data Presentation** (when applicable)
+       - Use tables, labeled diagrams, or organized observations
+       - Present data that requires interpretation, not just reading
+       - Ensure data patterns support the analytical questions
+    
+    3. **Multi-Part Sub-Questions**
+       - Typically 3 sub-questions per main question
+       - Each sub-question tests a different aspect/skill
+       - Sub-questions build on the scenario progressively
+       - Use clear analytical verbs: explain, compare, identify, analyze, justify, evaluate
+
+    ────────────────────────────────────────
+    FORMAT RULES
+    ────────────────────────────────────────
+
+    • Present scenario first (with any tables/data)
+    • Follow with numbered sub-questions (typically 3)
+    • Each sub-question should be answerable in 2-4 sentences
+    • Total question typically worth 3 marks (1 mark per sub-question for DOK 3)
+    • No blanks to fill - students write complete explanations
+
+    ────────────────────────────────────────
+    EXAMPLE STRUCTURE
+    ────────────────────────────────────────
+
+    **Scenario:**
+    [Present experimental setup, observation, or scientific situation with relevant data in table format if applicable]
+
+    **Questions:**
+    i) [First analytical question - e.g., explain role/mechanism]
+    ii) [Second analytical question - e.g., compare conditions/identify factors]
+    iii) [Third analytical question - e.g., draw conclusions/justify claims]
+    - Each question should continuation of the previous question/ there should be a proper flow of questions
+  4. Marks and Sub-Question Rules (STRICT RULE):
+
+    - The total marks for the question must match {{Marks}}.
+    - Number of sub-questions should be aligned with the total marks (e.g., 3 marks = ~3 sub-questions, or fewer if deeper reasoning is required).
+    - If {{Marks}} = 2, use ~2 sub-questions.
+    - If {{Marks}} = 4-5, use 4-5 sub-questions or deeper multi-step analysis.
+    - Each sub-question must test a distinct analytical skill.
+
+  5. Diagram/Table Inclusion Rules
+  
+    ## DIAGRAM/TABLE RULES
+    - Tables or diagrams are RECOMMENDED for descriptive questions to present data
+    - If included, describe the table/diagram structure clearly in the scenario
+    - Tables should present:
+        • Observable data (measurements, observations, outcomes)
+        • Comparative conditions (different setups, variables, environments)
+        • Time-series data (changes over time)
+    - Diagrams should:
+        • Show experimental setup visually
+        • Label key components
+        • Support analytical questions without revealing answers
+        
+    ### Diagram Prompt Guidelines:
+    
+    **Purpose**: Create exam-ready visual representations that support analytical questions.
+    
+    **Content Requirements**:
+      - Describe the experimental setup or observational scene
+      - Must be suitable for an exam paper
+      - Include labeled components, conditions, or measurements
+      - Create realistic, data-based representations
+      - Keep it clear, consistent, and self-contained
+    
+    **Format Requirements**:
+      - Use continuous narrative that properly defines everything
+      - Write as a cohesive description, not a bulleted list
+    
+  6. ## INSTRUCTION OVERVIEW:
+    - IMPORTANT → Total Questions to Generate: {{TOTAL_QUESTIONS}} (Sum of all questions across topics)
+    - Based on the topic you need to generate questions
+    - For the specified Topic(s), identify relevant concepts and ensure that each question uses these concepts in context.
+    - Use the supplied **Grade** and **Concepts** to determine the appropriate cognitive depth and difficulty.
+    - Questions must be **age-appropriate, realistic, and directly tied to the chapter/topic**.
+    - Age-appropriate wording and language must be used in the questions.
+    - Difficulty should come from analytical thinking, NOT from vocabulary.
+    - Descriptive questions must require explanation, analysis, comparison, or evaluation - not simple recall.
+
+  7. ## TEXTBOOK CONTENT HANDLING (CRITICAL)
+    - **Do NOT treat the textbook/concept excerpts as reading passages in questions**
+    - **Do NOT reference the textbook/concept material as a passage**
+    - Questions must be self-contained and NEVER reference the source material directly
+    All generated questions and solutions must be fully standalone and must NOT reference textbook pages, chapters, passages, or excerpts.
+
+    **FORBIDDEN question/Answer patterns:**
+    - ❌ "According to the textbook..."
+    - ❌ "The definition provided in the chapter..."
+    - ❌ "Based on the passage/story/definition provided..."
+    - ❌ "As described in the concept/chapter..."
+    
+    **Correct approach:**
+    - ✅ Extract the scientific concept and create an independent scenario-based question
+    - ✅ Questions should stand alone without referencing the source
+    - ✅ Use the concepts to generate original problem scenarios
+
+  ## Representation and Operation Discipline
+    All generated questions, solutions, reasoning steps must strictly conform to the representations, terminology, units, symbols, operations, methods, and concepts that appear in the provided textbook/PDF for that topic and grade.
+
+    Rules:
+    1. Do not introduce any terminology, unit, operation, theorem, or concept that is not present in the textbook/PDF.
+    2. If the textbook uses specific representations, you must use the same representation consistently.
+    3. Do not upgrade the abstraction level beyond what is taught in the PDF.
+    4. Do not use any problem-solving technique or reasoning step that students at this grade have not been taught.
+    5. During validation, flag and repair any violation of these rules.
+    6. Textbook/PDF takes priority. Only use NCERT-level knowledge if it aligns.
+    7. If a representation or construct is missing in the textbook/PDF, treat it as prohibited.
+
+  ## TAXONOMY LOCK RULE (MANDATORY)
+
+    **Taxonomy Lock Rule**
+     - For every question type, the user will explicitly specify:
+       - Taxonomy (e.g., Remembering, Understanding, Applying, Analyzing, etc.)
+       - DOK level
+       - Marks
+     - You MUST use **only the taxonomy provided for that question type**.
+     - Do NOT substitute, infer, upgrade, downgrade, or mix taxonomies.
+
+    **One-to-One Mapping**
+      - Each generated question must map **directly** to:
+        - The taxonomy mentioned for that specific question type
+        - The DOK level mentioned for that specific question type
+
+    **Output Consistency Check (Mandatory)**
+        - Before finalizing output, internally verify:
+          - Taxonomy in the output exactly matches the taxonomy stated in the input for that question.
+          - No question contains cognitive operations beyond the allowed taxonomy.
+
+    **Explicit Display Rule**
+        - Above each question, clearly display:
+          - Topic
+          - Marks
+          - DOK Level
+          - Taxonomy (must match input verbatim)
+
+    **No Cross-Contamination**
+        - Do NOT let:
+          - Higher-order taxonomy leak into lower-order questions
+          - Solution explanations exceed the allowed cognitive level
+
+  OUTPUT FORMAT — DESCRIPTIVE QUESTIONS
+
+    Generate Descriptive questions strictly in the following format.
+
+    SEPARATE EACH QUESTION ITEM WITH THE DELIMITER: `|||QUESTION_START|||` (only at the start of the question)
+
+    Each question must include:
+
+    1. Scenario Presentation:
+      - Present a clear scientific scenario with context
+      - Include data tables or diagrams if applicable
+      - Provide all necessary information for analysis
+
+    2. Diagram/Table Description (Optional but Recommended):
+      - If visualization is required, include a diagram prompt
+      - Describe tables showing experimental data, observations, or comparative conditions
+      - The diagram/table must support analysis without revealing answers
+
+    3. Sub-Questions:
+      - Typically 3 analytical sub-questions labeled i), ii), iii)
+      - Each sub-question tests a different analytical skill
+      - Questions require written explanations, not single-word answers
+
+    4. Answer Key:
+      - Provide expected answers for each sub-question
+      - Answers should be concise but complete (2-4 sentences each)
+
+    5. Solution Explanation:
+      - Provide detailed reasoning for each sub-question
+      - Explain the scientific principles involved
+      - Use age-appropriate language
+      - Reference the scenario data to support answers
+      - Do NOT just repeat the answer key - explain the reasoning
+
+    6. KEY IDEA (MANDATORY – EDUCATIONAL, STRICT FORMAT)
+
+      You must write a KEY IDEA meant for a weak or struggling student.
+
+      ASSUME:
+      - The student has NEVER seen this topic before.
+      - The student does NOT know any technical or scientific terminology.
+
+      HARD RULES (DO NOT VIOLATE):
+      - Do NOT mention any numbers, symbols, variables, or specific values from the question.
+      - Do NOT use advanced or textbook-style language.
+      - Do NOT write in a single flowing paragraph.
+      - The explanation must work for ANY similar question of this type.
+
+      LANGUAGE RULES:
+      - Use very simple, school-level English.
+      - Prefer short sentences.
+      - If a word sounds technical, explain it immediately or avoid it.
+
+      REQUIRED STRUCTURE (WRITE EXACTLY IN THIS ORDER):
+
+      KEY IDEA
+
+      1. What kind of problems these are  
+      Explain what these questions are asking the student to understand or analyze.
+
+      2. Core idea behind these problems  
+      Explain the main scientific concept from the beginning.
+
+      3. Why this idea works  
+      Explain logically why this scientific principle makes sense.
+
+      4. General step-by-step method  
+      Step 1:  
+      Step 2:  
+      Step 3:  
+
+      5. Common mistakes students make  
+      Mention at least two common mistakes and explain why students make them.
+
+      6. Tips to avoid these mistakes  
+      Give simple, practical tips.
+      
+      **- Do NOT explicitly break the explanation into section headers.**
+
+  ## OUTPUT FORMAT RULE (SCIENCE)
+
+    • Use ONLY plain Markdown text.  
+    • Do NOT use LaTeX or TeX in any form.
+
+    ### Rules:
+    • Write scientific expressions in clear plain text.  
+    • Use standard symbols and Unicode superscripts/subscripts (e.g., m/s², H₂O, Na⁺).  
+    • Write divisions inline using / (e.g., distance/time).  
+    • Write chemical equations in one line using → or ⇌.  
+    • Always write units explicitly.
+
+    ### Forbidden:
+    • No $, $$, \( \), or any LaTeX notation.  
+    • No backslash commands or math environments.
+
+    ### Examples:
+    ✔ Speed = distance/time = 10 m / 2 s = 5 m/s  
+    ✔ 2H₂ + O₂ → 2H₂O  
+    ✘ $\frac{a}{b}$ , \ce{H2O}

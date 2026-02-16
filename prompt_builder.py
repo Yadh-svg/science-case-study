@@ -21,10 +21,10 @@ with open(PROMPTS_FILE, 'r', encoding='utf-8') as f:
 QUESTION_TYPE_MAPPING = {
     "MCQ": "mcq_questions",
     "Fill in the Blanks": "FIB",
+    "Descriptive": "descriptive_questions",
     # "Case Study": "case_study_science",
     # "Multi-Part": "multi_part_science",
     # "Assertion-Reasoning": "assertion_reasoning",
-    # "Descriptive": "descriptive",
     # "Descriptive w/ Subquestions": "descriptive_subq"
 }
 

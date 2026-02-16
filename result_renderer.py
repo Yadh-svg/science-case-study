@@ -16,7 +16,8 @@ def extract_json_objects(text: str) -> List[Dict[str, Any]]:
     This handles braces inside strings correctly, unlike simple stack counting.
     """
     objects = []
-    decoder = json.JSONDecoder()
+    # Use strict=False to allow control characters (newlines) inside strings
+    decoder = json.JSONDecoder(strict=False)
     pos = 0
     length = len(text)
     
@@ -100,9 +101,16 @@ def extract_question_values_fallback(json_objects: List[Dict[str, Any]]) -> Dict
 def unescape_json_string(s: str) -> str:
     """Safely unescape JSON-escaped strings (convert \\n to real newlines, etc.)"""
     try:
-        # Use json.loads to properly unescape the string
+        # First try: use json.loads to properly unescape the string
         escaped = s.replace('"', '\\"')
-        return json.loads(f'"{escaped}"')
+        result = json.loads(f'"{escaped}"')
+        
+        # Check if we still have escaped sequences (double-escaping case)
+        if '\\n' in result or '\\t' in result:
+            # Apply manual replacement for double-escaped strings
+            result = result.replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r")
+        
+        return result
     except Exception:
         # Fallback: manual replacement of common escapes
         return s.replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r")

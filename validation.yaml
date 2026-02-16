@@ -177,7 +177,21 @@ validation_prompt: |
       • Use inline separators (e.g., "•"), no key:value labels.
       • No commentary inside metadata.
       - Metadata should be present at the beginning of the question.Not in middle or end
+    ## Only for FIB :
+        
+    - For a **1-mark question**:
+      - Use **two blanks of 0.5 mark each**.
 
+    - For a **2-mark question**:
+      - Use 4 blanks of 0.5 mark each.
+
+    - For a **3-mark question**:
+      - Use 6 blanks of 0.5 mark each.
+    - For a **4-mark question**:
+      - Use 8 blanks of 0.5 mark each.
+    - The number of blanks should be strict, It should not increase or decrease 
+
+    - IF ANY OF THESE ARE VIOLATED, YOU NEED TO FIX IT.
     ## GLOBAL MULTI-LINE FORMATTING RULE:
 
       All components of the question item must be formatted with clear vertical line breaks and proper spacing. Nothing should be merged inline or compressed into paragraphs.
@@ -395,5 +409,38 @@ structure_FIB: |
   EXAMPLE OUTPUT FORMAT:
   {
     "question1": "# Laws of Motion\n\n*Concept-based FIB*\n\nWhen a net external force acts on a body of mass 2 kg producing an acceleration of 3 m/s², the magnitude of the force is ____ N.\n\n### Answer\n6\n\n### Solution\nAccording to Newton’s second law:\nForce = mass × acceleration\n\nSubstituting values:\nForce = 2 kg × 3 m/s² = 6 N\n\nTherefore, the force acting on the body is 6 N.\n\n### Key Idea\nNewton’s second law states that force is directly proportional to acceleration for a given mass.",
+    "question2": "..."
+  }
+
+structure_Descriptive: |
+  Descriptive Questions Output Structure (SCIENCE):
+
+  Return a JSON object where each key ("question1", "question2", …) maps to a single markdown string.
+
+  Each value must contain the COMPLETE descriptive question written in PURE CLEAN MARKDOWN.
+  Do NOT use structured labels like **Topic:**, **Question:**, **Scenario:**, **Answer:**, **Solution:** as JSON fields.
+
+  Include ALL applicable components inside the markdown (after validation):
+  - Metadata Block must include:
+    Topic/Chapter • Question Type • Taxonomy • DOK • Marks
+  - Diagram/Table prompt (if applicable)
+  - Scenario introduction with context
+  - Data presentation (tables, observations, measurements)
+  - Sub-questions (typically i, ii, iii)
+  - Answer key for each sub-question
+  - Detailed solution with scientific reasoning for each sub-question
+  - Key idea / concept
+
+  Formatting rules:
+  - Use markdown headers for sections (##, ###).
+  - Present scenario first, then questions.
+  - Sub-questions must be labeled with roman numerals: i), ii), iii)
+  - Tables should use proper markdown table syntax.
+  - Chemical equations and scientific expressions must follow plain-text science rules.
+  - Everything inside each question value must be markdown text inside quotes, not JSON formatting.
+
+  EXAMPLE OUTPUT FORMAT:
+  {
+    "question1": "# Photosynthesis\n\n*Scenario-based Descriptive*\n\n**Scenario:**\nEmily conducted an experiment to study the factors affecting the rate of photosynthesis in aquatic plants. She placed identical plants in four different containers with varying conditions of light and carbon dioxide.\n\n| Container | Light Intensity | CO₂ Level | Oxygen Bubbles (per minute) |\n|-----------|----------------|-----------|----------------------------|\n| A         | High           | High      | 45                         |\n| B         | High           | Low       | 20                         |\n| C         | Low            | High      | 15                         |\n| D         | Low            | Low       | 5                          |\n\n**Questions:**\n\ni) Explain the role of light intensity in photosynthesis based on the data.\n\nii) Compare the oxygen production in containers A and C and identify the limiting factor.\n\niii) Justify which container conditions are most favorable for photosynthesis.\n\n### Answer Key\ni) Light intensity provides energy for photosynthesis. Higher light intensity (Containers A and B) produces more oxygen than lower light (Containers C and D), showing that light increases the rate of photosynthesis.\n\nii) Container A produces 45 bubbles/min while C produces only 15, despite both having high CO₂. Light intensity is the limiting factor in Container C.\n\niii) Container A conditions (high light, high CO₂) are most favorable because it produces the maximum oxygen (45 bubbles/min), indicating the highest rate of photosynthesis.\n\n### Solution\ni) Light intensity provides the energy needed for the light-dependent reactions of photosynthesis. From the data, containers with high light (A: 45, B: 20) produce significantly more oxygen than those with low light (C: 15, D: 5), demonstrating that light is essential for maximizing the photosynthetic rate.\n\nii) Both containers A and C have high CO₂ levels, but A produces 45 bubbles/min while C produces only 15. The key difference is light intensity (high in A, low in C). This shows that when CO₂ is abundant, light becomes the limiting factor that restricts photosynthesis in Container C.\n\niii) Container A has both high light intensity and high CO₂, producing the maximum oxygen output (45 bubbles/min). This represents optimal conditions where neither light nor CO₂ is limiting, allowing photosynthesis to proceed at its maximum rate. Containers B, C, and D all have at least one limiting factor reducing their efficiency.\n\n### Key Idea\nPhotosynthesis rate depends on multiple factors working together. When studying plant processes, comparing conditions helps identify which factors are essential and which ones limit the process when they are insufficient.",
     "question2": "..."
   }

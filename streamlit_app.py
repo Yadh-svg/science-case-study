@@ -1535,6 +1535,18 @@ with tab1:
                             # Ensure type is set
                             q['type'] = qtype
                             questions_list.append(q)
+                            
+                            # AUTO-GENERATE DESCRIPTIVE QUESTIONS FOR EACH FIB QUESTION
+                            if qtype == "Fill in the Blanks":
+                                # Clone the FIB config but change type to Descriptive
+                                descriptive_q = q.copy()
+                                descriptive_q['type'] = 'Descriptive'
+                                # Inherit DOK, marks, and taxonomy from the FIB question
+                                # (descriptive_q already has these from the copy, no need to override)
+                                # Remove FIB-specific fields
+                                descriptive_q.pop('fib_type', None)
+                                # Add descriptive question to the list
+                                questions_list.append(descriptive_q)
                     
                     if questions_list:
                         # Run async pipeline
@@ -1800,8 +1812,22 @@ with tab2:
                                         
                                         # Serialize back to the same format as the original LLM output
                                         # The format should be a JSON object where each questionX key maps to a markdown string
+                                        # CRITICAL: We don't use json.dumps here because it escapes newlines (\n -> \\n)
+                                        # which causes them to display as literal text instead of actual line breaks
                                         import json
-                                        updated_json_str = json.dumps(existing_questions_map, indent=2, ensure_ascii=False)
+                                        
+                                        # Manually construct JSON string with proper newline preservation
+                                        # Each value still needs JSON string escaping (quotes, backslashes, etc.)
+                                        # but we do it in a way that preserves the actual newlines
+                                        json_parts = []
+                                        for q_key in sorted(existing_questions_map.keys(), 
+                                                           key=lambda x: int(re.search(r'\d+', x).group()) if re.search(r'\d+', x) else 0):
+                                            # JSON-escape the key and value properly
+                                            # We escape quotes and backslashes, but keep newlines as actual newlines
+                                            escaped_value = existing_questions_map[q_key].replace('\\', '\\\\').replace('"', '\\"')
+                                            json_parts.append(f'  "{q_key}": "{escaped_value}"')
+                                        
+                                        updated_json_str = "{\n" + ",\n".join(json_parts) + "\n}"
                                         
                                         # Create a new batch result to trigger Streamlit's change detection
                                         # Direct mutation of nested dicts may not trigger rerender
