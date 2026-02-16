@@ -100,17 +100,22 @@ def extract_question_values_fallback(json_objects: List[Dict[str, Any]]) -> Dict
 
 def unescape_json_string(s: str) -> str:
     """Safely unescape JSON-escaped strings (convert \\n to real newlines, etc.)"""
+    if not isinstance(s, str):
+        return str(s)
+        
+    # Manual replacement for common double-escapes first
+    # This ensures we handle \\n regardless of whether json.loads fails
+    s = s.replace("\\\\n", "\n").replace("\\\\t", "\t").replace("\\\\r", "\r")
+    
     try:
-        # First try: use json.loads to properly unescape the string
-        escaped = s.replace('"', '\\"')
-        result = json.loads(f'"{escaped}"')
+        # Try to decode it as a JSON string if it looks like one
+        # If it doesn't have internal newlines, we can try to wrap it and load
+        if "\n" not in s:
+            escaped = s.replace('"', '\\"')
+            return json.loads(f'"{escaped}"')
         
-        # Check if we still have escaped sequences (double-escaping case)
-        if '\\n' in result or '\\t' in result:
-            # Apply manual replacement for double-escaped strings
-            result = result.replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r")
-        
-        return result
+        # If it has real newlines, just do manual replacement for any remaining escapes
+        return s.replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r")
     except Exception:
         # Fallback: manual replacement of common escapes
         return s.replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r")
@@ -130,90 +135,120 @@ def normalize_llm_output_to_questions(text: str) -> Dict[str, str]:
     This is the ONLY place where LLM output parsing/normalization happens.
     After this function, we guarantee: Dict[str, str] where values are pure markdown.
     """
-    # -------------------------------------------------------
-    # STRIP MARKDOWN CODE FENCES (LLM often emits ```json)
-    # -------------------------------------------------------
+    # Step 1: Preliminary cleanup
     if isinstance(text, str):
         text = text.strip()
+        
+        # If it's a JSON string literal (wrapped in quotes), unwrap it
+        if text.startswith('"') and text.endswith('"'):
+            try:
+                text = json.loads(text)
+            except:
+                pass
+                
+        # Strip markdown code fences
         text = re.sub(r"^```(?:json)?\s*\n?", "", text, flags=re.IGNORECASE)
         text = re.sub(r"\n?\s*```$", "", text)
+        text = text.strip()
     
     questions = {}
     
-    # Step 1: Extract JSON objects from text
+    # Step 2: Extract JSON objects from text
     json_objects = extract_json_objects(text)
     
     if not json_objects:
-        # If no JSON found, try treating entire text as a question (rare fallback)
-        return {"question1": text} if text.strip() else {}
+        # If no JSON object found, maybe it's a single string value?
+        if isinstance(text, str) and text.strip():
+            # Check if it contains "questionX" pattern even if not valid JSON
+            # This handles cases where LLM output is malformed but contains the key
+            match = re.search(r'["\'](question\d+)["\']\s*:\s*["\'](.*?)["\']', text, re.DOTALL | re.IGNORECASE)
+            if match:
+                k, v = match.groups()
+                num = re.search(r"\d+", k)
+                if num:
+                    questions[f"question{num.group()}"] = unescape_json_string(v)
+            else:
+                # If it's just raw text, return it as question1
+                return {"question1": text}
+        return questions
     
     for obj in json_objects:
         if not isinstance(obj, dict):
             continue
         
-        # Handle validation wrapper format (old format)
+        # Handle flattened or nested structures
+        # If the object is NOT a dict of questions, but has a key that IS a dict of questions
+        targets = [obj]
         if 'CORRECTED_ITEM' in obj or 'corrected_item' in obj:
-            obj = obj.get('CORRECTED_ITEM') or obj.get('corrected_item')
+            nested = obj.get('CORRECTED_ITEM') or obj.get('corrected_item')
+            if isinstance(nested, dict): targets.append(nested)
         
-        if not isinstance(obj, dict):
-            continue
-        
-        for k, v in obj.items():
-            # Only process keys matching question pattern
-            if not re.match(r'^(question|q)\d+$', k, re.IGNORECASE):
-                continue
+        for target in targets:
+            if not isinstance(target, dict): continue
             
-            # Normalize the key to consistent questionX format
-            num = re.search(r"\d+", k)
-            if not num:
-                continue
-            normalized_key = f"question{num.group()}"
-            
-            # ---- VALUE NORMALIZATION ----
-            if isinstance(v, str):
-                s = v.strip()
+            for k, v in target.items():
+                # Only process keys matching question pattern
+                if not re.match(r'^(question|q)\d+$', k, re.IGNORECASE):
+                    continue
                 
-                # Strip fences inside values (LLM may emit fenced JSON as value)
-                if s.startswith("```"):
-                    s = re.sub(r"^```(?:json)?\s*\n?", "", s, flags=re.IGNORECASE)
-                    s = re.sub(r"\n?\s*```$", "", s)
+                # Normalize the key to consistent questionX format
+                num = re.search(r"\d+", k)
+                if not num:
+                    continue
+                normalized_key = f"question{num.group()}"
                 
-                # Handle double-encoded JSON: value is a JSON string containing the actual question
-                if s.startswith("{"):
-                    try:
-                        parsed = json.loads(s)
-                        if isinstance(parsed, dict):
-                            # Extract the first string value from the nested JSON
-                            for inner_key, inner_v in parsed.items():
-                                if isinstance(inner_v, str):
-                                    questions[normalized_key] = unescape_json_string(inner_v)
-                                    break
+                # ---- VALUE NORMALIZATION ----
+                if isinstance(v, str):
+                    s = v.strip()
+                    
+                    # Strip fences inside values
+                    if s.startswith("```"):
+                        s = re.sub(r"^```(?:json)?\s*\n?", "", s, flags=re.IGNORECASE)
+                        s = re.sub(r"\n?\s*```$", "", s)
+                    
+                    # Handle double-encoded JSON
+                    if s.startswith("{"):
+                        try:
+                            # Try absolute decoding
+                            parsed = json.loads(s)
+                            if isinstance(parsed, dict):
+                                # If it has a matching question key, use it
+                                if normalized_key in parsed:
+                                    v_inner = parsed[normalized_key]
+                                    questions[normalized_key] = unescape_json_string(v_inner) if isinstance(v_inner, str) else str(v_inner)
+                                else:
+                                    # Take first string value
+                                    found = False
+                                    for ik, iv in parsed.items():
+                                        if isinstance(iv, str) and "question" in ik.lower():
+                                            questions[normalized_key] = unescape_json_string(iv)
+                                            found = True
+                                            break
+                                    if not found:
+                                        # Fallback to the whole parsed thing if it's a string
+                                        questions[normalized_key] = unescape_json_string(s)
                             else:
-                                # No string value found, use the original string
                                 questions[normalized_key] = unescape_json_string(s)
-                        else:
+                        except json.JSONDecodeError:
                             questions[normalized_key] = unescape_json_string(s)
-                    except json.JSONDecodeError:
-                        # Not valid JSON, treat as markdown (might just start with {)
-                        questions[normalized_key] = unescape_json_string(s)
-                else:
-                    # Normal markdown string
-                    questions[normalized_key] = unescape_json_string(s)
-            
-            elif isinstance(v, dict):
-                # Value is a dict - try to extract markdown from known keys
-                extracted = v.get('content') or v.get('value') or v.get('markdown') or v.get('text')
-                if isinstance(extracted, str):
-                    questions[normalized_key] = unescape_json_string(extracted)
-                else:
-                    # Fallback: take first string value
-                    for inner_v in v.values():
-                        if isinstance(inner_v, str):
-                            questions[normalized_key] = unescape_json_string(inner_v)
-                            break
                     else:
-                        # Convert dict to JSON for debugging
-                        questions[normalized_key] = json.dumps(v, indent=2)
+                        questions[normalized_key] = unescape_json_string(s)
+                
+                elif isinstance(v, dict):
+                    # Value is a dict
+                    extracted = v.get('content') or v.get('value') or v.get('markdown') or v.get('text')
+                    if isinstance(extracted, str):
+                        questions[normalized_key] = unescape_json_string(extracted)
+                    else:
+                        for inner_v in v.values():
+                            if isinstance(inner_v, str):
+                                questions[normalized_key] = unescape_json_string(inner_v)
+                                break
+                        else:
+                            questions[normalized_key] = json.dumps(v, indent=2)
+                elif v:
+                    # Fallback for non-string, non-dict values
+                    questions[normalized_key] = str(v)
     
     # Apply text replacements for Hindi to English
     for key in questions:
