@@ -7,6 +7,14 @@ validation_prompt: |
 
     {{GENERATED_CONTENT}}
 
+  ## BATCH INPUT SUMMARY (READ THIS FIRST):
+  {{INPUT_CONTEXT}}
+
+  ⚠️ CRITICAL COUNT RULE: The batch above contains exactly the number of questions listed in INPUT_CONTEXT.
+  Your JSON output MUST have exactly that many keys (question1, question2, ... questionN).
+  DO NOT merge, skip, or omit any question for ANY reason.
+  If a question cannot be validated, output it unchanged.
+
   - YOU MAIN AIM IS TO VALIDATE THE DOK LEVEL AND CORRECT IT WHILE THE OTHER THINGS ARE ALSO IMPORTANT.
  
 
@@ -127,8 +135,8 @@ validation_prompt: |
     10) When finished
     - Return a single JSON object `{...}` with keys "question1", "question2", "question3", etc. (numbered sequentially).
     - Each value must be the complete validated and corrected question formatted in clean, readable markdown.
-    - DO NOT use structured key-value labels like **Topic:**, **Question:**, **Options:**, **Answer:**, **Solution:**, **Key Idea:** inside the markdown content.
-    - Instead, use natural markdown formatting with headers (##, ###), bold text, lists, and tables for structure.
+    - DO NOT use JSON-style key-value labels (e.g., "answer": "...", "solution": "...") inside the markdown content. Instead, use markdown headers.
+    - REQUIRED markdown section headers (use these EXACTLY, in English): ### ANSWER KEY, ### SOLUTION, ### KEY IDEA. These must ALWAYS be present.
     - Include ALL components that exist after validation (see OUTPUT_FORMAT_RULES below for details).
     - Do NOT wrap in VALIDATION_REPORT or CORRECTED_ITEM. Output the question content directly.
     - Do NOT add components that were not generated or validated.
@@ -387,28 +395,26 @@ structure_FIB: |
   Return a JSON object where each key ("question1", "question2", …) maps to a single markdown string.
 
   Each value must contain the COMPLETE fill-in-the-blanks question written in PURE CLEAN MARKDOWN.
-  Do NOT use structured labels like **Topic:**, **Question:**, **Answer:**, **Solution:** as JSON fields.
+  Do NOT use JSON key-value pairs inside the markdown (e.g., {"answer": "xyz"}). Use markdown section headers instead.
 
-  Include ALL applicable components inside the markdown (after validation):
-  - Metadata Block must include:
-    Topic/Chapter • Question Type • Taxonomy • DOK • Marks
-    (for question/subquestion)
-  - Diagram prompt (if applicable)
-  - Question text with blanks
-  - Sub-parts (if multi-part)
-  - Correct answers for each blank
-  - Detailed solution (step-by-step scientific reasoning)
-  - Key idea / concept
+  MANDATORY SECTIONS — must appear in this order:
+  1. Metadata line: Topic/Chapter • Question Type • Taxonomy • DOK • Marks
+  2. Diagram prompt (if applicable)
+  3. Question text with blanks ([DROP N] or |TEXT N| as generated)
+  4. Sub-parts with roman numerals if multi-part
+  5. ### ANSWER KEY  ← REQUIRED — list each blank answer (e.g. DROP 1 → A, TEXT 1 → friction)
+  6. ### SOLUTION   ← REQUIRED — step-by-step scientific reasoning
+  7. ### KEY IDEA   ← REQUIRED — core concept
 
   Formatting rules:
-  - Use markdown headers for sections.
-  - Represent blanks as "____" or "[BLANK]".
+  - Use markdown headers for all sections (### ANSWER KEY, ### SOLUTION, ### KEY IDEA).
+  - Preserve all DROP and TEXT placeholders exactly as generated.
   - Chemical equations and scientific expressions must follow plain-text science rules.
   - Everything inside each question value must be markdown text inside quotes, not JSON formatting.
 
   EXAMPLE OUTPUT FORMAT:
   {
-    "question1": "# Laws of Motion\n\n*Concept-based FIB*\n\nWhen a net external force acts on a body of mass 2 kg producing an acceleration of 3 m/s², the magnitude of the force is ____ N.\n\n### Answer\n6\n\n### Solution\nAccording to Newton’s second law:\nForce = mass × acceleration\n\nSubstituting values:\nForce = 2 kg × 3 m/s² = 6 N\n\nTherefore, the force acting on the body is 6 N.\n\n### Key Idea\nNewton’s second law states that force is directly proportional to acceleration for a given mass.",
+    "question1": "Forces • Concept-based FIB • Remembering • DOK 1 • 2 Marks\n\nWhen an object moves on a surface, the force that opposes its motion is called [DROP 1].\n\nA. friction, which acts opposite to the direction of motion\nB. gravity, which pulls the object downward\nC. tension, which acts along the surface\nD. normal force, which acts perpendicular to the surface\n\n### ANSWER KEY\nDROP 1 → A\n\n### SOLUTION\nFriction is the force that opposes relative motion between two surfaces in contact. It acts in the direction opposite to motion, slowing the object down.\n\n### KEY IDEA\nFriction is a contact force that always opposes motion. Its magnitude depends on the nature of the surfaces and the normal force acting between them.",
     "question2": "..."
   }
 

@@ -602,9 +602,47 @@ async def process_single_batch_flow(
     
     logger.info(f"[{batch_key}] Batch validation complete")
     
+    # --- FALLBACK: Detect dropped questions and restore from raw generation ---
+    import json as _json
+    val_text = validation_result.get('text', '{}')
+    
+    # Split the raw generation into individual question blocks
+    raw_split = split_generated_content(raw_result['text'])
+    expected_count = len(raw_split)
+    
+    # Count how many questions the validator actually returned
+    try:
+        # Strip markdown fences if present
+        clean_val = val_text.strip()
+        if clean_val.startswith("```"):
+            import re as _re
+            clean_val = _re.sub(r"^```(?:json)?\s*\n?", "", clean_val, flags=_re.IGNORECASE)
+            clean_val = _re.sub(r"\n?\s*```$", "", clean_val)
+        val_obj = _json.loads(clean_val)
+        validated_count = sum(1 for k in val_obj if isinstance(k, str) and k.lower().startswith('question'))
+    except Exception:
+        validated_count = 0
+    
+    if validated_count < expected_count:
+        logger.warning(f"[{batch_key}] Validator returned {validated_count}/{expected_count} questions. Restoring missing questions from raw generation.")
+        
+        # Parse the existing validated output (or start fresh)
+        try:
+            merged = _json.loads(clean_val) if validated_count > 0 else {}
+        except Exception:
+            merged = {}
+        
+        # Fill in any missing questionN keys from raw split
+        for q_key, q_content in raw_split.items():
+            if q_key not in merged:
+                merged[q_key] = q_content
+                logger.info(f"[{batch_key}] Restored {q_key} from raw generation.")
+        
+        val_text = _json.dumps(merged, ensure_ascii=False)
+    
     # The validation result should already contain properly formatted JSON
     final_validation_payload = {
-        'text': validation_result.get('text', '{}'),
+        'text': val_text,
         'elapsed': validation_result.get('elapsed', 0),
         'batch_key': batch_key,
         'input_tokens': validation_result.get('input_tokens', 0),

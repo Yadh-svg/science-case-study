@@ -56,25 +56,51 @@ async def duplicate_single_question_async(
     if result.get('error'):
         return {"error": result['error']}
     
-    # Parse JSON response
+    # Parse JSON response — use strict=False to tolerate backslash sequences in markdown
     text = result.get('text', '')
-    try:
-        # Robustly extract JSON array
-        json_match = re.search(r'\[\s*\{.*?\}\s*\]', text, re.DOTALL)
-        if json_match:
-            duplicates = json.loads(json_match.group(0))
-            return {"duplicates": duplicates, "elapsed": result.get('elapsed', 0)}
-        else:
-            # Try parsing whole text as JSON if no match found
+    
+    # Strip markdown code fences if present
+    clean = text.strip()
+    if clean.startswith("```"):
+        clean = re.sub(r"^```(?:json)?\s*\n?", "", clean, flags=re.IGNORECASE)
+        clean = re.sub(r"\n?\s*```$", "", clean)
+        clean = clean.strip()
+    
+    decoder = json.JSONDecoder(strict=False)
+    duplicates = None
+    pos = 0
+    
+    # Scan for first JSON array or object
+    while pos < len(clean):
+        # Skip whitespace
+        while pos < len(clean) and clean[pos].isspace():
+            pos += 1
+        if pos >= len(clean):
+            break
+        if clean[pos] in ('[', '{'):
             try:
-                duplicates = json.loads(text)
-                if isinstance(duplicates, list):
-                    return {"duplicates": duplicates, "elapsed": result.get('elapsed', 0)}
-            except:
-                pass
-            return {"error": "Could not extract JSON array from Gemini response", "raw_text": text[:500]}
-    except Exception as e:
-        return {"error": f"JSON parsing failed: {str(e)}", "raw_text": text[:500]}
+                obj, _ = decoder.raw_decode(clean, pos)
+                if isinstance(obj, list):
+                    duplicates = obj
+                    break
+                elif isinstance(obj, dict):
+                    # Could be {"duplicates": [...]} or {"variation1": "...", ...}
+                    if "duplicates" in obj and isinstance(obj["duplicates"], list):
+                        duplicates = obj["duplicates"]
+                    else:
+                        # Wrap dict as single-item list
+                        duplicates = [obj]
+                    break
+            except json.JSONDecodeError:
+                pos += 1
+                continue
+        else:
+            pos += 1
+    
+    if duplicates is not None:
+        return {"duplicates": duplicates, "elapsed": result.get('elapsed', 0)}
+    
+    return {"error": f"JSON parsing failed: Could not extract array from response", "raw_text": text[:500]}
 
 async def process_parallel_duplication(
     requests: List[Dict[str, Any]],

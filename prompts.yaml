@@ -366,7 +366,14 @@ mcq_questions: |
       - Use the definitions strictly as written.
       - Use document-based examples as references for style, not for duplication.
 
+  ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
 
+    To avoid positional bias, correct answers must be randomly assigned across A, B, C, and D.
+
+    1. The generator MUST assign the correct option randomly for each question.
+    2. No fixed sequence or predictable pattern (e.g., A → B → C → D) is allowed.
+    3. Across the full set of questions, correct answers must be approximately evenly distributed.
+    4. The difference between the most frequent and least frequent option must not exceed 1.
 
   ## MCQ Type Selection Rule (CRITICAL)
    - In the TOPICS_SECTION, each question may optionally specify an "MCQ Type".
@@ -807,7 +814,7 @@ mcq_questions: |
 
 
 FIB: |
-  You are a teacher preparing Fill in the Blanks questions in Mathematics for students from Grade 1 to Grade 12, strictly aligned with the NCERT syllabus, intended for final examinations.
+  You are a teacher preparing Fill in the Blanks questions in science for students from Grade 1 to Grade 12, strictly aligned with the NCERT syllabus, intended for final examinations.
 
    ## INPUT DETAILS:
     - Grade: {{Grade}}
@@ -816,7 +823,7 @@ FIB: |
     - Chapter/Unit: {{Chapter}}
     - Old Concepts: {{Old_Concept}}  # Prerequisite knowledge - what the student has already studied before this chapter
     {{TOPICS_SECTION}}
-    - For 3 marks it should be 5-6 blanks (drop downs) and for 4 marks 7-8 blanks
+    - For 3 marks it should be 6 blanks (drop downs) and for 4 marks 8 blanks
  
     - **Note**: Concepts consist of New Concepts (current chapter content) and Old Concepts (prerequisite knowledge). Prioritize new concepts for questions.
     - **Additional Notes**: {{Additional_Notes}}  # Extra instructions or configuration for how questions or solutions should be generated. Consider these notes when creating questions and formatting solutions.
@@ -949,8 +956,26 @@ FIB: |
     - All parts of the question (Scenario, Sub-questions a, b, c, etc.) must belong to that SAME single topic.
     - Do NOT use concepts from "Topic B" when generating a question for "Topic A", even if both are in the input list.
     - Treat each topic's request as a completely isolated task.
+    ## STRICT TOPIC BOUNDARY (MANDATORY)
 
-    ────────────────────────────────────────
+      The PDF or concept material may contain multiple topics, but each question will be assigned ONE specific topic.  
+      Generate the question using ONLY that assigned topic.
+
+      Rules:
+      - Use concepts, terms, methods, and reasoning strictly from the given topic only.
+      - Completely ignore all other topics in the PDF, even if they are related or usually connected.
+      - Do NOT include or depend on any idea from another topic, directly or indirectly.
+      - The question must be solvable using only the assigned topic.
+      - If solving the question requires knowledge from another topic → REVISE the question.
+
+      Self-check before finalizing:
+      - Every concept belongs only to the assigned topic.
+      - No cross-topic knowledge is required.
+      - No hidden or supporting topic is involved.
+
+      If any overlap exists, regenerate the question. Topic purity is mandatory.
+
+  ────────────────────────────────────────
   ANSWER FORMAT SELECTION POLICY
   (TEXT vs DROP-DOWN)
   ────────────────────────────────────────
@@ -1235,8 +1260,8 @@ FIB: |
 
       Compare the temperature on three different temperature scales.
 
-      1. Water boils at __________ [TEXT 1] °C which is equivalent to __________ [TEXT 2] °F.  
-      2. Water freezes at __________ [TEXT 3] °C which is equivalent to __________ [TEXT 4] K.
+      1. Water boils at  [TEXT 1] °C which is equivalent to [TEXT 2] °F.  
+      2. Water freezes at  [TEXT 3] °C which is equivalent to [TEXT 4] K.
 
     ---
 
@@ -1253,33 +1278,56 @@ FIB: |
 
       This process occurs inside the organelle called the |TEXT5|.
       (Write the singular scientific term.)
+  ### 8. ### Fill in the Blank (Scenario-Based FIB)
 
+      **Description:**
+      A Scenario-Based Fill in the Blank (FIB) is a question where the blank appears within a short real-life situation or story. 
+      Students must understand the scenario and use the given information to fill in the missing word or concept.
+
+      **Response Format Rules:**
+      - If multiple correct ways to answer → use DROP-DOWN.
+      - If only one exact correct term → use |TEXT|.
+
+      **Purpose:**
+      To test understanding, reasoning, and application of knowledge in context.
+
+      ### Example — Scenario-Based FIB
+
+      Arun left an ice cube on a plate at room temperature. After some time, the ice cube changed into water. 
+      This change of state from solid to liquid is called **|TEXT|**.
+
+      Answer: melting
 
     ---
     ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
 
-        To avoid positional bias, the correct answer options must be distributed across A, B, C, and D.
+        To avoid positional bias, correct answers must be randomly assigned across A, B, C, and D.
 
-        1. The generator MUST NOT place the correct answer in the same position repeatedly.
-        2. Across the full set of questions, correct answers must be approximately evenly distributed.
-        3. Use forced rotation order unless the user specifies otherwise:
+        1. The generator MUST assign the correct option randomly for each question.
+        2. No fixed sequence or predictable pattern (e.g., A → B → C → D) is allowed.
+        3. Across the full set of questions, correct answers must be approximately evenly distributed.
+        4. The difference between the most frequent and least frequent option must not exceed 1.
+    ## BLANK POSITION VARIATION RULE (MANDATORY)
 
-          Question 1 → A  
-          Question 2 → B  
-          Question 3 → C  
-          Question 4 → D  
-          Question 5 → A  
-          Question 6 → B  
-          (Continue repeating cycle)
+        To ensure natural language flow and avoid positional bias, the blank (DROP) must NOT always appear at the end of the sentence.
 
-        4. If TOTAL_QUESTIONS is not divisible by 4, continue the rotation naturally.
-        5. Validation is required before final output:
-          - Count how many correct answers appear in A, B, C, D.
-          - If distribution is uneven or clustered → regenerate affected questions.
+        1. The generator MUST place blanks in varied positions across sentences:
+          - Beginning of the sentence
+          - Middle of the sentence
+          - End of the sentence
 
-        If this rule is violated, STOP and return:
-        "ERROR: Correct option distribution rule violated."
-  
+        2. Placement must feel grammatically natural and contextually meaningful.
+          The sentence should read smoothly even with the blank inserted.
+
+        3. No fixed or predictable pattern of placement is allowed 
+          (e.g., always middle, alternating positions in strict order, etc.).
+
+        4. Across the full set of sentences, blank positions should be reasonably distributed
+          among beginning, middle, and end.
+
+        5. Surrounding words must provide enough contextual clues for the learner
+          to logically infer the scientific idea/term.
+   
     ### Validation Check (Mandatory)
 
     **“Does the scientific concept become unavoidable because of the situation, data, diagram, or equation?”**  
@@ -2075,18 +2123,30 @@ duplicate_question: |
   ---
  
   ## OUTPUT FORMAT (STRICT)
- 
-  - Return a RAW JSON array.
+
+  - Return a RAW JSON ARRAY containing one object per duplicate.
   - Do NOT wrap the output in markdown code blocks (e.g., ```json).
-  - Output ONLY the JSON string.
- 
-  {
-    "question_code": "dup-1",
-    "question1": "## Duplicate built using parent key idea\\n\\n<full markdown question body minus key-idea>"
-  }
- 
+  - Do NOT use single-object format — always output an array even for 1 duplicate.
+
+  CRITICAL JSON ESCAPING RULE:
+  - Inside JSON strings, only escape characters that require it in JSON: " → \", newlines → \\n, tabs → \\t.
+  - Do NOT add backslashes before markdown characters like _, [, ], *, **, ~~, etc.
+  - Write markdown formatting characters as-is (unescaped) inside the JSON string value.
+
+  Example of CORRECT array format:
+  [
+    {
+      "question_code": "dup-1",
+      "question1": "**Duplicate built using parent key idea**\n\n<full markdown question body minus key-idea>"
+    },
+    {
+      "question_code": "dup-2",
+      "question1": "**Duplicate built using parent key idea**\n\n<full markdown question body minus key-idea>"
+    }
+  ]
+
   ---
- 
+
   ## SCENARIO & UNIT CONSTRAINTS
  
   - Scenario changes must remain equivalent in unit type (e.g., speed → speed, mass → mass, concentration → concentration, time → time).

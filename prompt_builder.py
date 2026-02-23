@@ -176,6 +176,37 @@ def build_topics_section(questions: List[Dict[str, Any]], batch_key: str = "") -
         if not subparts_config:
             subparts_config = q.get('subparts', [])
             
+        # Auto-generate subparts based on marks if not provided
+        # ONLY auto-generate when num_subparts is not explicitly 1 (single-part)
+        explicitly_single_part = q.get('num_subparts', 0) == 1
+        if not subparts_config and not explicitly_single_part and batch_key in ['Fill in the Blanks', 'Descriptive']:
+            try:
+                marks = int(float(q.get('marks', 1)))
+            except (ValueError, TypeError):
+                marks = 1
+                
+            dok = q.get('dok', 1)
+            # Handle list vs string for taxonomy
+            raw_tax = q.get('taxonomy', 'Remembering')
+            taxonomy = raw_tax[0] if isinstance(raw_tax, list) and raw_tax else raw_tax if isinstance(raw_tax, str) else 'Remembering'
+            
+            if marks == 2:
+                subparts_config = [
+                    {'part': 'i', 'marks': 1, 'dok': dok, 'taxonomy': taxonomy},
+                    {'part': 'ii', 'marks': 1, 'dok': dok, 'taxonomy': taxonomy}
+                ]
+            elif marks == 3:
+                subparts_config = [
+                    {'part': 'i', 'marks': 1, 'dok': dok, 'taxonomy': taxonomy},
+                    {'part': 'ii', 'marks': 2, 'dok': dok, 'taxonomy': taxonomy}
+                ]
+            elif marks >= 4:
+                subparts_config = [
+                    {'part': 'i', 'marks': 1, 'dok': dok, 'taxonomy': taxonomy},
+                    {'part': 'ii', 'marks': 1, 'dok': dok, 'taxonomy': taxonomy},
+                    {'part': 'iii', 'marks': marks - 2, 'dok': dok, 'taxonomy': taxonomy}
+                ]
+            
         # Handle FIB Type (applies to both single and multi-part)
         fib_type = q.get('fib_type', 'Auto')
         fib_type_str = f", FIB Type: {fib_type}" if fib_type != 'Auto' else ""

@@ -613,8 +613,12 @@ def render_batch_results(batch_key: str, result_data: Dict[str, Any], render_con
         # After normalization, content is GUARANTEED to be a string
         markdown_content = questions_dict[q_key]
         
-        # Invariant check (should never fail after normalization)
-        assert isinstance(markdown_content, str), f"Normalization failed: {q_key} is not a string"
+        # Safe type check — a hard assert here would crash the loop and hide remaining questions
+        if not isinstance(markdown_content, str):
+            import logging as _log
+            _log.getLogger(__name__).warning(f"Normalization produced non-string for {q_key}: {type(markdown_content)}")
+            import json as _j
+            markdown_content = _j.dumps(markdown_content, indent=2, ensure_ascii=False) if isinstance(markdown_content, (dict, list)) else str(markdown_content)
         
         # Render markdown directly - no JSON parsing, no guessing
         render_markdown_question(q_key, markdown_content, batch_key, batch_key, render_context)

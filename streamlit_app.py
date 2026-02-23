@@ -832,6 +832,7 @@ with tab1:
                     fib_type_options = [
                         "Auto",
                         "Concept (definition)",
+                        "Scenario-Based FIB",
                         "REAL LIFE IMAGES BASED",
                         "IMAGE BASED",
                         "Image-Based Science Observation",
@@ -850,6 +851,8 @@ with tab1:
                     
                     # If single-part (num_subparts = 1), show DOK, Marks, Taxonomy directly
                     if num_subparts == 1:
+                        # Clear any stale subparts_config from a previous multi-part selection
+                        st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'] = []
                         cols = st.columns([1, 1, 2])
                         
                         with cols[0]:
@@ -943,6 +946,13 @@ with tab1:
                                     )
                                 )
                                 st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][j]['taxonomy'] = taxonomy
+                    
+                    # --- Aggregate subpart values to top-level for pipeline compatibility ---
+                    subparts_cfg = st.session_state.question_types_config[qtype]['questions'][i].get('subparts_config', [])
+                    if subparts_cfg:
+                        st.session_state.question_types_config[qtype]['questions'][i]['dok'] = subparts_cfg[0].get('dok', 1)
+                        st.session_state.question_types_config[qtype]['questions'][i]['marks'] = sum(s.get('marks', 1.0) for s in subparts_cfg)
+                        st.session_state.question_types_config[qtype]['questions'][i]['taxonomy'] = subparts_cfg[0].get('taxonomy', 'Remembering')
                     
                     # New Concept Source Selection (MANDATORY)
                     st.markdown("**New Concept Source:**")
@@ -1541,10 +1551,20 @@ with tab1:
                                 # Clone the FIB config but change type to Descriptive
                                 descriptive_q = q.copy()
                                 descriptive_q['type'] = 'Descriptive'
-                                # Inherit DOK, marks, and taxonomy from the FIB question
-                                # (descriptive_q already has these from the copy, no need to override)
-                                # Remove FIB-specific fields
+                                
+                                # --- Derive correct top-level dok/marks/taxonomy for Descriptive clone ---
+                                # For multi-subpart FIB, the top-level values are already aggregated above.
+                                # For single-part FIB, q already has correct dok/marks/taxonomy.
+                                # Either way q's top-level values are now correct, copy them explicitly.
+                                descriptive_q['dok'] = q.get('dok', 1)
+                                descriptive_q['marks'] = q.get('marks', 1.0)
+                                descriptive_q['taxonomy'] = q.get('taxonomy', 'Remembering')
+                                
+                                # Remove ALL FIB-specific fields so Descriptive prompt builder is clean
                                 descriptive_q.pop('fib_type', None)
+                                descriptive_q.pop('num_subparts', None)
+                                descriptive_q.pop('subparts_config', None)
+                                
                                 # Add descriptive question to the list
                                 questions_list.append(descriptive_q)
                     
@@ -1743,12 +1763,26 @@ with tab2:
                         }
                         
                         # Reconstruct the full original config list
+                        # IMPORTANT: Must mirror the generation pipeline exactly,
+                        # including the auto-generated Descriptive clone for every FIB question.
                         full_config_list = []
                         for q_type, config in st.session_state.question_types_config.items():
                             for q in config.get('questions', []):
                                 q_copy = q.copy()
                                 q_copy['type'] = q_type
                                 full_config_list.append(q_copy)
+                                
+                                # Mirror: auto-generate Descriptive clone for each FIB question
+                                if q_type == "Fill in the Blanks":
+                                    descriptive_q = q_copy.copy()
+                                    descriptive_q['type'] = 'Descriptive'
+                                    descriptive_q['dok'] = q_copy.get('dok', 1)
+                                    descriptive_q['marks'] = q_copy.get('marks', 1.0)
+                                    descriptive_q['taxonomy'] = q_copy.get('taxonomy', 'Remembering')
+                                    descriptive_q.pop('fib_type', None)
+                                    descriptive_q.pop('num_subparts', None)
+                                    descriptive_q.pop('subparts_config', None)
+                                    full_config_list.append(descriptive_q)
                         
                         # Build existing content map
                         existing_content_map = {}
