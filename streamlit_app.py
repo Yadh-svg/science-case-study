@@ -407,10 +407,10 @@ with tab1:
     question_types = [
         "MCQ",
         "Fill in the Blanks",
+        "Descriptive",
         # "Case Study",
         # "Multi-Part",
         # "Assertion-Reasoning",
-        # "Descriptive",
         # "Descriptive w/ Subquestions"
     ]
     
@@ -1040,53 +1040,154 @@ with tab1:
             
             elif qtype in ["Descriptive", "Descriptive w/ Subquestions"]:
                 st.markdown(f"#### {qtype} Configuration")
+
                 for i in range(num_questions):
                     st.markdown(f"**Question {i+1}**")
-                    cols = st.columns([2, 2, 1, 1, 2])
-                    
-                    with cols[0]:
-                        topic = st.text_input(
-                            "Topic",
-                            key=f"{qtype}_topic_{i}",
-                            value=st.session_state.question_types_config[qtype]['questions'][i].get('topic', ''),
-                            placeholder="e.g., nth term of AP"
-                        )
-                        st.session_state.question_types_config[qtype]['questions'][i]['topic'] = topic
-                    
-                        # Descriptive Type (Internal only, not in UI)
-                        st.session_state.question_types_config[qtype]['questions'][i]['descriptive_type'] = st.session_state.question_types_config[qtype]['questions'][i].get('descriptive_type', 'Auto')
 
-                    with cols[2]:
-                        dok = st.selectbox(
-                            "DOK",
-                            [1, 2, 3],
-                            key=f"{qtype}_dok_{i}",
-                            index=st.session_state.question_types_config[qtype]['questions'][i].get('dok', 1) - 1
-                        )
-                        st.session_state.question_types_config[qtype]['questions'][i]['dok'] = dok
-                    
-                    with cols[3]:
-                        marks = st.number_input(
-                            "Marks",
-                            min_value=0.5,
-                            max_value=10.0,
-                            step=0.5,
-                            key=f"{qtype}_marks_{i}",
-                            value=st.session_state.question_types_config[qtype]['questions'][i].get('marks', 1.0)
-                        )
-                        st.session_state.question_types_config[qtype]['questions'][i]['marks'] = marks
-                    
-                    with cols[4]:
-                        taxonomy = st.selectbox(
-                            "Taxonomy",
-                            taxonomy_options,
-                            key=f"{qtype}_taxonomy_{i}",
-                            index=taxonomy_options.index(
-                                st.session_state.question_types_config[qtype]['questions'][i].get('taxonomy', 'Remembering')
+                    # Topic field
+                    topic = st.text_input(
+                        "Topic",
+                        key=f"{qtype}_topic_{i}",
+                        value=st.session_state.question_types_config[qtype]['questions'][i].get('topic', ''),
+                        placeholder="e.g., nth term of AP"
+                    )
+                    st.session_state.question_types_config[qtype]['questions'][i]['topic'] = topic
+
+                    # Number of sub-parts
+                    num_subparts = st.number_input(
+                        "Number of Sub-Parts",
+                        min_value=1,
+                        max_value=5,
+                        value=st.session_state.question_types_config[qtype]['questions'][i].get('num_subparts', 1),
+                        key=f"{qtype}_subparts_{i}",
+                        help="Set to 1 for a single question, or 2–5 for questions with roman numeral sub-parts (i, ii, iii, …)"
+                    )
+                    st.session_state.question_types_config[qtype]['questions'][i]['num_subparts'] = num_subparts
+
+                    # Descriptive Type selectbox
+                    descriptive_type_options = [
+                        "Auto",
+                        "Concept (definition)",
+                        "Scenario-Based",
+                        "REAL LIFE IMAGES BASED",
+                        "IMAGE BASED",
+                        "Image-Based Science Observation",
+                        "Data Based",
+                        "Numerical and Image Based",
+                        "Equation Based"
+                    ]
+                    current_desc_type = st.session_state.question_types_config[qtype]['questions'][i].get('descriptive_type', 'Auto')
+                    descriptive_type = st.selectbox(
+                        "Descriptive Type",
+                        descriptive_type_options,
+                        key=f"{qtype}_desc_type_{i}",
+                        index=descriptive_type_options.index(current_desc_type) if current_desc_type in descriptive_type_options else 0
+                    )
+                    st.session_state.question_types_config[qtype]['questions'][i]['descriptive_type'] = descriptive_type
+
+                    # Single-part layout
+                    if num_subparts == 1:
+                        # Clear any stale subparts_config
+                        st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'] = []
+                        cols = st.columns([1, 1, 2])
+
+                        with cols[0]:
+                            dok = st.selectbox(
+                                "DOK",
+                                [1, 2, 3],
+                                key=f"{qtype}_dok_{i}",
+                                index=st.session_state.question_types_config[qtype]['questions'][i].get('dok', 1) - 1
                             )
-                        )
-                        st.session_state.question_types_config[qtype]['questions'][i]['taxonomy'] = taxonomy
-                    
+                            st.session_state.question_types_config[qtype]['questions'][i]['dok'] = dok
+
+                        with cols[1]:
+                            marks = st.number_input(
+                                "Marks",
+                                min_value=0.5,
+                                max_value=10.0,
+                                step=0.5,
+                                key=f"{qtype}_marks_{i}",
+                                value=st.session_state.question_types_config[qtype]['questions'][i].get('marks', 1.0)
+                            )
+                            st.session_state.question_types_config[qtype]['questions'][i]['marks'] = marks
+
+                        with cols[2]:
+                            taxonomy = st.selectbox(
+                                "Taxonomy",
+                                taxonomy_options,
+                                key=f"{qtype}_taxonomy_{i}",
+                                index=taxonomy_options.index(
+                                    st.session_state.question_types_config[qtype]['questions'][i].get('taxonomy', 'Remembering')
+                                )
+                            )
+                            st.session_state.question_types_config[qtype]['questions'][i]['taxonomy'] = taxonomy
+
+                    else:
+                        # Multi-part: show per-subpart config
+                        if 'subparts_config' not in st.session_state.question_types_config[qtype]['questions'][i]:
+                            st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'] = []
+
+                        current_subparts = len(st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'])
+                        if num_subparts != current_subparts:
+                            if num_subparts > current_subparts:
+                                for j in range(current_subparts, num_subparts):
+                                    roman_numerals = ['i', 'ii', 'iii', 'iv', 'v']
+                                    st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'].append({
+                                        'part': roman_numerals[j] if j < len(roman_numerals) else f'part_{j+1}',
+                                        'dok': 1,
+                                        'marks': 1.0,
+                                        'taxonomy': 'Remembering'
+                                    })
+                            else:
+                                st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'] = \
+                                    st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][:num_subparts]
+
+                        st.markdown("**Sub-Parts Configuration**")
+                        for j in range(num_subparts):
+                            cols = st.columns([1, 1, 1, 2])
+                            roman_numerals = ['i', 'ii', 'iii', 'iv', 'v']
+
+                            with cols[0]:
+                                st.markdown(f"Part ({roman_numerals[j] if j < len(roman_numerals) else j+1})")
+
+                            with cols[1]:
+                                dok = st.selectbox(
+                                    "DOK",
+                                    [1, 2, 3],
+                                    key=f"{qtype}_subpart_dok_{i}_{j}",
+                                    index=st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][j].get('dok', 1) - 1
+                                )
+                                st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][j]['dok'] = dok
+
+                            with cols[2]:
+                                marks = st.number_input(
+                                    "Marks",
+                                    min_value=0.5,
+                                    max_value=10.0,
+                                    step=0.5,
+                                    key=f"{qtype}_subpart_marks_{i}_{j}",
+                                    value=st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][j].get('marks', 1.0)
+                                )
+                                st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][j]['marks'] = marks
+
+                            with cols[3]:
+                                taxonomy = st.selectbox(
+                                    "Taxonomy",
+                                    taxonomy_options,
+                                    key=f"{qtype}_subpart_taxonomy_{i}_{j}",
+                                    index=taxonomy_options.index(
+                                        st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][j].get('taxonomy', 'Remembering')
+                                    )
+                                )
+                                st.session_state.question_types_config[qtype]['questions'][i]['subparts_config'][j]['taxonomy'] = taxonomy
+
+                        # Aggregate subpart values to top-level for pipeline compatibility
+                        subparts_cfg = st.session_state.question_types_config[qtype]['questions'][i].get('subparts_config', [])
+                        if subparts_cfg:
+                            st.session_state.question_types_config[qtype]['questions'][i]['dok'] = subparts_cfg[0].get('dok', 1)
+                            st.session_state.question_types_config[qtype]['questions'][i]['marks'] = sum(s.get('marks', 1.0) for s in subparts_cfg)
+                            st.session_state.question_types_config[qtype]['questions'][i]['taxonomy'] = subparts_cfg[0].get('taxonomy', 'Remembering')
+
                     # New Concept Source Selection (MANDATORY)
                     st.markdown("**New Concept Source:**")
                     new_concept_source = st.radio(
@@ -1103,7 +1204,7 @@ with tab1:
                         horizontal=True
                     )
                     st.session_state.question_types_config[qtype]['questions'][i]['new_concept_source'] = new_concept_source
-                    
+
                     if new_concept_source == 'pdf':
                         if st.session_state.get('universal_pdf'):
                             st.info(f"ℹ️ Will use universal file: **{st.session_state.universal_pdf.name}**")
@@ -1112,7 +1213,7 @@ with tab1:
                         st.session_state.question_types_config[qtype]['questions'][i]['new_concept_pdf'] = None
                     else:
                         st.session_state.question_types_config[qtype]['questions'][i]['new_concept_pdf'] = None
-                    
+
                     # Additional Notes Selection (OPTIONAL)
                     st.markdown("**Additional Notes (Optional):**")
                     col_cb1, col_cb2 = st.columns(2)
@@ -1146,7 +1247,7 @@ with tab1:
                         with col_p:
                             st.markdown("<br>", unsafe_allow_html=True)
                             an_paste = paste(label="📋 Paste", key=f"{qtype}_paste_{i}")
-                            
+
                         an_final = None
                         if an_upload:
                             an_final = an_upload
@@ -1158,7 +1259,7 @@ with tab1:
                             st.success(f"✅ Ready: {an_final.name}")
                     else:
                         st.session_state.question_types_config[qtype]['questions'][i]['additional_notes_pdf'] = None
-                        
+
                     # Update source for compatibility
                     if has_text_note and has_file_note:
                         st.session_state.question_types_config[qtype]['questions'][i]['additional_notes_source'] = 'both'
@@ -1168,7 +1269,7 @@ with tab1:
                         st.session_state.question_types_config[qtype]['questions'][i]['additional_notes_source'] = 'pdf'
                     else:
                         st.session_state.question_types_config[qtype]['questions'][i]['additional_notes_source'] = 'none'
-                    
+
                     st.markdown("---")
             
             elif qtype == "Case Study":
@@ -1546,27 +1647,7 @@ with tab1:
                             q['type'] = qtype
                             questions_list.append(q)
                             
-                            # AUTO-GENERATE DESCRIPTIVE QUESTIONS FOR EACH FIB QUESTION
-                            if qtype == "Fill in the Blanks":
-                                # Clone the FIB config but change type to Descriptive
-                                descriptive_q = q.copy()
-                                descriptive_q['type'] = 'Descriptive'
-                                
-                                # --- Derive correct top-level dok/marks/taxonomy for Descriptive clone ---
-                                # For multi-subpart FIB, the top-level values are already aggregated above.
-                                # For single-part FIB, q already has correct dok/marks/taxonomy.
-                                # Either way q's top-level values are now correct, copy them explicitly.
-                                descriptive_q['dok'] = q.get('dok', 1)
-                                descriptive_q['marks'] = q.get('marks', 1.0)
-                                descriptive_q['taxonomy'] = q.get('taxonomy', 'Remembering')
-                                
-                                # Remove ALL FIB-specific fields so Descriptive prompt builder is clean
-                                descriptive_q.pop('fib_type', None)
-                                descriptive_q.pop('num_subparts', None)
-                                descriptive_q.pop('subparts_config', None)
-                                
-                                # Add descriptive question to the list
-                                questions_list.append(descriptive_q)
+                            # Descriptive is now its own independent type — no auto-cloning from FIB.
                     
                     if questions_list:
                         # Run async pipeline
@@ -1574,6 +1655,8 @@ with tab1:
                             try:
                                 # Import here to avoid circular imports
                                 from batch_processor import process_batches_pipeline
+                                import nest_asyncio
+                                nest_asyncio.apply()  # Prevent "event loop already running" error in Streamlit
                                 
                                 # Run async pipeline without progressive UI callback
                                 # Results will be available in Results tab only
@@ -1656,7 +1739,12 @@ with tab2:
                 if val_res and not val_res.get('error'):
                         st.markdown("### ✅ Validated Output")
                         # Use the new renderer with "results" context
-                        render_batch_results(batch_key, val_res, render_context="results")
+                        try:
+                            render_batch_results(batch_key, val_res, render_context="results")
+                        except Exception as render_err:
+                            st.error(f"❌ Error rendering results for '{batch_key}': {str(render_err)}")
+                            st.exception(render_err)
+                            st.text_area("Raw Output (fallback)", value=val_res.get('text', ''), height=300, disabled=True)
                 elif val_res and val_res.get('error'):
                         st.error(f"❌ Validation Error: {val_res['error']}")
                         st.error(val_res.get('text', ''))
@@ -1772,17 +1860,8 @@ with tab2:
                                 q_copy['type'] = q_type
                                 full_config_list.append(q_copy)
                                 
-                                # Mirror: auto-generate Descriptive clone for each FIB question
-                                if q_type == "Fill in the Blanks":
-                                    descriptive_q = q_copy.copy()
-                                    descriptive_q['type'] = 'Descriptive'
-                                    descriptive_q['dok'] = q_copy.get('dok', 1)
-                                    descriptive_q['marks'] = q_copy.get('marks', 1.0)
-                                    descriptive_q['taxonomy'] = q_copy.get('taxonomy', 'Remembering')
-                                    descriptive_q.pop('fib_type', None)
-                                    descriptive_q.pop('num_subparts', None)
-                                    descriptive_q.pop('subparts_config', None)
-                                    full_config_list.append(descriptive_q)
+                                # Note: Descriptive is now its own independent question type with its own UI.
+                                # No auto-cloning from FIB.
                         
                         # Build existing content map
                         existing_content_map = {}

@@ -176,10 +176,10 @@ def build_topics_section(questions: List[Dict[str, Any]], batch_key: str = "") -
         if not subparts_config:
             subparts_config = q.get('subparts', [])
             
-        # Auto-generate subparts based on marks if not provided
+        # Auto-generate subparts based on marks if not provided (FIB only)
         # ONLY auto-generate when num_subparts is not explicitly 1 (single-part)
         explicitly_single_part = q.get('num_subparts', 0) == 1
-        if not subparts_config and not explicitly_single_part and batch_key in ['Fill in the Blanks', 'Descriptive']:
+        if not subparts_config and not explicitly_single_part and batch_key in ['Fill in the Blanks']:
             try:
                 marks = int(float(q.get('marks', 1)))
             except (ValueError, TypeError):
