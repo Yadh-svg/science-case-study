@@ -573,7 +573,8 @@ with tab1:
                             "Real Life Based",
                             "Data Based",
                             "Real Life Image Based",
-                            "Equation Based"
+                            "Equation Based",
+                            "Graph Based"
                         ]
                         current_type = st.session_state.question_types_config[qtype]['questions'][i].get('mcq_type', 'Auto')
                         mcq_type = st.selectbox(
@@ -838,7 +839,8 @@ with tab1:
                         "Image-Based Science Observation",
                         "Data Based",
                         "Numerical and Image Based",
-                        "Equation Based"
+                        "Equation Based",
+                        "Graph Based"
                     ]
                     current_fib_type = st.session_state.question_types_config[qtype]['questions'][i].get('fib_type', 'Auto')
                     fib_type = st.selectbox(
@@ -1074,7 +1076,8 @@ with tab1:
                         "Image-Based Science Observation",
                         "Data Based",
                         "Numerical and Image Based",
-                        "Equation Based"
+                        "Equation Based",
+                        "Graph Based"
                     ]
                     current_desc_type = st.session_state.question_types_config[qtype]['questions'][i].get('descriptive_type', 'Auto')
                     descriptive_type = st.selectbox(

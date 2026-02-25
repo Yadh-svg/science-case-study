@@ -357,7 +357,42 @@ mcq_questions: |
         C) C₆H₁₂O₆ + 6O₂ + light energy → 6CO₂ + 6H₂O  
         D) C₆H₁₂O₆ + 6H₂O + light energy → 6CO₂ + 6O₂
 
+      
+      11. GRAPH-BASED MCQ
 
+      Description:
+      In this type of question, a graph is either included in the question or in the options, and students are asked to analyze the graph to select the correct answer. This tests the student's ability to interpret and extract information from graphical data.
+
+      Diagram Prompt (for image generation or drawing):
+      "Create a clean educational bar graph showing the growth of a plant over 7 days.
+
+        Title: Growth of a Plant Over 7 Days
+
+        X-axis label: Days (marked 0 to 7)
+        Y-axis label: Height of plant (cm) from 0 to 8
+
+        Show blue vertical bars for each day with steadily increasing heights:
+        Day 0 ≈ 1.5 cm
+        Day 1 ≈ 2 cm
+        Day 2 ≈ 2.5 cm
+        Day 3 ≈ 3.2 cm
+        Day 4 ≈ 3.5 cm
+        Day 5 ≈ 5.5 cm
+        Day 6 ≈ 6.5 cm
+        Day 7 ≈ 7.2 cm
+
+        Between day 4 and day 5, draw dashed horizontal guide lines and a vertical double-headed arrow showing the increase. Label the arrow: “1 cm/day”.
+
+        Style:
+        - Light grey chart background
+        - Simple classroom textbook style
+        - Clear axis ticks and labels
+        - Neat, minimal design suitable for a math problem"
+
+      Example Question:
+      The graph shows the growth of a plant over 7 days.
+
+      What is the growth rate of the plant between day 3 and day 5
       -----------------------------------------
       ### RULES
       - Each science MCQ must belong to exactly ONE of the above types.
@@ -1278,7 +1313,7 @@ FIB: |
 
       This process occurs inside the organelle called the |TEXT5|.
       (Write the singular scientific term.)
-  ### 8. ### Fill in the Blank (Scenario-Based FIB)
+  ### 8. Fill in the Blank (Scenario-Based FIB)
 
       **Description:**
       A Scenario-Based Fill in the Blank (FIB) is a question where the blank appears within a short real-life situation or story. 
@@ -1297,6 +1332,56 @@ FIB: |
       This change of state from solid to liquid is called **|TEXT|**.
 
       Answer: melting
+
+  ### 9. Fill in the Blank Graph-Based Fill-in-the-Blanks 
+
+    Description: 
+    In this type, a graph is provided, and students need to fill in the blanks based on the data represented in the graph. The blanks may appear as dropdown options or as part of a larger descriptive question, where students are required to extract values from the graph.
+
+    Example: 
+    Question: 
+      Refer to the graph showing the temperature variation throughout the day. 
+    
+      Diagram prompt :Create a clean educational bar graph showing temperature variation throughout the day.
+
+        X-axis label: Time of Day
+        Y-axis label: Temperature (°C) ranging from 0 to 30.
+
+        Time points on X-axis (left to right):
+        6 AM, 9 AM, 12 PM, 1 PM, 2 PM, 3 PM, 6 PM, 9 PM, 7 PM
+
+        Corresponding temperatures (approximate bar heights):
+          6 AM → 9°C
+          9 AM → 14°C
+          12 PM → 19°C
+          1 PM → 28°C (highlight this bar in red)
+          2 PM → 25°C
+          3 PM → 23°C
+          6 PM → 19°C
+          9 PM → 16°C
+          7 PM → 9°C
+          Design details:
+
+          All bars in blue except the 1 PM bar in red.
+          Add a dotted horizontal line at 28°C.
+          Label above the red bar: “Maximum” with a small arrow pointing to it.
+          Clean white background.
+          Simple, textbook-style formatting.
+          Clear readable fonts.
+          Minimal shadows and no 3D effects.
+      
+      q : The bar graph above represents the temperature variation throughout the day, from 6 AM to 7 PM. From the graph, it is clear that the temperature starts at a lower level in the morning and gradually increases as the day progresses. At 12 PM __________ [Dropdown 1]. As the day continues, the temperature [Dropdown 2]. 
+
+      Dropdown 1 Options: 
+      A) The temperature peaks 
+      B) The temperature reduces 
+      C) The temperature is moderate 
+
+      Dropdown 2 Options: 
+      A) decreases steadily towards the evening. 
+      B) begins to level off and then slowly drops. 
+      C) experiences a slight drop but maintains a steady trend. 
+            ###
 
     ---
     ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
@@ -2717,9 +2802,55 @@ descriptive_questions: |
       [ ] Cognitive level ≥ application
       [ ] Marks aligned with reasoning depth
 
+    9 . Graph-Based Descriptive Questions 
+
+        Description: 
+        In this type of question, the graph is provided, and the students are required to describe the trends or answer questions based on the graph. These questions can have multiple parts, and students are expected to interpret the graph comprehensively. 
+        Diagram Prompt:
+
+          Draw a vertical bar graph representing monthly rainfall.
+
+          Title: Monthly Rainfall (in cm)
+
+          X-axis label: MONTHS  
+          Y-axis label: RAINFALL (in cm)
+
+          X-axis categories (left to right):
+          Jan, Feb, Apr, May, June, July, Aug, Sep, Oct
+
+          Y-axis scale:
+          Start at 0 and go up to 50 cm
+          Mark intervals of 5 cm (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50)
+
+          Bar heights (approximate values based on image):
+          Jan – 5 cm  
+          Feb – 10 cm  
+          Apr – 20 cm  
+          May – 15 cm  
+          June – 40 cm  
+          July – 45 cm  
+          Aug – 50 cm  
+          Sep – 38 cm  
+          Oct – 25 cm  
+
+          Design instructions:
+          - Use equal width vertical bars.
+          - Keep equal spacing between bars.
+          - Bars should be unshaded or lightly shaded.
+          - Clearly label both axes.
+          - Ensure August is the tallest bar.
+          - Ensure January is the shortest bar.
+
+        The following bar graph represents the monthly rainfall in centimeters from January to October. This data could impact crop production, as rainfall plays a crucial role in the growth and yield of various crops. Based on the graph, answer the following questions: 
+
+        Question 1: 
+
+        Which month recorded the highest rainfall? 
+  
 
 
-  3. DESCRIPTIVE QUESTION DESIGN RULES
+
+  10. DESCRIPTIVE QUESTION DESIGN RULES
 
     Descriptive questions assess deeper understanding through scenario-based, multi-part questions.
     Each question presents a realistic scientific scenario followed by analytical sub-questions.
@@ -2844,6 +2975,11 @@ descriptive_questions: |
     5. During validation, flag and repair any violation of these rules.
     6. Textbook/PDF takes priority. Only use NCERT-level knowledge if it aligns.
     7. If a representation or construct is missing in the textbook/PDF, treat it as prohibited.
+
+  ## Descriptive Type Selection Rule (CRITICAL)
+   - In the TOPICS_SECTION, each question may optionally specify a "Descriptive Type".
+   - If "Descriptive Type" is specified, you **MUST STRICTLY** generate a question that fits that specific definition and style (e.g. Graph-Based Descriptive Questions).
+   - If "Descriptive Type" is "Auto" or NOT specified, you must choose the most appropriate type based on the topic and grade level, ensuring variety across the set.
 
   ## TAXONOMY LOCK RULE (MANDATORY)
 
