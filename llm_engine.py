@@ -109,7 +109,7 @@ def run_gemini(
     thinking_level: str = "medium",
     file_metadata: Optional[Dict[str, Any]] = None,
     log_name: str = "prompt",
-    save_prompt: bool = True
+    save_prompt: bool = False
 ) -> Dict[str, Any]:
     """
     Run Gemini model with optional PDF/image files using File API.
@@ -222,7 +222,7 @@ async def run_gemini_async(
     thinking_level: str = "medium",
     file_metadata: Optional[Dict[str, Any]] = None,
     log_name: str = "prompt",
-    save_prompt: bool = True
+    save_prompt: bool = False
 ) -> Dict[str, Any]:
     """
     Async wrapper for run_gemini.

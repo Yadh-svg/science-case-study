@@ -1066,6 +1066,15 @@ with tab1:
                     )
                     st.session_state.question_types_config[qtype]['questions'][i]['num_subparts'] = num_subparts
 
+                    # Add Without Stem option
+                    without_stem = st.checkbox(
+                        "Descriptive without stem",
+                        key=f"{qtype}_without_stem_{i}",
+                        value=st.session_state.question_types_config[qtype]['questions'][i].get('without_stem', False),
+                        help="Check this box to avoid having a detailed stem/scenario."
+                    )
+                    st.session_state.question_types_config[qtype]['questions'][i]['without_stem'] = without_stem
+
                     # Descriptive Type selectbox
                     descriptive_type_options = [
                         "Auto",
@@ -1079,12 +1088,21 @@ with tab1:
                         "Equation Based",
                         "Graph Based"
                     ]
+                    
+                    if without_stem:
+                        descriptive_type_options.remove("Auto")
+                        
                     current_desc_type = st.session_state.question_types_config[qtype]['questions'][i].get('descriptive_type', 'Auto')
+                    
+                    # fallback if current choice is no longer in the list
+                    if current_desc_type not in descriptive_type_options:
+                        current_desc_type = descriptive_type_options[0]
+                        
                     descriptive_type = st.selectbox(
                         "Descriptive Type",
                         descriptive_type_options,
                         key=f"{qtype}_desc_type_{i}",
-                        index=descriptive_type_options.index(current_desc_type) if current_desc_type in descriptive_type_options else 0
+                        index=descriptive_type_options.index(current_desc_type)
                     )
                     st.session_state.question_types_config[qtype]['questions'][i]['descriptive_type'] = descriptive_type
 

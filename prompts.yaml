@@ -531,6 +531,76 @@ mcq_questions: |
     - Each incorrect option must have its **own complete distractor analysis**.
 
   ---
+  ## SOLUTION FORMAT 
+
+    The solution must be written **step-by-step**.  
+    Each step must include:
+
+    - What is being done or explained  
+    - Clear and complete explanation  
+    - Marks allotted for that step  
+    - Logical progression toward the final answer  
+
+    Do **not** combine steps.  
+    Explain **why** or **how**, not just the final result.  
+    Total marks across all steps must equal the marks of the question.
+
+    ---
+
+    ## Step-wise Solution Structure
+
+    ### SOLUTION
+
+    **Step 1: Identification / Concept / First required part (X mark)**  
+    Provide a clear explanation of the concept, identification, or reasoning needed for this step.  
+    Explain what is known, what is asked, and how this step helps solve the problem.
+
+    ---
+
+    **Step 2: Application / Equation / Reasoning / Next required part (X mark)**  
+    Carry out the required process (write equation, apply principle, describe factor, etc.).  
+    Explain what is being applied and why it is valid in this situation.
+
+    ---
+
+    **Step 3: Further explanation / Result / Conclusion (X mark)**  
+    Complete the remaining requirement of the question.  
+    Explain the final outcome clearly and logically.
+
+    ---
+
+    ## If a Step Contains Multiple Points
+
+    Divide marks clearly and explain each point.
+
+    **Example structure:**
+
+    **Step 2: Explanation of factors (3 marks total)**  
+
+    a. First factor — explanation (1 mark)  
+    Clear description of how it affects the result.
+
+    b. Second factor — explanation (1 mark)  
+    Reason and effect clearly stated.
+
+    c. Third factor — explanation (1 mark)  
+    Proper conceptual explanation.
+
+    ---
+
+    ## Explanation Quality Rules
+
+    - Use complete sentences.  
+    - Explain cause–effect relationships.  
+    - Justify equations or principles used.  
+    - Avoid one-word answers.  
+    - Make reasoning easy to follow.
+
+    ---
+
+    ## Marking Consistency Rule
+
+    **Sum of all step marks must equal total marks of the question.**
 
 
    ## TEXTBOOK CONTENT HANDLING (CRITICAL)
@@ -1873,7 +1943,7 @@ FIB: |
       - If the chapter introduces or emphasizes a particular technique, then **every relevant calculation in that chapter** must use the same technique, even in simpler sub-questions (both question and solution).  
       - This ensures consistency with what the student is currently being taught at that grade level.  
       - Only if no specific method is mentioned in the concepts should the general grade-appropriate method be used.
-  
+
   
   7. ## TEXTBOOK CONTENT HANDLING (CRITICAL)
     - **Do NOT treat the textbook/concept excerpts as reading passages in questions**
@@ -2021,6 +2091,8 @@ FIB: |
       - using technique that the student studied in the chapter.
       - Justify the filled answers implicitly through reasoning.
       - Do NOT reference answer placeholders in the explanation.
+  
+  ---
 
     ## STRICT KNOWLEDGE BOUNDARY RULES
     Treat the uploaded PDFs/images as the only source of knowledge. Do not use any outside syllabus, curriculum, or textbook knowledge. Do not introduce concepts, terminology, skills, or grade-level content that is not explicitly shown in the uploaded material. If the material shows addition, subtraction, even/odd numbers, halving, or true/false reasoning, generate new items only using those same concepts. Do not name properties, laws, or theories unless they are explicitly printed in the PDF/image.
@@ -3046,6 +3118,78 @@ descriptive_questions: |
       - Use age-appropriate language
       - Reference the scenario data to support answers
       - Do NOT just repeat the answer key - explain the reasoning
+      ## SOLUTION FORMAT 
+
+        The solution must be written **step-by-step**.  
+        Each step must include:
+
+        - What is being done or explained  
+        - Clear and complete explanation  
+        - Marks allotted for that step  
+        - Logical progression toward the final answer  
+
+        Do **not** combine steps.  
+        Explain **why** or **how**, not just the final result.  
+        Total marks across all steps must equal the marks of the question.
+
+        ---
+
+        ## Step-wise Solution Structure
+
+        ### SOLUTION
+
+        **Step 1: Identification / Concept / First required part (X mark)**  
+        Provide a clear explanation of the concept, identification, or reasoning needed for this step.  
+        Explain what is known, what is asked, and how this step helps solve the problem.
+
+        ---
+
+        **Step 2: Application / Equation / Reasoning / Next required part (X mark)**  
+        Carry out the required process (write equation, apply principle, describe factor, etc.).  
+        Explain what is being applied and why it is valid in this situation.
+
+        ---
+
+        **Step 3: Further explanation / Result / Conclusion (X mark)**  
+        Complete the remaining requirement of the question.  
+        Explain the final outcome clearly and logically.
+
+        ---
+
+        ## If a Step Contains Multiple Points
+
+        Divide marks clearly and explain each point.
+
+        **Example structure:**
+
+        **Step 2: Explanation of factors (3 marks total)**  
+
+        a. First factor — explanation (1 mark)  
+        Clear description of how it affects the result.
+
+        b. Second factor — explanation (1 mark)  
+        Reason and effect clearly stated.
+
+        c. Third factor — explanation (1 mark)  
+        Proper conceptual explanation.
+
+        ---
+
+        ## Explanation Quality Rules
+
+        - Use complete sentences.  
+        - Explain cause–effect relationships.  
+        - Justify equations or principles used.  
+        - Avoid one-word answers.  
+        - Make reasoning easy to follow.
+
+        ---
+
+        ## Marking Consistency Rule
+
+        **Sum of all step marks must equal total marks of the question.**
+      ---
+  
 
     6. KEY IDEA (MANDATORY – EDUCATIONAL, STRICT FORMAT)
 
@@ -3112,11 +3256,181 @@ descriptive_questions: |
     - Do not mix answer types within a single blank.
     - Ensure every blank tests understanding, not guessing.
     - Output language must be English
+  ============================================================
+    ADDITION — DESCRIPTIVE QUESTION GENERATOR
+    SUPPORT FOR "WITH STEM" AND "WITHOUT STEM"
+  ============================================================
 
-  ## OUTPUT FORMAT RULE (SCIENCE)
+    INPUT PARAMETER (MANDATORY FOR EVERY DESCRIPTIVE QUESTION)
 
-    • Use ONLY plain Markdown text.  
-    • Do NOT use LaTeX or TeX in any form.
+    - Question Structure Mode:
+        • With Stem
+        • Without Stem
+
+    This parameter MUST be provided for each question type.
+
+    ------------------------------------------------------------
+    STRUCTURE MODE BEHAVIOUR RULE
+    ------------------------------------------------------------
+
+    The generator MUST change behaviour strictly based on the
+    selected Question Structure Mode.
+
+    ============================================================
+    1) IF Question Structure Mode = "With Stem"
+    ============================================================
+
+    Follow the existing full descriptive framework:
+
+    (No change to existing system)
+
+    ============================================================
+    2) IF Question Structure Mode = "Without Stem"
+    ============================================================
+
+    This is a DIRECT CONCEPT-BASED DESCRIPTIVE QUESTION.
+
+    ------------------------------------------------------------
+    STRICT RULES — WITHOUT STEM MODE
+    ------------------------------------------------------------
+
+    1. NO scenario or narrative context
+    2. NO experimental story or setup
+    3. NO real-life description
+    5. Question must be direct and exam-style
+    6. Answer must be written as VALUE POINTS
+    7. Number of value points must align with marks
+
+    ------------------------------------------------------------
+    VALUE POINT DEFINITION
+    ------------------------------------------------------------
+
+    Value points are scientifically correct explanation statements.
+
+    Each value point MUST:
+    ✔ Express one clear scientific idea  
+    ✔ Be independent (not repetition)  
+    ✔ Directly answer the question  
+    ✔ Be conceptually meaningful  
+    ✔ Be mark-worthy  
+
+    ------------------------------------------------------------
+    VALUE POINT COUNT RULE (MANDATORY)
+    ------------------------------------------------------------
+
+    Marks → Expected Value Points
+
+    1 mark → 1 value point  
+    2 marks → 2–4 value points  
+    3 marks → 3–6 value points  
+    4 marks → 4–8 value points  
+    5 marks → 5–10 value points  
+
+    Rules:
+    - Do NOT inflate with filler points
+    - Depth must match grade level
+    - Each point must earn marks independently
+
+    ============================================================
+    WITHOUT STEM QUESTION FORMAT (STRICT TEMPLATE)
+    ============================================================
+
+    |||QUESTION_START|||
+
+    Topic:
+    Marks:
+    DOK Level:
+    Taxonomy:
+    Question Structure Mode: Without Stem
+
+    Question:
+    [Direct descriptive concept-based question]
+
+    ------------------------------------------------------------
+    ANSWER KEY (Value Points)
+
+    1.
+    2.
+    3.
+    ...
+
+    (Concise scientific value statements only)
+
+    ------------------------------------------------------------
+    SOLUTION (STEP-WISE MARKING)
+
+    Step 1: First Value Point Explanation (X mark)
+    Clear scientific explanation.
+
+    ---
+
+    Step 2: Second Value Point Explanation (X mark)
+    Concept explanation with reasoning.
+
+    ---
+
+    Step 3: Third Value Point Explanation (X mark)
+    Further explanation or conclusion.
+
+    ---
+
+    Total marks across steps MUST equal question marks.
+
+    ------------------------------------------------------------
+    KEY IDEA
+    (Use existing mandatory KEY IDEA framework unchanged)
+
+    ============================================================
+    TAXONOMY ENFORCEMENT — WITHOUT STEM
+    ============================================================
+
+    Task verb MUST match taxonomy exactly.
+
+    Remembering → define, state, list, name  
+    Understanding → explain, describe, classify  
+    Applying → calculate, determine, use  
+    Analysing → compare, differentiate, identify pattern  
+    Evaluating → justify, assess, evaluate  
+
+    No cognitive level upgrade allowed.
+
+    ============================================================
+    DOK HANDLING — WITHOUT STEM
+    ============================================================
+
+    If DOK 3 is assigned:
+    ✔ Structured reasoning required
+    ✔ Justification or comparison required
+    ✔ But still NO scenario
+
+    Valid examples:
+    - Compare two processes
+    - Justify a scientific claim
+    - Evaluate a statement using principles
+
+    ============================================================
+    ADDITIONAL SAFETY RULES
+    ============================================================
+
+    ✔ Do NOT convert into mini scenario  
+    ✔ Do NOT add artificial context  
+    ✔ Keep crisp exam-style wording  
+    ✔ Do NOT exceed taxonomy cognitive level  
+    ✔ Maintain grade appropriateness  
+
+    ============================================================
+    INTERNAL VALIDATION CHECK (MANDATORY)
+    ============================================================
+
+    If Mode = Without Stem:
+
+    [ ] No scenario text present  
+    [ ] Question is direct concept-based  
+    [ ] Value point count matches marks  
+    [ ] Value points are unique  
+    [ ] No repetition of reasoning  
+    [ ] Step-wise marks sum equals total marks  
+
 
     ### Rules:
     • Write scientific expressions in clear plain text.  

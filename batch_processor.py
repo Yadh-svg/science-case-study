@@ -302,7 +302,7 @@ async def generate_raw_batch(
             file_metadata=file_metadata,
             # Use a more explicit log name for regeneration if override is on
             log_name=f"Regeneration_{batch_key}" if general_config.get('save_prompts_override') else f"{batch_key}_Gen",
-            save_prompt=True  # Always save generation prompts (including Descriptive questions)
+            save_prompt=False  # Disabled prompt saving
         )
 
 
@@ -863,7 +863,7 @@ async def regenerate_specific_questions_pipeline(
     
     # 3. Enable prompt saving for regeneration regardless of general config
     regeneration_config = general_config.copy()
-    regeneration_config['save_prompts_override'] = True
+    regeneration_config['save_prompts_override'] = False
     regeneration_config['is_regeneration'] = True
     
     # 4. Execute Standard Pipeline

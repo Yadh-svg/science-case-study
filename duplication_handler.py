@@ -50,7 +50,7 @@ async def duplicate_single_question_async(
         thinking_level="medium",
         file_metadata=file_metadata,
         log_name="Duplication",
-        save_prompt=True
+        save_prompt=False
     )
     
     if result.get('error'):

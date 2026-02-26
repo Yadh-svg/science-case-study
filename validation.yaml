@@ -172,7 +172,6 @@ validation_prompt: |
      - There should be heading for options as OPTIONS
         9. Remove all HTML/Markdown image tags, links, and visual annotations from the question and options.
         10 .There must be no wrapper metadata such as status, pass/fail flags, repaired_item containers, validation_reports, arrays, or lists. Output only the final clean JSON object with "question1": "<markdown>" , ...
-        11 . Please remove any mention of mark distributions from the solution.
    
       Metadata Block must include:
         Topic/Chapter • Question Type • Taxonomy • DOK • Marks

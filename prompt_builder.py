@@ -218,6 +218,12 @@ def build_topics_section(questions: List[Dict[str, Any]], batch_key: str = "") -
         # Handle Descriptive Type
         descriptive_type = q.get('descriptive_type', 'Auto')
         descriptive_type_str = f", Descriptive Type: {descriptive_type}" if descriptive_type != 'Auto' else ""
+        
+        # Handle Without Stem option for Descriptive
+        without_stem = q.get('without_stem', False)
+        if without_stem:
+            descriptive_type_str += ", Format: Without Stem"
+
 
         # Use subparts_config if present and non-empty
         if subparts_config and len(subparts_config) > 0:
