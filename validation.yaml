@@ -30,7 +30,7 @@ validation_prompt: |
         • Arithmetic or calculation corrections in solution steps  
         • Minor scientific terminology or unit fixes (SI units, symbols, labels)  
         • Small punctuation, spelling, or formatting corrections  
-        • Option label formatting (A/B/C/D consistency)  
+        • Option label formatting consistency (for FIB dropdowns, use / separator format only; A/B/C/D applies only to MCQ)
         • Distractor wording or formatting changes that do NOT alter the correct option  
         • Single-sentence clarifications within the same container (e.g., add "(show reasoning)" or a brief parenthetical clarification of a scientific term)  
         • Small numeric or value perturbations only when required to avoid textbook reuse, without changing the concept tested  
@@ -222,7 +222,8 @@ validation_prompt: |
       3. Do NOT separate options using spaces, commas, or inline formatting.
       4. After writing one option, insert a line break immediately.
       5. This rule overrides all other formatting instructions.
-      6, each dropdown should contain option number for eg DROP 1 : A,B,C ... and should be on separate line
+      6. Each dropdown must use / separator format: DROP 1 : option 1 / option 2 / option 3 / option 4
+         Each option within a dropdown must be on a separate line only for MCQ. For FIB dropdowns, keep / separator format.
       Correct format example:
 
       OPTIONS:
@@ -413,10 +414,9 @@ structure_FIB: |
 
   EXAMPLE OUTPUT FORMAT:
   {
-    "question1": "Forces • Concept-based FIB • Remembering • DOK 1 • 2 Marks\n\nWhen an object moves on a surface, the force that opposes its motion is called [DROP 1].\n\nA. friction, which acts opposite to the direction of motion\nB. gravity, which pulls the object downward\nC. tension, which acts along the surface\nD. normal force, which acts perpendicular to the surface\n\n### ANSWER KEY\nDROP 1 → A\n\n### SOLUTION\nFriction is the force that opposes relative motion between two surfaces in contact. It acts in the direction opposite to motion, slowing the object down.\n\n### KEY IDEA\nFriction is a contact force that always opposes motion. Its magnitude depends on the nature of the surfaces and the normal force acting between them.",
-    "question2": "..."
+  "question1": "Forces • Concept-based FIB • Remembering • DOK 1 • 2 Marks\n\nWhen an object moves on a surface, the force that opposes its motion is called [DROP 1].\n\nDROP 1 : friction, which acts opposite to the direction of motion / gravity, which pulls the object downward / tension, which acts along the surface / normal force, which acts perpendicular to the surface\n\n### ANSWER KEY\nDROP 1 → friction, which acts opposite to the direction of motion\n\n### SOLUTION\nFriction is the force that opposes relative motion between two surfaces in contact. It acts in the direction opposite to motion, slowing the object down.\n\n### KEY IDEA\nFriction is a contact force that always opposes motion. Its magnitude depends on the nature of the surfaces and the normal force acting between them.",
+  "question2": "..."
   }
-
 structure_Descriptive: |
   Descriptive Questions Output Structure (SCIENCE):
 

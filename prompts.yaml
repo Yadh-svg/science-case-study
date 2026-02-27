@@ -401,7 +401,7 @@ mcq_questions: |
       - Use the definitions strictly as written.
       - Use document-based examples as references for style, not for duplication.
 
-  ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
+    ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
 
     To avoid positional bias, correct answers must be randomly assigned across A, B, C, and D.
 
@@ -1167,37 +1167,20 @@ FIB: |
     Riya observed differences between the two ponds. Based on the diagram, complete the statements by choosing the most appropriate option for each [DROP].
 
     i) In Pond A, the number of pollinators visiting flowers was higher because [DROP 1]
-
-    A. The presence of fish reduced insect larvae, allowing more pollinating insects to survive and visit flowers.  
-    B. The fish directly carried pollen from one flower to another in the pond ecosystem.  
-    C. The larvae consumed all flowering plants, forcing pollinators to migrate elsewhere.  
-    D. The absence of fish increased competition among pollinators.  
-
-    ---
-
     ii) The organism that directly controls the population of insect larvae in Pond A is [DROP 2]
-
-    A. Fish, which feed on insect larvae and regulate their numbers.  
-    B. Flowering plants, which compete with larvae for nutrients.  
-    C. Pollinators, which consume larvae during nectar collection.  
-    D. Soil microbes, which physically remove larvae from water.  
-
-    ---
-
     iii) The ecological interaction between fish and insect larvae represents [DROP 3]
 
-    A. A predator–prey relationship where one organism feeds on another.  
-    B. Mutualism in which both organisms benefit equally.  
-    C. Competition for the same food resource.  
-    D. Parasitism where larvae live inside fish.  
+    DROP 1 : The presence of fish reduced insect larvae, allowing more pollinating insects to survive and visit flowers. / The fish directly carried pollen from one flower to another in the pond ecosystem. / The larvae consumed all flowering plants, forcing pollinators to migrate elsewhere. / The absence of fish increased competition among pollinators.
+    DROP 2 : Fish, which feed on insect larvae and regulate their numbers. / Flowering plants, which compete with larvae for nutrients. / Pollinators, which consume larvae during nectar collection. / Soil microbes, which physically remove larvae from water.
+    DROP 3 : A predator–prey relationship where one organism feeds on another. / Mutualism in which both organisms benefit equally. / Competition for the same food resource. / Parasitism where larvae live inside fish.
 
     ---
 
     ANSWER KEY
 
-    DROP 1 → A  
-    DROP 2 → A  
-    DROP 3 → A  
+    DROP 1 → The presence of fish reduced insect larvae, allowing more pollinating insects to survive and visit flowers.
+    DROP 2 → Fish, which feed on insect larvae and regulate their numbers.
+    DROP 3 → A predator–prey relationship where one organism feeds on another. 
 
     ---
 
@@ -1238,48 +1221,26 @@ FIB: |
 
       Analyze the given food web diagram and choose the most appropriate option for each [DROP].
 
+
       i) The first trophic level in the diagram consists of [DROP 1]
-
-      A. Organisms that produce their own food through photosynthesis and form the base of the food web.  
-      B. Animals that feed directly on other animals.  
-      C. Predators that occupy the highest trophic level.  
-      D. Organisms that consume both plants and animals.  
-
-      ---
-
       ii) The group consisting of mouse, rabbit, and grasshopper represents [DROP 2]
-
-      A. Primary consumers that feed directly on producers.  
-      B. Secondary consumers that prey on herbivores.  
-      C. Decomposers that recycle nutrients.  
-      D. Apex predators controlling all populations.  
-
-      ---
-
       iii) If the mouse population suddenly disappears, the population most directly affected would be [DROP 3]
-
-      A. Snake, because it depends on mouse as one of its food sources.  
-      B. Grass, because it consumes snake.  
-      C. Hawk, because it feeds exclusively on grass.  
-      D. Lizard, because it depends only on grasshopper.  
-
-      ---
-
       iv) The reason the first trophic level has the highest number of organisms is that [DROP 4]
 
-      A. Energy decreases at each successive trophic level, limiting higher-level populations.  
-      B. Predators reproduce more slowly than plants.  
-      C. Herbivores consume all available energy.  
-      D. Energy increases as it moves upward in the food chain.  
+      DROP 1 :  Organisms that produce their own food through photosynthesis and form the base of the food web. / Animals that feed directly on other animals. / Predators that occupy the highest trophic level. / Organisms that consume both plants and animals. 
+      DROP 2 : Primary consumers that feed directly on producers. / Secondary consumers that prey on herbivores. / Decomposers that recycle nutrients. / Apex predators controlling all populations.  
+      DROP 3 : Snake, because it depends on mouse as one of its food sources. / Grass, because it consumes snake. / Hawk, because it feeds exclusively on grass. / Lizard, because it depends only on grasshopper.  
+      DROP 4 : Energy decreases at each successive trophic level, limiting higher-level populations. /  Predators reproduce more slowly than plants. / Herbivores consume all available energy. / Energy increases as it moves upward in the food chain.  
+
 
       ---
 
       ANSWER KEY
 
-      DROP 1 → A  
-      DROP 2 → A  
-      DROP 3 → A  
-      DROP 4 → A  
+      DROP 1 → Organisms that produce their own food through photosynthesis and form the base of the food web.
+      DROP 2 → Primary consumers that feed directly on producers.
+      DROP 3 → Snake, because it depends on mouse as one of its food sources.  
+      DROP 4 → Energy decreases at each successive trophic level, limiting higher-level populations.  
       ---
 
       ### Diagram Prompt
@@ -1442,16 +1403,10 @@ FIB: |
       
       q : The bar graph above represents the temperature variation throughout the day, from 6 AM to 7 PM. From the graph, it is clear that the temperature starts at a lower level in the morning and gradually increases as the day progresses. At 12 PM __________ [Dropdown 1]. As the day continues, the temperature [Dropdown 2]. 
 
-      Dropdown 1 Options: 
-      A) The temperature peaks 
-      B) The temperature reduces 
-      C) The temperature is moderate 
+      Dropdown 1 Options: The temperature peaks / The temperature reduces / The temperature is moderate 
 
-      Dropdown 2 Options: 
-      A) decreases steadily towards the evening. 
-      B) begins to level off and then slowly drops. 
-      C) experiences a slight drop but maintains a steady trend. 
-            ###
+      Dropdown 2 Options: decreases steadily towards the evening. / begins to level off and then slowly drops. / experiences a slight drop but maintains a steady trend. 
+   
 
     ---
     ## CORRECT OPTION DISTRIBUTION RULE (MANDATORY)
@@ -1797,47 +1752,23 @@ FIB: |
           ---
 
           i) The formation of the reddish-brown coating in Setup A indicates that [DROP 1]
-
-          A. Iron reacts with both oxygen and water to form hydrated iron oxide, which appears as rust.  
-          B. Iron undergoes physical expansion due to moisture and changes color as a result.  
-          C. Water alone is sufficient to chemically transform iron into a new compound.  
-          D. Oxygen alone causes iron to disintegrate without the involvement of moisture.  
-
-          ---
-
           ii) Comparing Setup A and Setup B shows that rusting does not occur when [DROP 2]
-
-          A. Iron is exposed to oxygen but moisture is absent.  
-          B. Iron is kept in contact with water at room temperature.  
-          C. Iron is allowed to remain in open air for several days.  
-          D. Iron is placed in a container with limited air circulation.  
-
-          ---
-
           iii) The absence of rust in Setup C suggests that [DROP 3]
-
-          A. Removing dissolved oxygen from water prevents the oxidation of iron.  
-          B. Covering water with oil increases the rate of rusting.  
-          C. Boiling water permanently alters the chemical nature of iron.  
-          D. Iron does not react in the presence of any liquid.  
-
-          ---
-
           iv) From this experiment, it can be concluded that rusting is a process that [DROP 4]
 
-          A. Requires both oxygen and water to proceed effectively.  
-          B. Occurs only when iron is heated at high temperatures.  
-          C. Takes place in completely dry air without moisture.  
-          D. Depends solely on the presence of carbon dioxide in the atmosphere.  
+          DROP 1 : Iron reacts with both oxygen and water to form hydrated iron oxide, which appears as rust. / Iron undergoes physical expansion due to moisture and changes color as a result. / Water alone is sufficient to chemically transform iron into a new compound. / Oxygen alone causes iron to disintegrate without the involvement of moisture.
+          DROP 2 : Iron is exposed to oxygen but moisture is absent. /  Iron is kept in contact with water at room temperature. / Iron is allowed to remain in open air for several days. / Iron is placed in a container with limited air circulation.
+          DROP 3 : Removing dissolved oxygen from water prevents the oxidation of iron. / Covering water with oil increases the rate of rusting. / Boiling water permanently alters the chemical nature of iron. / Iron does not react in the presence of any liquid. 
+          DROP 4 : Requires both oxygen and water to proceed effectively. / Occurs only when iron is heated at high temperatures. / Takes place in completely dry air without moisture. / Depends solely on the presence of carbon dioxide in the atmosphere.
 
           ---
 
           ## ANSWER KEY
 
-          - DROP 1 → A  
-          - DROP 2 → A  
-          - DROP 3 → A  
-          - DROP 4 → A  
+          - DROP 1 → Iron reacts with both oxygen and water to form hydrated iron oxide, which appears as rust.  
+          - DROP 2 → Iron is exposed to oxygen but moisture is absent. 
+          - DROP 3 → Removing dissolved oxygen from water prevents the oxidation of iron.  
+          - DROP 4 → Requires both oxygen and water to proceed effectively.
 
           ---
 
@@ -1867,7 +1798,7 @@ FIB: |
       The gas released during photosynthesis is [DROP].
 
       Drop-down Options:
-      [DROP] → (oxygen, carbon dioxide, nitrogen, hydrogen)
+      [DROP] → oxygen / carbon dioxide / nitrogen / hydrogen
 
       Answer:
       [DROP]: oxygen
@@ -2083,7 +2014,12 @@ FIB: |
       - Explicitly list all options for each [DROP].
       - Options must be mutually exclusive and conceptually valid.
       - Exactly one option must be correct.
+      - OPTIONS SHOULDNT BE spserated with a,b,c,d 
+      - for eacg dropdown the option of eacah drop should be seperated with / 
+        eg : |DROP 1| : option 1 / option 2 / option 3 / option 4 / 
 
+        correct answer :
+          |DROP 1| : option 1
     5. Solution Explanation:
       - Give the correct option for each drop /blanks  
       - Provide a clear, step-by-step explanation.
@@ -2110,7 +2046,7 @@ FIB: |
     <description of the visual to be shown>
 
     Drop-down Options (if applicable):
-    [DROP] → (option 1, option 2, option 3, option 4)
+    DROP 1 : option 1 / option 2 / option 3 / option 4
 
     Answer Key (with mark distribution):
     TEXT 1: mark distribution
