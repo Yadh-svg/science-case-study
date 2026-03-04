@@ -187,16 +187,18 @@ validation_prompt: |
     ## Only for FIB :
         
     - For a **1-mark question**:
-      - Use **two blanks of 0.5 mark each**.
+      - Use **1 blank** (1 mark per blank).
 
     - For a **2-mark question**:
-      - Use 4 blanks of 0.5 mark each.
+      - Use **2 blanks** (1 mark per blank).
 
     - For a **3-mark question**:
-      - Use 6 blanks of 0.5 mark each.
+      - Use **3 blanks** (1 mark per blank).
+
     - For a **4-mark question**:
-      - Use 8 blanks of 0.5 mark each.
-    - The number of blanks should be strict, It should not increase or decrease 
+      - Use **4 blanks** (1 mark per blank).
+
+    - The number of blanks should be strict. It should not increase or decrease.
 
     - IF ANY OF THESE ARE VIOLATED, YOU NEED TO FIX IT.
     ## GLOBAL MULTI-LINE FORMATTING RULE:

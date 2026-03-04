@@ -215,23 +215,54 @@ mcq_questions: |
       C) The components are separate and can be physically identified.
       D) The mixture has components that are visible and easy to separate.
 
+      4. 
+      
+      MCQ (Statement Based)[for grades 6 and above]
       -----------------------------------------
-      4. MCQ (Statement Based)
-      -----------------------------------------
-      DEFINITION:
-      An MCQ where the question is framed as a statement, and the options involve identifying the truth or accuracy of that statement. This type often tests comprehension, analysis, and logical reasoning.
+        DEFINITION:
+        An MCQ where the question is framed as a statement, and the options involve identifying the truth or accuracy of that statement. This type often tests comprehension, analysis, and logical reasoning.
 
-      EXAMPLE :
-      Which of the following combinations of statements correctly describes the role of elements and compounds in making everyday materials?
-        I) Chemists create compounds, leading to the invention of life-saving medicines and vaccines.
-        II) The knowledge of elements and compounds helps in the creation of fertilizers.
-        III) Wood, steel, and concrete, used as building materials, are all examples of elements.
-        IV) Elements like iron and aluminium are used to construct bridges, buildings, and vehicles.
-      Options:
-        A. I, II and IV
-        B. II and III
-        C. I and III
-        D. I, III and IV
+        EXAMPLE :
+        Which of the following combinations of statements correctly describes the role of elements and compounds in making everyday materials?
+          I) Chemists create compounds, leading to the invention of life-saving medicines and vaccines.
+          II) The knowledge of elements and compounds helps in the creation of fertilizers.
+          III) Wood, steel, and concrete, used as building materials, are all examples of elements.
+          IV) Elements like iron and aluminium are used to construct bridges, buildings, and vehicles.
+        Options:
+          A. I, II and IV
+          B. II and III
+          C. I and III
+          D. I, III and IV
+
+      MCQ (Statement Based)[for grades 3 to 5]
+      -----------------------------------------
+        DEFINITION:
+        A short real-life scenario is provided, followed by four statements (A, B, C, D).
+        The student must identify the ONE correct statement.
+        Tests basic comprehension and fact identification.
+
+        STRUCTURE:
+        [Short scenario — 2 to 4 sentences]
+
+        Which of the following statements is correct?
+
+        Statement A) _______________
+        Statement B) _______________
+        Statement C) _______________
+        Statement D) _______________
+
+        Options:
+        A: Statement A
+        B: Statement B
+        C: Statement C
+        D: Statement D
+
+        RULES:
+        - Only ONE statement is correct.
+        - Other three must be plausible but incorrect.
+        - No combination options (e.g., "A and B").
+        - Simple language suitable for Grade 3 to Grade 5.
+        - Difficult words must have meaning in brackets.
 
       -----------------------------------------
       5. MCQ (Image + Statement Based)
@@ -253,37 +284,75 @@ mcq_questions: |
       C) I, II and IV
       D) II, III and IV
       
-      -----------------------------------------
-      6. MCQ (Assertion and reasoning)
-      -----------------------------------------
-      DEFINITION:
-        This is a Statement-Based MCQ in Assertion–Reason (A–R) format.  
-        Students must evaluate the truth of both the Assertion and the Reason and determine whether the Reason correctly explains the Assertion, selecting the appropriate option accordingly.
+      6. 
+        MCQ (Assertion and reasoning) [for grades 6 and above]
+        -----------------------------------------
+          DEFINITION:
+            This is a Statement-Based MCQ in Assertion–Reason (A–R) format.  
+            Students must evaluate the truth of both the Assertion and the Reason and determine whether the Reason correctly explains the Assertion, selecting the appropriate option accordingly.
+                
+          EXAMPLE :
+          In the question below, there are two statements marked as Assertion (A) and Reason (R). Read the statements and choose the correct option:  
+            Assertion (A): Salad is an example for a mixture.  
+            Reason (R): The components like onion, tomato and chickpeas maintain their individual characteristics.  
+            Options:  
+              A) Both Assertion (A) and Reason (R) are true, and Reason (R) correctly explains Assertion (A).  
+              B) Both Assertion (A) and Reason (R) are true, but Reason (R) does not explain Assertion (A).  
+              C) Assertion (A) is true, but Reason (R) is false.  
+              D) Assertion (A) is false, but Reason (R) is true.  
+            - You should not change the option order
+          For Assertion–Reason :
+            Unlike other option distribution 
+            Ensure the final answer key across all questions follows this distribution:
+            - **20%** of questions → **Correct Option A**
+            - **30%** of questions → **Correct Option B**
+            - **25%** of questions → **Correct Option C**
+            - **25%** of questions → **Correct Option D**
+
             
-      EXAMPLE :
-      In the question below, there are two statements marked as Assertion (A) and Reason (R). Read the statements and choose the correct option:  
-        Assertion (A): Salad is an example for a mixture.  
-        Reason (R): The components like onion, tomato and chickpeas maintain their individual characteristics.  
-        Options:  
-          A) Both Assertion (A) and Reason (R) are true, and Reason (R) correctly explains Assertion (A).  
-          B) Both Assertion (A) and Reason (R) are true, but Reason (R) does not explain Assertion (A).  
-          C) Assertion (A) is true, but Reason (R) is false.  
-          D) Assertion (A) is false, but Reason (R) is true.  
-        - You should not change the option order
-      For Assertion–Reason :
-        Unlike other option distribution 
-        Ensure the final answer key across all questions follows this distribution:
-        - **20%** of questions → **Correct Option A**
-        - **30%** of questions → **Correct Option B**
-        - **25%** of questions → **Correct Option C**
-        - **25%** of questions → **Correct Option D**
+            FOR EG : 10 QUESTION 
+            then  A=2, B=3, C=2, D=3
+            Total must always equal {{TOTAL_QUESTIONS}}.
 
-        
-        FOR EG : 10 QUESTION 
-        then  A=2, B=3, C=2, D=3
-        Total must always equal {{TOTAL_QUESTIONS}}.
+        MCQ (Assertion and Reasoning) [Grades 3–5]
+        ------------------------------------------
+          DEFINITION:
+            A simplified Statement-Based MCQ where students read two statements
+            (or a character debate) and judge whether each statement is true/false
+            and whether the second explains the first.
 
-                  
+          FORMATS:
+
+            Format 1 — Two Statements:
+              Read the two statements and select the correct option.
+              Statement 1: [Claim]
+              Statement 2: [Reason/Explanation]
+
+            Format 2 — Character Debate:
+              Two characters hold opposing views. Students pick who is correct and why.
+              Each option pairs a character with a reason.
+
+          LANGUAGE RULES:
+            - Use simple, age-appropriate language (no jargon)
+            - Do NOT use the words "Assertion" or "Reason"
+            - Use "Statement 1" and "Statement 2" or character names instead
+
+          OPTIONS (fixed order, do not change):
+            Option A: Statement 1 and 2 are true and statement 2 is the explanation for statement 1. 
+            Option B: statement 1 and 2 are true but statement 2 is not the correct explanation for statement 1 
+            Option C: statement 1 is true but statement 2 is false. 
+            Option D: statement 1 is false but statement 2 is true. 
+
+          ANSWER KEY DISTRIBUTION:
+            - 20% → Option A
+            - 30% → Option B
+            - 25% → Option C
+            - 25% → Option D
+
+            E.g. for 10 questions: A=2, B=3, C=2, D=3
+            Total must always equal {{TOTAL_QUESTIONS}}.
+
+                          
       -----------------------------------------
       7. MCQ (Real-Life Based)
       -----------------------------------------
@@ -503,7 +572,7 @@ mcq_questions: |
      - **1 Correct Answer**: The only correct solution
      - **3 Distractors**: Plausible but incorrect options
 
-  3. **Solution**: Step-by-step solution showing how to arrive at the correct answer
+  3. **Solution**: 
      - Clearly explain the reasoning
      - Show all steps
      - Justify why the correct answer is right
@@ -530,78 +599,19 @@ mcq_questions: |
       - a wrongly selected false statement.
     - Each incorrect option must have its **own complete distractor analysis**.
 
-  ---
-  ## SOLUTION FORMAT 
-
-    The solution must be written **step-by-step**.  
-    Each step must include:
-
-    - What is being done or explained  
-    - Clear and complete explanation  
-    - Marks allotted for that step  
-    - Logical progression toward the final answer  
-
-    Do **not** combine steps.  
-    Explain **why** or **how**, not just the final result.  
-    Total marks across all steps must equal the marks of the question.
-
-    ---
-
-    ## Step-wise Solution Structure
+  ## SOLUTION FORMAT (MCQ)
 
     ### SOLUTION
 
-    **Step 1: Identification / Concept / First required part (X mark)**  
-    Provide a clear explanation of the concept, identification, or reasoning needed for this step.  
-    Explain what is known, what is asked, and how this step helps solve the problem.
+    **Correct Answer: (A/B/C/D) — [Option Text]**
 
-    ---
-
-    **Step 2: Application / Equation / Reasoning / Next required part (X mark)**  
-    Carry out the required process (write equation, apply principle, describe factor, etc.).  
-    Explain what is being applied and why it is valid in this situation.
-
-    ---
-
-    **Step 3: Further explanation / Result / Conclusion (X mark)**  
-    Complete the remaining requirement of the question.  
-    Explain the final outcome clearly and logically.
-
-    ---
-
-    ## If a Step Contains Multiple Points
-
-    Divide marks clearly and explain each point.
-
-    **Example structure:**
-
-    **Step 2: Explanation of factors (3 marks total)**  
-
-    a. First factor — explanation (1 mark)  
-    Clear description of how it affects the result.
-
-    b. Second factor — explanation (1 mark)  
-    Reason and effect clearly stated.
-
-    c. Third factor — explanation (1 mark)  
-    Proper conceptual explanation.
-
-    ---
-
-    ## Explanation Quality Rules
-
-    - Use complete sentences.  
-    - Explain cause–effect relationships.  
-    - Justify equations or principles used.  
-    - Avoid one-word answers.  
-    - Make reasoning easy to follow.
-
-    ---
-
-    ## Marking Consistency Rule
-
-    **Sum of all step marks must equal total marks of the question.**
-
+    Write a single, continuous paragraph explaining why the correct answer 
+    is scientifically accurate. Use flowing prose only — do NOT use numbered 
+    steps, bullet points, or sub-headers like "Why this is correct" or 
+    "Why the other options are wrong." Within the same paragraph, briefly 
+    address why each incorrect option is wrong by identifying the specific 
+    misconception or error behind it. The explanation must be grade-appropriate, 
+    concise, and written as a unified piece of reasoning.
 
    ## TEXTBOOK CONTENT HANDLING (CRITICAL)
     - **Do NOT treat the textbook/concept excerpts as reading passages in questions**
@@ -889,14 +899,6 @@ mcq_questions: |
 
   ---
 
-  **Solution:**
-
-  [Provide step-by-step solution showing how to arrive at the correct answer. Include all reasoning and calculations and the mark split.]
-
-  ---
-
-  ---
-
   **Distractor Analysis:**
 
   | Option | Misconception |
@@ -928,7 +930,8 @@ FIB: |
     - Chapter/Unit: {{Chapter}}
     - Old Concepts: {{Old_Concept}}  # Prerequisite knowledge - what the student has already studied before this chapter
     {{TOPICS_SECTION}}
-    - For 3 marks it should be 6 blanks (drop downs) and for 4 marks 8 blanks
+    ## STRICT NUMBER OF BLANK RULES (STRICTLY FOLLOW)
+    - For 2 marks it should be 2 blanks / drop downs and for 3 marks it should be 3 blanks / drop downs and for 4 marks 4 blanks / drop downs
  
     - **Note**: Concepts consist of New Concepts (current chapter content) and Old Concepts (prerequisite knowledge). Prioritize new concepts for questions.
     - **Additional Notes**: {{Additional_Notes}}  # Extra instructions or configuration for how questions or solutions should be generated. Consider these notes when creating questions and formatting solutions.
@@ -1805,23 +1808,22 @@ FIB: |
 
     4.  Marks and Blanks Rules (STRICT RULE):
 
-    - Each blank or dropdown must carry **0.5 mark**.
-    - No blank or dropdown can have marks **less than 0.5 or more than 0.5**, and no other intermediate values are allowed.
+    - Each blank or dropdown must carry **1 mark**.
+    - No blank or dropdown can have marks **less than 1 or more than 1**, and no other intermediate values are allowed.
 
     - For a **1-mark question**:
-      - Use total **two blanks/dropdowns of 0.5 mark each**.
+      - Use total **one blank/dropdown of 1 mark each**.
 
     - For a **2-mark question**:
-      - Use total **4 blanks/dropdowns of 0.5 mark each**.
+      - Use total **two blanks/dropdowns of 1 mark each**.
 
     - For a **3-mark question**:
-      - Use total 6 blanks/dropdowns of 0.5 mark each.
+      - Use total **three blanks/dropdowns of 1 mark each**.
     - For a **4-mark question**:
-      - Use total 8 blanks/dropdowns of 0.5 mark each.
+      - Use total **four blanks/dropdowns of 1 mark each**.
     - The number of blanks should be strict, It should not increase or decrease 
     - It is allowed to include **multiple blanks and/or dropdowns** as appropriate to the question type, provided the above marking rules are satisfied.
     - Each blank should carry marks in proportion to its allotted value.
-    - Wherever 0.5 mark is possible, it should be used.
 
   5. Diagram Prompt (for visualization purposes only) 
     ## DIAGRAM RULES
