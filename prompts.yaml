@@ -316,32 +316,103 @@ mcq_questions: |
 
         MCQ (Assertion and Reasoning) [Grades 3–5]
         ------------------------------------------
-          DEFINITION:
-            A simplified Statement-Based MCQ where students read two statements
-            (or a character debate) and judge whether each statement is true/false
-            and whether the second explains the first.
+          Create Grade 3 reasoning-based MCQs in the format shown below.
 
-          FORMATS:
+          The question should present two children discussing an idea or situation.
+          Students must decide **which child is correct and why**.
 
-            Format 1 — Two Statements:
-              Read the two statements and select the correct option.
-              Statement 1: [Claim]
-              Statement 2: [Reason/Explanation]
+          The question may be created in **either of the following forms**:
 
-            Format 2 — Character Debate:
-              Two characters hold opposing views. Students pick who is correct and why.
-              Each option pairs a character with a reason.
+          ---
 
-          LANGUAGE RULES:
-            - Use simple, age-appropriate language (no jargon)
-            - Do NOT use the words "Assertion" or "Reason"
-            - Use "Statement 1" and "Statement 2" or character names instead
+          FORM 1 — TEXT ONLY (No Image)
 
-          OPTIONS (fixed order, do not change):
-            Option A: Statement 1 and 2 are true and statement 2 is the explanation for statement 1. 
-            Option B: statement 1 and 2 are true but statement 2 is not the correct explanation for statement 1 
-            Option C: statement 1 is true but statement 2 is false. 
-            Option D: statement 1 is false but statement 2 is true. 
+          Write a short child-friendly situation (1–2 lines).
+          Introduce two children discussing the situation.
+
+          Then ask:
+
+          **Whom do you agree with and why?**
+
+          Options must follow this structure:
+
+          Option A: [Child name] because [reason].
+          Option B: [Child name] because [incorrect or weak reason].
+          Option C: [Other child] because [reason].
+          Option D: [Other child] because [incorrect or weak reason].
+
+          ---
+
+          FORM 2 — IMAGE-BASED QUESTION
+
+          Write a short context sentence introducing the situation.
+
+          Then include a section:
+
+          **Image Prompt:**
+          Describe a simple cartoon-style illustration showing the situation.
+          The image should include:
+
+          * the two children
+          * the situation in the background
+          * speech bubbles showing their ideas (optional)
+
+          Then ask:
+
+          **Whom do you agree with and why?**
+
+          Options must follow the same structure:
+
+          Option A: [Child name] because [reason].
+          Option B: [Child name] because [incorrect reason].
+          Option C: [Other child] because [reason].
+          Option D: [Other child] because [incorrect reason].
+
+          ---
+
+          RULES
+
+          • Language must be simple and suitable for Grade 3.
+          • Use familiar contexts (plants, animals, school, food, festivals, games, community).
+          • Only **one option must be correct**.
+          • Two options must refer to the first child and two to the second child.
+          • Incorrect options should sound believable but contain wrong reasoning.
+          • Do **not** use the words "Assertion" or "Reason".
+          • The question **may randomly include an image or not**.
+
+          ---
+
+          EXAMPLE — TEXT ONLY
+
+          Avaneesh and Mithun are trying to grow plants on a fence.
+          They are debating which plant would grow better on the fence.
+
+          Whom do you agree with and why?
+
+          Option A: Avaneesh because the weak stem of morning glory needs support to grow.
+          Option B: Avaneesh because the thick stem of morning glory easily spreads on the fence.
+          Option C: Mithun because the weak stem of rose needs support to grow.
+          Option D: Mithun because roses look more attractive on a fence.
+
+          ---
+
+          EXAMPLE — IMAGE BASED
+
+          Two boys, Arjun and Ravi, are discussing a community feast.
+
+          Image Prompt:
+          A colorful cartoon illustration of a community feast where people sit together and eat food.
+          Two boys stand in the foreground.
+          Arjun smiles and says in a speech bubble: "A community feast helps people celebrate together."
+          Ravi looks unsure and says: "A community feast only gives food to poor people."
+
+          Whom do you agree with and why?
+
+          Option A: Arjun because a community feast helps people celebrate together and strengthen relationships.
+          Option B: Arjun because a community feast makes food less accessible for everyone in the community.
+          Option C: Ravi because a community feast makes people farther by increasing food inequality.
+          Option D: Ravi because a community feast is a way to give food for only needy people.
+
 
           ANSWER KEY DISTRIBUTION:
             - 20% → Option A
