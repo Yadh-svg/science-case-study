@@ -316,112 +316,143 @@ mcq_questions: |
 
         MCQ (Assertion and Reasoning) [Grades 3–5]
         ------------------------------------------
-          Create Grade 3 reasoning-based MCQs in the format shown below.
+        Create Grade 3 - 5 reasoning-based MCQs in the format shown below.
 
-          The question should present two children discussing an idea or situation.
-          Students must decide **which child is correct and why**.
+        The question should present two children having a SHORT conversation
+        (1–2 lines of dialogue — one line each) about an idea or situation.
+        Students must decide **which child is correct and why**.
 
-          The question may be created in **either of the following forms**:
+        The question may be created in **either of the following forms**:
 
-          ---
+        ---
 
-          FORM 1 — TEXT ONLY (No Image)
+        FORM 1 — TEXT ONLY (No Image)
 
-          Write a short child-friendly situation (1–2 lines).
-          Introduce two children discussing the situation.
+        Write a short child-friendly situation (1 line).
+        Then show a 1–2 line conversation — each child says ONE thing.
+        Their statement should naturally hint at their reasoning.
 
-          Then ask:
+        Then ask:
 
-          **Whom do you agree with and why?**
+        **Whom do you agree with and why?**
 
-          Options must follow this structure:
+        Options must follow this structure:
 
-          Option A: [Child name] because [reason].
-          Option B: [Child name] because [incorrect or weak reason].
-          Option C: [Other child] because [reason].
-          Option D: [Other child] because [incorrect or weak reason].
+        Option A: [Child name] because [reason].
+        Option B: [Child name] because [incorrect or weak reason].
+        Option C: [Other child] because [reason].
+        Option D: [Other child] because [incorrect or weak reason].
 
-          ---
+        ---
 
-          FORM 2 — IMAGE-BASED QUESTION
+        FORM 2 — IMAGE-BASED QUESTION
 
-          Write a short context sentence introducing the situation.
+        Write a short context sentence (1 line) introducing the situation.
 
-          Then include a section:
+        Then show a 1–2 line conversation — each child says ONE thing.
+        Their statement should naturally hint at their reasoning.
 
-          **Image Prompt:**
-          Describe a simple cartoon-style illustration showing the situation.
-          The image should include:
+        Then include a section:
 
-          * the two children
-          * the situation in the background
-          * speech bubbles showing their ideas (optional)
+        **Image Prompt:**
+        Describe a simple cartoon-style illustration showing the situation.
+        The image should include:
 
-          Then ask:
+        * The two children facing each other
+        * The situation shown in the background
+        * A speech bubble for EACH child showing their exact line from the conversation
 
-          **Whom do you agree with and why?**
+        Then ask:
 
-          Options must follow the same structure:
+        **Whom do you agree with and why?**
 
-          Option A: [Child name] because [reason].
-          Option B: [Child name] because [incorrect reason].
-          Option C: [Other child] because [reason].
-          Option D: [Other child] because [incorrect reason].
+        Options must follow the same structure:
 
-          ---
+        Option A: [Child name] because [reason].
+        Option B: [Child name] because [incorrect reason].
+        Option C: [Other child] because [reason].
+        Option D: [Other child] because [incorrect reason].
 
-          RULES
+        ---
 
-          • Language must be simple and suitable for Grade 3.
-          • Use familiar contexts (plants, animals, school, food, festivals, games, community).
-          • Only **one option must be correct**.
-          • Two options must refer to the first child and two to the second child.
-          • Incorrect options should sound believable but contain wrong reasoning.
-          • Do **not** use the words "Assertion" or "Reason".
-          • The question **may randomly include an image or not**.
+        RULES
 
-          ---
+        - Language must be simple and suitable for Grade 3.
+        - Use familiar contexts (plants, animals, school, food, festivals, games, community).
+        - Each child says exactly ONE line — keep it short and natural.
+        - Their line should hint at their reasoning without giving the answer away.
+        - Only **one option must be correct**.
+        - Two options must refer to the first child and two to the second child.
+        - Incorrect options should sound believable but contain wrong reasoning.
+        - Do **not** use the words "Assertion" or "Reason".
+        - The question **may randomly include an image or not**.
 
-          EXAMPLE — TEXT ONLY
+        ---
 
-          Avaneesh and Mithun are trying to grow plants on a fence.
-          They are debating which plant would grow better on the fence.
+        EXAMPLE — TEXT ONLY
 
-          Whom do you agree with and why?
+        Priya and Arjun are watering plants in their school garden.
 
-          Option A: Avaneesh because the weak stem of morning glory needs support to grow.
-          Option B: Avaneesh because the thick stem of morning glory easily spreads on the fence.
-          Option C: Mithun because the weak stem of rose needs support to grow.
-          Option D: Mithun because roses look more attractive on a fence.
+        Priya: "We should water the plants in the afternoon when it's sunny!"
+        Arjun: "I think morning is better — the water soaks into the soil before it gets too hot."
 
-          ---
+        Whom do you agree with and why?
 
-          EXAMPLE — IMAGE BASED
+        Option A: Priya because afternoon sun helps water reach the roots faster.
+        Option B: Priya because sunlight during watering makes plants grow more quickly.
+        Option C: Arjun because morning watering lets water absorb before the heat evaporates it.
+        Option D: Arjun because plants can only absorb water when the temperature is cold.
 
-          Two boys, Arjun and Ravi, are discussing a community feast.
+        ---
 
-          Image Prompt:
-          A colorful cartoon illustration of a community feast where people sit together and eat food.
-          Two boys stand in the foreground.
-          Arjun smiles and says in a speech bubble: "A community feast helps people celebrate together."
-          Ravi looks unsure and says: "A community feast only gives food to poor people."
+        EXAMPLE — IMAGE BASED
 
-          Whom do you agree with and why?
+        Meena and Rohan are at a school fair discussing how to reduce waste.
 
-          Option A: Arjun because a community feast helps people celebrate together and strengthen relationships.
-          Option B: Arjun because a community feast makes food less accessible for everyone in the community.
-          Option C: Ravi because a community feast makes people farther by increasing food inequality.
-          Option D: Ravi because a community feast is a way to give food for only needy people.
+        Meena: "We should use paper plates — they're better for the Earth!"
+        Rohan: "I think washable plates are better because they don't need to be thrown away every time."
 
+        Image Prompt:
+        A colorful cartoon of a school fair with stalls in the background.
+        Meena stands on the left holding a paper plate with a speech bubble:
+        "Paper plates are better for the Earth!"
+        Rohan stands on the right holding a washable plate with a speech bubble:
+        "Washable plates don't need to be thrown away every time!"
+        Both children face each other.
 
-          ANSWER KEY DISTRIBUTION:
-            - 20% → Option A
-            - 30% → Option B
-            - 25% → Option C
-            - 25% → Option D
+        Whom do you agree with and why?
 
-            E.g. for 10 questions: A=2, B=3, C=2, D=3
-            Total must always equal {{TOTAL_QUESTIONS}}.
+        Option A: Meena because paper plates break down faster and create less long-term waste.
+        Option B: Meena because paper plates are thrown away, so no water is wasted cleaning them.
+        Option C: Rohan because reusable plates create less overall waste than making new ones each time.
+        Option D: Rohan because washing plates uses no water or energy at all.
+
+        ---
+        - Children must speak like real Grade 3 kids — NOT like textbooks.
+          BAD: "Friction is a force that resists motion."
+          GOOD: "The car stops faster on the carpet because it's rough!"
+
+        - The situation must show children DOING something or NOTICING something
+          — not just standing and stating facts.
+          BAD: "Ryan and Emily are discussing friction."
+          GOOD: "Ryan and Emily are rolling a toy car on carpet and tiles."
+
+        - Wrong options must sound TEMPTING and believable to a Grade 3 child
+          — not obviously silly or impossible.
+          BAD: "Friction only happens with wooden objects."
+          GOOD: "Carpet gives the car more energy to keep moving."
+
+        - Never use scientific definitions inside the children's speech.
+          Children should describe what they SEE or FEEL, not define concepts.
+
+        ANSWER KEY DISTRIBUTION:
+          - 20% → Option A
+          - 30% → Option B
+          - 25% → Option C
+          - 25% → Option D
+
+          E.g. for 10 questions: A=2, B=3, C=2, D=3
+          Total must always equal {{TOTAL_QUESTIONS}}.
 
                           
       -----------------------------------------
